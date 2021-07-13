@@ -53,18 +53,16 @@ function generateVibeEmbed(sender: User, recipient: User): MessageEmbed {
     value += '|';
     return { name, value };
   });
-  const status = Math.random() ? '**✅ | Vibe Check Passed**' : '**❌ | Vibe Check failed**';
+  const status = Math.round(Math.random()) ? '**✅ | Vibe Check Passed**' : '**❌ | Vibe Check failed**';
 
-  // Create embeds and add fields.
-  const embed = new MessageEmbed()
+  // Create embed and add fields, and return.
+  return new MessageEmbed()
     .setAuthor(recipient.username, recipient.avatarURL() ?? undefined) // This is whatever.
     .setDescription(status)
     .setTitle('Vibe Check')
     .addFields(fields)
     .setColor('#7ce4f7')
     .setFooter(`checked by ${sender.username}`, sender.avatarURL() ?? undefined);
-
-  return embed;
 }
 
 const VibeCommand: Command = {
