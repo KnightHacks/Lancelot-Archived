@@ -80,13 +80,8 @@ const VibeCommand: Command = {
     await interaction.defer();
 
     // If there's no user, that means it's just a sender check.
-    if (!user) {
-      await interaction.followUp({ embeds: [generateVibeEmbed(sender, sender)] });
-      return;
-    }
-
     // Defer because the bot is thinking.
-    await interaction.followUp({ embeds: [generateVibeEmbed(sender, user)] });
+    await interaction.followUp({ embeds: [generateVibeEmbed(sender, user ?? sender)] });
   }
 };
 
