@@ -42,6 +42,7 @@
   },
   "dependencies": {
     "@knighthacks/dispatch": "^0.1.0-dev-8cb84a2",
+    "axios": "^0.21.1",
     "discord.js": "^13.0.0-dev.98c6078.1626221017",
     "dotenv": "^10.0.0"
   }
