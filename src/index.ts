@@ -1,6 +1,6 @@
 import path from 'path';
 import dotenv from 'dotenv';
-import { Client } from 'dispatch';
+import { Client } from '@knighthacks/dispatch';
 
 // Load env vars.
 dotenv.config();

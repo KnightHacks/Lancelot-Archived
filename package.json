@@ -38,8 +38,8 @@
     "typescript": "^4.3.5"
   },
   "dependencies": {
+    "@knighthacks/dispatch": "^1.0.0-dev-faa55ba",
     "discord.js": "github:discordjs/discord.js",
-    "dispatch": "github:KnightHacks/dispatch",
     "dotenv": "^10.0.0"
   }
 }

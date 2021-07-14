@@ -1,5 +1,5 @@
 import { ApplicationCommandOption, CommandInteraction, EmbedFieldData, MessageEmbed, User } from 'discord.js';
-import { Command } from 'dispatch';
+import { Command } from '@knighthacks/dispatch';
 
 const options: ApplicationCommandOption[] = [
   {
