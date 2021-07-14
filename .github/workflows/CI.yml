@@ -17,6 +17,7 @@ jobs:
       - uses: actions/cache@v2
         env:
           cache-name: cache-node-modules
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           path: ~/.npm
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
@@ -24,18 +25,13 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
-      - name: Reconfigure git to use HTTP authentication
-        run: >
-          git config --global url."https://github.com/".insteadOf
-          ssh://git@github.com/
       - name: Install Dependencies
         run: npm ci
         env:
           NPM_CONFIG_PRODUCTION: false
       - name: Run Build
         run: npm run build
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
   Test:
     runs-on: ubuntu-latest
     steps:
@@ -43,6 +39,7 @@ jobs:
       - uses: actions/cache@v2
         env:
           cache-name: cache-node-modules
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           path: ~/.npm
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
@@ -50,10 +47,6 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
-      - name: Reconfigure git to use HTTP authentication
-        run: >
-          git config --global url."https://github.com/".insteadOf
-          ssh://git@github.com/
       - name: Install Dependencies
         run: npm ci
         env:
@@ -62,8 +55,7 @@ jobs:
         run: npm run build
       - name: Run Tests
         run: npm test
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   Lint:
     runs-on: ubuntu-latest
     steps:
@@ -71,6 +63,7 @@ jobs:
       - uses: actions/cache@v2
         env:
           cache-name: cache-node-modules
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           path: ~/.npm
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
@@ -78,13 +71,7 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
-      - name: Reconfigure git to use HTTP authentication
-        run: >
-          git config --global url."https://github.com/".insteadOf
-          ssh://git@github.com/
       - name: Install Dependencies
         run: npm ci
       - name: Run Linter
         run: npm run lint
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
