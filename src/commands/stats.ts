@@ -1,5 +1,5 @@
 import { CommandInteraction, MessageEmbed } from 'discord.js';
-import { Command } from 'dispatch';
+import { Command } from '@knighthacks/dispatch';
 
 const StatsCommand: Command = {
   name: 'stats',

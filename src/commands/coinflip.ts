@@ -1,5 +1,5 @@
 import { CommandInteraction } from 'discord.js';
-import { Command } from 'dispatch';
+import { Command } from '@knighthacks/dispatch';
 
 const CoinFlipCommand: Command = {
   name: 'coinflip',
