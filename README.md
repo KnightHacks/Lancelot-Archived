@@ -5,7 +5,7 @@
 - Make sure you're running at least node v14.x
 - Setup npm to access our packages:
   - [Create a personal access token for your github account](https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token)
-  - In the scope enable `write:packages`
+  - In the scopes enable `write:packages`
   - Add `//npm.pkg.github.com/:_authToken=PERSONAL_ACCESS_TOKEN` to your `~/.npmrc`
   - run `npm install` in the project directory, and the packages should install.
 
