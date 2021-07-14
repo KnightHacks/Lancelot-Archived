@@ -41,7 +41,7 @@
     "typescript": "^4.3.5"
   },
   "dependencies": {
-    "@knighthacks/dispatch": "^1.0.0-dev-faa55ba",
+    "@knighthacks/dispatch": "^0.1.0-dev-d65933d",
     "discord.js": "^13.0.0-dev.98c6078.1626221017",
     "dotenv": "^10.0.0"
   }
