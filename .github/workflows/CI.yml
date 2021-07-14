@@ -17,13 +17,10 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '14.x'
-          registry-url: 'https://npm.pkg.github.com'
-          # Defaults to the user or organization that owns the workflow file
-          scope: '@KnightHacks'
+          registry-url: 'https://registry.npmjs.org'
       - uses: actions/cache@v2
         env:
           cache-name: cache-node-modules
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           path: ~/.npm
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
@@ -35,7 +32,6 @@ jobs:
         run: npm ci
         env:
           NPM_CONFIG_PRODUCTION: false
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Run Build
         run: npm run build
           
@@ -46,13 +42,10 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '14.x'
-          registry-url: 'https://npm.pkg.github.com'
-          # Defaults to the user or organization that owns the workflow file
-          scope: '@KnightHacks'
+          registry-url: 'https://registry.npmjs.org'
       - uses: actions/cache@v2
         env:
           cache-name: cache-node-modules
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           path: ~/.npm
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
@@ -76,13 +69,10 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '14.x'
-          registry-url: 'https://npm.pkg.github.com'
-          # Defaults to the user or organization that owns the workflow file
-          scope: '@KnightHacks'
+          registry-url: 'https://registry.npmjs.org'
       - uses: actions/cache@v2
         env:
           cache-name: cache-node-modules
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           path: ~/.npm
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
