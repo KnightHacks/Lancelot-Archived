@@ -3,6 +3,9 @@
   "version": "1.0.1",
   "description": "A template for running typescript on the nodejs platform",
   "main": "src/index.ts",
+  "engines": {
+    "node": ">=14"
+  },
   "scripts": {
     "build": "tsc",
     "start": "npm run start:dev",
