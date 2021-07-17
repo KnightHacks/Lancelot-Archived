@@ -1,6 +1,7 @@
 import { ApplicationCommandOption, CommandInteraction, EmbedFieldData, MessageEmbed, User } from 'discord.js';
 import { Command, inChannels } from '@knighthacks/dispatch';
 import { Channels } from '../channels';
+import Colors from '../colors';
 
 const options: ApplicationCommandOption[] = [
   {
@@ -62,7 +63,7 @@ function generateVibeEmbed(sender: User, recipient: User): MessageEmbed {
     .setDescription(status)
     .setTitle('Vibe Check')
     .addFields(fields)
-    .setColor('#7ce4f7')
+    .setColor(Colors.embedColor)
     .setFooter(`checked by ${sender.username}`, sender.avatarURL() ?? undefined);
 }
 

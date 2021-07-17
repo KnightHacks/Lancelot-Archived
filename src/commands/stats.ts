@@ -1,6 +1,7 @@
 import { CommandInteraction, MessageEmbed } from 'discord.js';
 import { Command, inChannels } from '@knighthacks/dispatch';
 import { Channels } from '../channels';
+import Colors from '../colors';
 
 const StatsCommand: Command = {
   name: 'stats',
@@ -24,7 +25,7 @@ const StatsCommand: Command = {
     console.log(interaction.guild?.iconURL());
 
     const embed = new MessageEmbed()
-      .setColor('#7ce4f7')
+      .setColor(Colors.embedColor)
       .setTitle(`Server Info - ${guild.name}`)
       .setThumbnail(interaction.guild?.iconURL() ?? '')
       .addField('Created on:', guild.createdAt.toUTCString())
