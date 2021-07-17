@@ -84,3 +84,12 @@ jobs:
         run: npm ci
       - name: Run Linter
         run: npm run lint
+  Deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.KEY }}
+          script: ./update.sh && exit
