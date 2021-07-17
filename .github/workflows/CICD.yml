@@ -90,6 +90,7 @@ jobs:
     steps:
       - uses: appleboy/ssh-action@master
         with:
+          command_timeout: 200m
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.KEY }}
