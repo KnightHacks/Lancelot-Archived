@@ -98,7 +98,7 @@ jobs:
         # step 2: Build Docker Image  
         - name: Build Docker
           run: |
-            cd ../
+            ls
             docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER}}/lancelot:${{ github.sha }}
         
         # step 3: Push Docker to Azure Registry  
