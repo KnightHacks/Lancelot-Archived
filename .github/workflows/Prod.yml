@@ -83,17 +83,37 @@ jobs:
         run: npm ci
       - name: Run Linter
         run: npm run lint
-  Deploy:
+   # Dockerize the bot to be sent to azure containter registery
+  Dockerize:
     runs-on: ubuntu-latest
-    steps:
-      - uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SERVER_IP }}
-          username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.KEY }}
-          script: |
-            sudo pkill start:prod 
-            cd Lancelot
-            sudo git pull
-            sudo npm run start:prod &
-            exit
+    steps:      
+        # step 1: Docker login        
+        - name: 'Docker login'
+          uses: azure/docker-login@v1
+          with:
+            login-server: ${{ secrets.REGISTRY_LOGIN_SERVER}}
+            username: ${{ secrets.REGISTRY_USERNAME }}
+            password: ${{ secrets.REGISTRY_PASSWORD }}
+            
+        # step 2: Build Docker Image  
+        - name: Build Docker
+          run: docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER}}/lancelot:${{ github.sha }}
+        
+        # step 3: Push Docker to Azure Registry  
+        - name: Push Docker
+          run: docker push ${{ secrets.REGISTRY_LOGIN_SERVER}}/lancelot:${{ github.sha }}
+          
+#   Deploy:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: appleboy/ssh-action@master
+#         with:
+#           host: ${{ secrets.SERVER_IP }}
+#           username: ${{ secrets.SERVER_USER }}
+#           key: ${{ secrets.KEY }}
+#           script: |
+#             sudo pkill start:prod 
+#             cd Lancelot
+#             sudo git pull
+#             sudo npm run start:prod &
+#             exit
