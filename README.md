@@ -43,7 +43,7 @@ own server.
 You will need to extract the **Guild ID** of the server you want to use for
 testing. Go to the Discord settings and select "Advanced".
 
-<img src="./docs/discord-settings.png">
+<img src="./docs/discord-settings.png" height="400">
 
 Turn the "Developer Settings" option on.
 
@@ -52,7 +52,7 @@ Turn the "Developer Settings" option on.
 Go back to your servers and right click the testing server. You should now have
 an option to "Copy ID", which will copy the guild ID to your clipboard.
 
-<img src="./docs/right-click.png">
+<img src="./docs/right-click.png" height="400">
 
 Add the guild ID to the `.env` file:
 
