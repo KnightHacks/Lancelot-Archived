@@ -92,9 +92,8 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.KEY }}
           script: |
-            if [[ "$(uname)" = "Linux" ]];then killall --older-than 1h start:prod;fi
-            if [[ "$(uname)" = "Linux" ]];then killall --older-than 1h ./dist/index.js;fi
+            sudo pkill start:prod 
             cd Lancelot
             sudo git pull
-            sudo npm run start:prod
+            sudo npm run start:prod &
             exit
