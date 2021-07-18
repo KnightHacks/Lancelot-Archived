@@ -2,7 +2,7 @@
 # And deploy the bot to the prod instance
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
-name: Node.js CI
+name: Node.js Prod
 
 on:
   push:
@@ -86,7 +86,9 @@ jobs:
    # Dockerize the bot to be sent to azure containter registery
   Dockerize:
     runs-on: ubuntu-latest
-    steps:      
+    steps:
+        - name: Check out code into the node module
+          uses: actions/checkout@v2
         # step 1: Docker login        
         - name: 'Docker login'
           uses: azure/docker-login@v1
