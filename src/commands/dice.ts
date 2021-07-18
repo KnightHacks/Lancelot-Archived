@@ -14,8 +14,8 @@ const DiceCommand: Command = {
   name: 'dice',
   description: 'Roll a die to get a random number between 1 and 6',
   async run(interaction: CommandInteraction) {
-    const number = Math.floor(Math.random() * 6) + 1;
-    await interaction.reply(`You rolled a  :${numberToString[number]}:`);
+    const randNumber = Math.floor(Math.random() * 6) + 1; // +1 to exclude 0 and include 6
+    await interaction.reply(`You rolled a  :${numberToString[randNumber]}:`);
   }
 };
 
