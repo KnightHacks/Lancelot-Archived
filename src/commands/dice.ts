@@ -1,7 +1,7 @@
 import { CommandInteraction } from 'discord.js';
 import { Command } from '@knighthacks/dispatch';
 
-const nToS: Record<number, string> = {
+const numberToString: Record<number, string> = {
   1: 'one',
   2: 'two',
   3: 'three',
@@ -15,7 +15,7 @@ const DiceCommand: Command = {
   description: 'Roll a die to get a random number between 1 and 6',
   async run(interaction: CommandInteraction) {
     const number = Math.floor(Math.random() * 6) + 1;
-    await interaction.reply(`You rolled a  :${nToS[number]}:`);
+    await interaction.reply(`You rolled a  :${numberToString[number]}:`);
   }
 };
 
