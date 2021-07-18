@@ -92,7 +92,9 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.KEY }}
           script: |
-            killall sudo npm run start:prod
+            sudo pkill -f start:prod
+            sudo pkill -f ./dist/index.js
             cd Lancelot
             sudo git pull
             sudo npm run start:prod
+            exit
