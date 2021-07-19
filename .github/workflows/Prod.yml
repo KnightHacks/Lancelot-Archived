@@ -116,4 +116,5 @@ jobs:
           key: ${{ secrets.KEY }}
           script: |
             sudo docker rm lancelot
+            sudo docker pull ${{ secrets.REGISTRY_LOGIN_SERVER}}/lancelot:latest
             sudo docker run --env-file .env --name lancelot -d ${{ secrets.REGISTRY_LOGIN_SERVER}}/lancelot:latest
