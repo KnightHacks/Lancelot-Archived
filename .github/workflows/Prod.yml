@@ -100,24 +100,20 @@ jobs:
         # step 2: Build Docker Image  
         - name: Build Docker
           run: |
-            sudo ls
-            docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER}}/lancelot:${{ github.sha }}
+            docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER}}/lancelot
         
         # step 3: Push Docker to Azure Registry  
         - name: Push Docker
-          run: docker push ${{ secrets.REGISTRY_LOGIN_SERVER}}/lancelot:${{ github.sha }}
+          run: docker push ${{ secrets.REGISTRY_LOGIN_SERVER}}/lancelot
           
-#   Deploy:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: appleboy/ssh-action@master
-#         with:
-#           host: ${{ secrets.SERVER_IP }}
-#           username: ${{ secrets.SERVER_USER }}
-#           key: ${{ secrets.KEY }}
-#           script: |
-#             sudo pkill start:prod 
-#             cd Lancelot
-#             sudo git pull
-#             sudo npm run start:prod &
-#             exit
+  Deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.KEY }}
+          script: |
+            sudo docker rm lancelot
+            sudo docker run --name lancelot -d ${{ secrets.REGISTRY_LOGIN_SERVER}}/lancelot:latest
