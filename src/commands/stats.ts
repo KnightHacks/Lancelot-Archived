@@ -1,12 +1,12 @@
 import { CommandInteraction, MessageEmbed } from 'discord.js';
-import { Command, inChannels } from '@knighthacks/dispatch';
+import { Command, inChannelNames } from '@knighthacks/dispatch';
 import { Channels } from '../channels';
 import Colors from '../colors';
 
 const StatsCommand: Command = {
   name: 'stats',
   description: 'Displays statistics for this guild',
-  permissions: inChannels(Channels.bot),
+  permissions: inChannelNames(Channels.bot),
   async run(interaction: CommandInteraction) {
 
     const members = interaction.guild?.members.cache;

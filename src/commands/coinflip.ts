@@ -1,11 +1,11 @@
 import { CommandInteraction } from 'discord.js';
-import { Command, inChannels } from '@knighthacks/dispatch';
+import { Command, inChannelNames } from '@knighthacks/dispatch';
 import { Channels } from '../channels';
 
 const CoinFlipCommand: Command = {
   name: 'coinflip',
   description: 'Performs a coin flip',
-  permissions: inChannels(Channels.bot),
+  permissions: inChannelNames(Channels.bot),
   async run(interaction: CommandInteraction): Promise<void> {
     const flip = Math.round(Math.random());
     const side = flip ? '**heads**' : '**tails**';
