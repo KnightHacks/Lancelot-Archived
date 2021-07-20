@@ -22,14 +22,13 @@ const WhoIs: Command = {
       return;
     }
     // ! used since the command would have never ran if the user wasnt in the server
-    const userJoinedAt = interaction.guild?.members.cache.get(user.id)?.joinedAt?.toUTCString()!;
-
+    const userJoinedAt = interaction.guild?.members.cache.get(user.id)?.joinedAt?.toUTCString() ?? '<N/A>';
 
     const embed = new MessageEmbed({
       color: 0x7ce4f7,
       timestamp: interaction.createdTimestamp,
       title:`User Info - ${user.username}`,
-      thumbnail: {url: user.avatarURL()!},
+      thumbnail: {url: user.avatarURL() ?? undefined},
       footer: {text: `Requested by ${interaction.member?.user.username}`},
       fields: [
         {name: 'ID: ', value: user.id, inline: false},
