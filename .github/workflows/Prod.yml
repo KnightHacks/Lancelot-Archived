@@ -115,6 +115,8 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.KEY }}
           script: |
+            sudo docker stop lancelot
             sudo docker rm lancelot
             sudo docker pull ${{ secrets.REGISTRY_LOGIN_SERVER}}/lancelot:latest
             sudo docker run --env-file .env --name lancelot -d ${{ secrets.REGISTRY_LOGIN_SERVER}}/lancelot:latest
+            ./discord.sh --webhook-url=${{ secrets.LANCELOT_WEBHOOK}} --text "Lancelot is deployed, give a minute to boot!"
