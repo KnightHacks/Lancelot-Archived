@@ -2,16 +2,17 @@ import { Command } from '@knighthacks/dispatch';
 import axios from 'axios';
 import { CommandInteraction, InteractionReplyOptions, Message, MessageEmbed } from 'discord.js';
 import Colors from '../colors';
-import { singleButton } from '../util/button';
+import { singleButtonRow } from '../util/button';
 
 const url = 'https://api.thecatapi.com/v1/images/search';
 
 type CatResponse = [{ url: string }];
 
-const row = singleButton(
-  'Another one!',
-  'catButton',
-);
+const row = singleButtonRow({
+  label: 'Another!',
+  customId: 'catButton',
+  style: 'PRIMARY',
+});
 
 async function getCatImage(): Promise<string | null> {
   return axios.get<CatResponse>(url)

@@ -1,7 +1,8 @@
-import { ApplicationCommandOption, CommandInteraction, EmbedFieldData, MessageEmbed, User } from 'discord.js';
+import { ApplicationCommandOption, CommandInteraction, EmbedFieldData, Message, MessageEmbed, User } from 'discord.js';
 import { Command, inChannelNames } from '@knighthacks/dispatch';
 import { Channels } from '../channels';
 import Colors from '../colors';
+import { singleButtonRow } from '../util/button';
 
 const options: ApplicationCommandOption[] = [
   {
@@ -10,6 +11,12 @@ const options: ApplicationCommandOption[] = [
     description: 'The user to vibe check',
   }
 ];
+
+const row = singleButtonRow({
+  label: 'Recheck',
+  customId: 'vibeButton',
+  style: 'PRIMARY',
+});
 
 const categories = [
   { name: 'Royalty', emoji: '👑' },
@@ -81,7 +88,17 @@ const VibeCommand: Command = {
 
     // If there's no user, that means it's just a sender check.
     // Defer because the bot is thinking.
-    await interaction.followUp({ embeds: [generateVibeEmbed(sender, user ?? sender)] });
+    const message = await interaction.followUp({ 
+      embeds: [generateVibeEmbed(sender, user ?? sender)],
+      fetchReply: true,
+      components: [row],
+    }) as Message;
+
+    const collector = message.createMessageComponentCollector({ 'componentType': 'BUTTON' });
+    collector.on('collect', async (i) => {
+      await i.deferUpdate();
+      await interaction.editReply({ embeds: [generateVibeEmbed(sender, user ?? sender)]});
+    });
   }
 };
 

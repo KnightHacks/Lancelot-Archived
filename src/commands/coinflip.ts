@@ -1,15 +1,35 @@
-import { CommandInteraction } from 'discord.js';
+import { CommandInteraction, Message } from 'discord.js';
 import { Command, inChannelNames } from '@knighthacks/dispatch';
 import { Channels } from '../channels';
+import { singleButtonRow } from '../util/button';
+
+const row = singleButtonRow({
+  label: 'Flip Again',
+  style: 'PRIMARY',
+  customId: 'flipButton',
+});
+
+function getFlip(): string {
+  const flip = Math.round(Math.random());
+  return flip ? '**heads**' : '**tails**';
+}
 
 const CoinFlipCommand: Command = {
   name: 'coinflip',
   description: 'Performs a coin flip',
   permissionHandler: inChannelNames(Channels.bot),
   async run(interaction: CommandInteraction): Promise<void> {
-    const flip = Math.round(Math.random());
-    const side = flip ? '**heads**' : '**tails**';
-    await interaction.reply(`${interaction.user.username}, you got ${side}`);
+    const message = await interaction.reply({ 
+      content: `${interaction.user.username}, you got ${getFlip()}`,
+      fetchReply: true,
+      components: [row],
+    }) as Message;
+
+    const collector = message.createMessageComponentCollector({ componentType: 'BUTTON' });
+    collector.on('collect', async (i) => {
+      await i.update(`${interaction.user.username}, you got ${getFlip()}`);
+    });
+
   }
 };
 

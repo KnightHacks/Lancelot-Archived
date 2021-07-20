@@ -2,16 +2,17 @@ import { Command } from '@knighthacks/dispatch';
 import axios from 'axios';
 import { CommandInteraction, InteractionReplyOptions, Message, MessageEmbed } from 'discord.js';
 import Colors from '../colors';
-import { singleButton } from '../util/button';
+import { singleButtonRow } from '../util/button';
 
 const url = 'https://dog.ceo/api/breeds/image/random';
 
 type DogResponse = { message: string; status: 'success' | 'failure' };
 
-const row = singleButton(
-  'Another one!',
-  'dogButton',
-);
+const row = singleButtonRow({
+  label: 'Another!',
+  customId: 'dogButton',
+  style: 'PRIMARY',
+});
 
 async function getDogImage(): Promise<string | null> {
   return axios.get<DogResponse>(url)

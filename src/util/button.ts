@@ -1,21 +1,13 @@
-import { MessageActionRow, MessageButton, MessageButtonStyleResolvable } from 'discord.js';
+import { MessageActionRow, MessageButton, MessageButtonOptions } from 'discord.js';
 
 /**
  * A convenience function for creating a single button in a row.
- * @param label The title of the button.
- * @param customID The custom ID for the button.
- * @param style The button style.
+ * @param options The options for the button.
  * @returns A new action row component.
  */
-export function singleButton(
-  label: string, 
-  customID: string,
-  style: MessageButtonStyleResolvable = 'PRIMARY'
+export function singleButtonRow(
+  options: MessageButtonOptions
 ): MessageActionRow {
-  const button = new MessageButton()
-    .setLabel(label)
-    .setCustomId(customID)
-    .setStyle(style);
-
+  const button = new MessageButton(options);
   return new MessageActionRow().addComponents(button);
 }
