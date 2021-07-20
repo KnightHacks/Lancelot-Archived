@@ -71,7 +71,7 @@ const VibeCommand: Command = {
   name: 'vibe',
   description: 'Performs a vibe check on the given user.',
   options,
-  permissions: inChannelNames(Channels.bot),
+  permissionHandler: inChannelNames(Channels.bot),
   async run(interaction: CommandInteraction) {
     const user = interaction.options.get('user')?.user;
     const sender = interaction.user;

@@ -5,7 +5,7 @@ import { Channels } from '../channels';
 const command: Command = {
   name: 'test',
   description: 'a test command',
-  permissions: inChannelNames(Channels.bot),
+  permissionHandler: inChannelNames(Channels.bot),
   async run(interaction: CommandInteraction): Promise<void> {
     await interaction.reply('Hello from dispatch');
   }
