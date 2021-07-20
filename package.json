@@ -4,7 +4,8 @@
   "description": "A template for running typescript on the nodejs platform",
   "main": "src/index.ts",
   "engines": {
-    "node": ">=14"
+    "node": ">=14.0.0",
+    "npm": ">=7.0.0"
   },
   "scripts": {
     "build": "tsc",
