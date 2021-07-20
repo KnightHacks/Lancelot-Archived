@@ -14,7 +14,7 @@ const WhoIs: Command = {
   description: 'Displays info about a given user',
   options,
   async run(interaction: CommandInteraction) {
-    const user = interaction.options.get('user')?.user;
+    const user = interaction.options.get('user')?.user ?? interaction.user;
     await interaction.defer();
     if(!user || !user.id)
     {
@@ -28,8 +28,8 @@ const WhoIs: Command = {
     const embed = new MessageEmbed({
       color: 0x7ce4f7,
       timestamp: interaction.createdTimestamp,
-      title:'User Info - {member}',
-      thumbnail: {proxyURL: user.avatarURL() ?? ''},
+      title:`User Info - ${user.username}`,
+      thumbnail: {url: user.avatarURL()!},
       footer: {text: `Requested by ${interaction.member?.user.username}`},
       fields: [
         {name: 'ID: ', value: user.id, inline: false},
