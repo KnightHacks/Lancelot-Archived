@@ -109,15 +109,7 @@ jobs:
   Deploy:
     runs-on: ubuntu-latest
     steps:
-     - name: Wait for dockerize to succeed
-       uses: fountainhead/action-wait-for-check@v1.0.0
-       id: wait-for-docker
-       with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          checkName: Dockerize
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
-     - name: Do something with a passing build
-       if: steps.wait-for-docker.outputs.conclusion == 'success'
+     - name: deploy
      - uses: appleboy/ssh-action@master
        with:
           host: ${{ secrets.SERVER_IP }}
