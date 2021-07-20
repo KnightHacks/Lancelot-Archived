@@ -1,18 +1,17 @@
 import { Command } from '@knighthacks/dispatch';
 import axios from 'axios';
-import { CommandInteraction, InteractionReplyOptions, Message, MessageActionRow, MessageButton, MessageEmbed } from 'discord.js';
+import { CommandInteraction, InteractionReplyOptions, Message, MessageEmbed } from 'discord.js';
 import Colors from '../colors';
+import { singleButton } from '../util/button';
 
 const url = 'https://api.thecatapi.com/v1/images/search';
 
 type CatResponse = [{ url: string }];
 
-const button = new MessageButton()
-  .setCustomId('catButton')
-  .setStyle('PRIMARY')
-  .setLabel('Another one!');
-
-const row = new MessageActionRow().addComponents(button);
+const row = singleButton(
+  'Another one!',
+  'catButton',
+);
 
 async function getCatImage(): Promise<string | null> {
   return axios.get<CatResponse>(url)
@@ -49,7 +48,8 @@ const CatCommand: Command = {
     const collector = repliedMessage.createMessageComponentCollector({ componentType: 'BUTTON' });
     collector.on('collect', async (i) => {
       await i.deferUpdate();
-      await i.update('hello');
+      const catImage = await getMessage();
+      await i.editReply(catImage);
     });
 
   }
