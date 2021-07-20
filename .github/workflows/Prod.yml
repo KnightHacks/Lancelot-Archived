@@ -109,7 +109,6 @@ jobs:
   Deploy:
     runs-on: ubuntu-latest
     steps:
-     - name: deploy
      - uses: appleboy/ssh-action@master
        with:
           host: ${{ secrets.SERVER_IP }}
