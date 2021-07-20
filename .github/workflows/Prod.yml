@@ -109,15 +109,24 @@ jobs:
   Deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: appleboy/ssh-action@master
-        with:
+     - name: Wait for dockerize to succeed
+       uses: fountainhead/action-wait-for-check@v1.0.0
+       id: wait-for-docker
+       with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          checkName: Dockerize
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+     - name: Do something with a passing build
+       if: steps.wait-for-build.outputs.conclusion == 'success'
+     - uses: appleboy/ssh-action@master
+       with:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.KEY }}
           script: |
             sudo docker stop lancelot
             sudo docker rm lancelot
-            sudo az login -u ${{ secrets.AZURE_CONTAINER_USER}} -p ${{ secrets.AZURE_CONTAINER_PASSWORD}}
+            sudo docker login lancelot.azurecr.io -u ${{ secrets.AZURE_CONTAINER_USER}} -p ${{ secrets.AZURE_CONTAINER_PASSWORD}}
             sudo docker pull ${{ secrets.REGISTRY_LOGIN_SERVER}}/lancelot:latest
             sudo docker run --env-file .env --name lancelot -d ${{ secrets.REGISTRY_LOGIN_SERVER}}/lancelot:latest
             ./discord.sh --webhook-url=${{ secrets.LANCELOT_WEBHOOK}} --text "Lancelot is deployed, give a minute to boot!"
