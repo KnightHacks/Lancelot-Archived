@@ -1,11 +1,12 @@
 import { ApplicationCommandOption, CommandInteraction, MessageEmbed } from 'discord.js';
 import { Command } from '@knighthacks/dispatch';
+import Colors from '../colors';
 
 const options: ApplicationCommandOption[] = [
   {
     name: 'user',
     type: 'USER',
-    description: 'The user to vibe check',
+    description: 'Displays the specified user\'s info. If no user is tagged, displays the author\'s info.',
   }
 ];
 
@@ -25,10 +26,10 @@ const WhoIs: Command = {
     const userJoinedAt = interaction.guild?.members.cache.get(user.id)?.joinedAt?.toUTCString() ?? '<N/A>';
 
     const embed = new MessageEmbed({
-      color: 0x7ce4f7,
+      color: Colors.embedColor,
       timestamp: interaction.createdTimestamp,
       title:`User Info - ${user.username}`,
-      thumbnail: {url: user.avatarURL() ?? undefined},
+      thumbnail: {url: user.avatarURL() ?? ''},
       footer: {text: `Requested by ${interaction.member?.user.username}`},
       fields: [
         {name: 'ID: ', value: user.id, inline: false},
