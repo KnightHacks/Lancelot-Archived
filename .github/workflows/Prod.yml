@@ -117,7 +117,7 @@ jobs:
           checkName: Dockerize
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
      - name: Do something with a passing build
-       if: steps.wait-for-build.outputs.conclusion == 'success'
+       if: steps.wait-for-docker.outputs.conclusion == 'success'
      - uses: appleboy/ssh-action@master
        with:
           host: ${{ secrets.SERVER_IP }}
