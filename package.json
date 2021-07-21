@@ -11,7 +11,7 @@
     "build": "tsc",
     "start": "npm run start:dev",
     "start:dev": "NODE_ENV=development nodemon --exec ts-node ./src/index.ts",
-    "start:prod": "NODE_ENV=development tsc && node ./dist/index.js",
+    "start:prod": "export NODE_ENV=production && tsc && node ./dist/index.js",
     "test": "jest ./src/__tests__",
     "lint": "eslint ./src"
   },

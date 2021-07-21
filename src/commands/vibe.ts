@@ -97,7 +97,7 @@ const VibeCommand: Command = {
     const collector = message.createMessageComponentCollector({ 'componentType': 'BUTTON' });
     collector.on('collect', async (i) => {
       await i.deferUpdate();
-      await interaction.editReply({ embeds: [generateVibeEmbed(sender, user ?? sender)]});
+      await i.editReply({ embeds: [generateVibeEmbed(sender, user ?? sender)] });
     });
   }
 };
