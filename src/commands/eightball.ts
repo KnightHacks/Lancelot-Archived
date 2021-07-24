@@ -6,6 +6,7 @@ const options: ApplicationCommandOption[] = [
     name: 'question',
     type: 'STRING',
     description: 'Generates a random response to a question',
+    required: true,
   }
 ];
 
@@ -27,11 +28,6 @@ const eightball: Command = {
   description : 'Ask a question, and you shall recieve an answer',
   options,
   async run(interaction: CommandInteraction) {
-    const question = interaction.options.get('question');
-    if(!question)
-    {
-      await interaction.reply('Please ask a question.');
-    }
     const randIndex = Math.floor(Math.random() * responses.length);
     await interaction.reply(responses[randIndex] ?? '');
   }
