@@ -21,7 +21,7 @@ async function getFact(): Promise<string | null> {
       if (e.response.status === 429) {
         return 'Error: `too many requests have been made lately, please try again later.`';
       }
-      return null
+      return null;
     });
 }
 
