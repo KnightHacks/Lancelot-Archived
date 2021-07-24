@@ -30,10 +30,10 @@ const eightball: Command = {
     const question = interaction.options.get('question');
     if(!question)
     {
-      await interaction.followUp('Please ask a question.');
+      await interaction.reply('Please ask a question.');
     }
     const randIndex = Math.floor(Math.random() * responses.length);
-    await interaction.followUp(responses[randIndex] ?? '');
+    await interaction.reply(responses[randIndex] ?? '');
   }
 };
 
