@@ -6,14 +6,14 @@ const links: Record<string, LinkButtonData> = {
   LinkTree: { link: 'https://knighthacks.org/linktree', label: 'Link Tree' },
   Dues: { link: 'https://knighthacks.org/dues', label: 'Pay Dues' },
   Feedback: { link: 'https://knighthacks.org/feedback', label: 'Workshop Feedback' },
-  Ops: { link: 'https://knighthacks.org/ops', label: },
+  Ops: { link: 'https://knighthacks.org/ops', label: 'Ops Meetings' },
 };
 
-const buttons: MessageButton[] = Object.entries(links).map(([name, link]) => {
+const buttons: MessageButton[] = Object.entries(links).map(([_, data]) => {
   return new MessageButton()
-    .setLabel(name)
+    .setLabel(data.label)
     .setStyle('LINK')
-    .setURL(link);
+    .setURL(data.link);
 });
 
 const row = new MessageActionRow().addComponents(buttons);
