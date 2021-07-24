@@ -45,7 +45,6 @@ const FactCommand: Command = {
       // Listen for button interactions.
       collector.on('collect', async (collectInteraction) => {
         const fact = await getFact();
-        console.log(fact)
         if (fact) {
           await collectInteraction.update({ content: fact });
         } else {
