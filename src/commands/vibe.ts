@@ -1,22 +1,25 @@
-import { ApplicationCommandOption, CommandInteraction, EmbedFieldData, Message, MessageEmbed, User } from 'discord.js';
-import { Command, inChannelNames } from '@knighthacks/dispatch';
-import { Channels } from '../channels';
+import {
+  ApplicationCommandOption,
+  CommandInteraction,
+  EmbedFieldData,
+  MessageEmbed,
+  User,
+} from 'discord.js';
+import {
+  Command,
+  Client,
+  UIComponent,
+  DispatchButton,
+} from '@knighthacks/dispatch';
 import Colors from '../colors';
-import { singleButtonRow } from '../util/button';
 
 const options: ApplicationCommandOption[] = [
   {
     name: 'user',
     type: 'USER',
     description: 'The user to vibe check',
-  }
+  },
 ];
-
-const row = singleButtonRow({
-  label: 'Recheck',
-  customId: 'vibeButton',
-  style: 'PRIMARY',
-});
 
 const categories = [
   { name: 'Royalty', emoji: '👑' },
@@ -39,9 +42,10 @@ type Result = {
 
 function generateVibeEmbed(sender: User, recipient: User): MessageEmbed {
   // Generate a random percentage per each category
-  const results: Result[] = categories.map(category => (
-    { category, score: Math.floor(Math.random() * 101) }
-  ));
+  const results: Result[] = categories.map((category) => ({
+    category,
+    score: Math.floor(Math.random() * 101),
+  }));
 
   const fields = results.map((result): EmbedFieldData => {
     // Dexponetiate the score.
@@ -62,7 +66,9 @@ function generateVibeEmbed(sender: User, recipient: User): MessageEmbed {
     value += '|';
     return { name, value };
   });
-  const status = Math.round(Math.random()) ? '**✅ | Vibe Check Passed**' : '**❌ | Vibe Check failed**';
+  const status = Math.round(Math.random())
+    ? '**✅ | Vibe Check Passed**'
+    : '**❌ | Vibe Check failed**';
 
   // Create embed and add fields, and return.
   return new MessageEmbed()
@@ -71,35 +77,43 @@ function generateVibeEmbed(sender: User, recipient: User): MessageEmbed {
     .setTitle('Vibe Check')
     .addFields(fields)
     .setColor(Colors.embedColor)
-    .setFooter(`checked by ${sender.username}`, sender.avatarURL() ?? undefined);
+    .setFooter(
+      `checked by ${sender.username}`,
+      sender.avatarURL() ?? undefined
+    );
 }
 
 const VibeCommand: Command = {
   name: 'vibe',
   description: 'Performs a vibe check on the given user.',
   options,
-  permissionHandler: inChannelNames(Channels.bot),
-  async run(interaction: CommandInteraction) {
+  //permissionHandler: inChannelNames(Channels.bot),
+  async run(interaction: CommandInteraction, client: Client) {
     const user = interaction.options.get('user')?.user;
     const sender = interaction.user;
 
     // Show that the bot is thinking.
     await interaction.defer();
 
+    const ui: UIComponent = new DispatchButton({
+      style: 'PRIMARY',
+      label: 'hello, world',
+      async onClick(i) {
+        await i.deferUpdate();
+        await i.editReply({
+          embeds: [generateVibeEmbed(sender, user ?? sender)],
+        });
+      },
+    });
+
     // If there's no user, that means it's just a sender check.
     // Defer because the bot is thinking.
-    const message = await interaction.followUp({ 
+    await interaction.followUp({
       embeds: [generateVibeEmbed(sender, user ?? sender)],
       fetchReply: true,
-      components: [row],
-    }) as Message;
-
-    const collector = message.createMessageComponentCollector({ 'componentType': 'BUTTON' });
-    collector.on('collect', async (i) => {
-      await i.deferUpdate();
-      await i.editReply({ embeds: [generateVibeEmbed(sender, user ?? sender)] });
+      components: client.registerUI(ui),
     });
-  }
+  },
 };
 
 export default VibeCommand;
