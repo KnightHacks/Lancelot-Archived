@@ -33,15 +33,15 @@ const FactCommand: Command = {
 
     if (fact) {
       // Send message.
-      const message = await interaction.reply({ 
-        content: fact, 
+      const message = await interaction.reply({
+        content: fact,
         fetchReply: true,
         components: [row],
       }) as Message;
 
       // Create a button collector.
       const collector = message.createMessageComponentCollector({ componentType: 'BUTTON'});
-  
+
       // Listen for button interactions.
       collector.on('collect', async (collectInteraction) => {
         const fact = await getFact();
@@ -52,7 +52,7 @@ const FactCommand: Command = {
         }
       });
     } else {
-      await interaction.reply({ 
+      await interaction.reply({
         content: 'Error: `something went wrong.`',
         fetchReply: true,
       }) as Message;
