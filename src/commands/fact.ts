@@ -4,7 +4,7 @@ import { CommandInteraction, Message, MessageActionRow, MessageButton } from 'di
 
 const url = 'https://uselessfacts.jsph.pl/random.json?language=en';
 
-type FactResponse = { text: string | null};
+type FactResponse = { text: string | null };
 
 const newFactButton = new MessageButton()
   .setLabel('New Fact')
