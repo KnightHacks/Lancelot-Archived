@@ -3,11 +3,11 @@ import { MessageActionRow, MessageButton } from 'discord.js';
 
 type LinkButtonData = { link: string; label: string };
 const links: LinkButtonData[] = [
-  { link: 'https://club.knighthacks.org/', label: 'Website' },
-  { link: 'https://knighthacks.org/linktree', label: 'Link Tree' },
-  { link: 'https://knighthacks.org/dues', label: 'Pay Dues' },
-  { link: 'https://knighthacks.org/feedback', label: 'Workshop Feedback' },
-  { link: 'https://knighthacks.org/ops', label: 'Operator Meetings' },
+  { link: 'https://www.knighthacks.org/', label: 'Website' },
+  { link: 'https://www.knighthacks.org/linktree', label: 'Link Tree' },
+  { link: 'https://www.knighthacks.org/dues', label: 'Pay Dues' },
+  { link: 'https://www.knighthacks.org/feedback', label: 'Workshop Feedback' },
+  { link: 'https://www.knighthacks.org/ops', label: 'Operator Meetings' },
 ];
 
 const buttons: MessageButton[] = links.map(data => {
