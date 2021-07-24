@@ -1,16 +1,18 @@
 import {
+  Client,
+  Command,
+  DispatchButton,
+  inChannelNames,
+  UIComponent,
+} from '@knighthacks/dispatch';
+import {
   ApplicationCommandOption,
   CommandInteraction,
   EmbedFieldData,
   MessageEmbed,
   User,
 } from 'discord.js';
-import {
-  Command,
-  Client,
-  UIComponent,
-  DispatchButton,
-} from '@knighthacks/dispatch';
+import { Channels } from '../channels';
 import Colors from '../colors';
 
 const options: ApplicationCommandOption[] = [
@@ -87,7 +89,7 @@ const VibeCommand: Command = {
   name: 'vibe',
   description: 'Performs a vibe check on the given user.',
   options,
-  //permissionHandler: inChannelNames(Channels.bot),
+  permissionHandler: inChannelNames(Channels.bot),
   async run(interaction: CommandInteraction, client: Client) {
     const user = interaction.options.get('user')?.user;
     const sender = interaction.user;
