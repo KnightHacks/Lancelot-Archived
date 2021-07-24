@@ -97,7 +97,7 @@ const VibeCommand: Command = {
 
     const ui: UIComponent = new DispatchButton({
       style: 'PRIMARY',
-      label: 'hello, world',
+      label: 'Recheck',
       async onClick(i) {
         await i.deferUpdate();
         await i.editReply({
