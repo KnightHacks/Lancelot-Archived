@@ -55,7 +55,7 @@ const FactCommand: Command = {
       await interaction.reply({
         content: 'Error: `something went wrong.`',
         fetchReply: true,
-      }) as Message;
+      });
     }
   }
 };
