@@ -1,17 +1,17 @@
 import { Command } from '@knighthacks/dispatch';
 import axios from 'axios';
-import { CommandInteraction, Message, MessageActionRow, MessageButton } from 'discord.js';
+import { CommandInteraction, Message } from 'discord.js';
+import { singleButtonRow } from '../util/button';
 
 const url = 'https://uselessfacts.jsph.pl/random.json?language=en';
 
 type FactResponse = { text: string | null };
 
-const newFactButton = new MessageButton()
-  .setLabel('New Fact')
-  .setCustomId('newFactButton')
-  .setStyle('PRIMARY');
-
-const row = new MessageActionRow().addComponents(newFactButton);
+const row = singleButtonRow({
+  label: 'New Fact',
+  customId: 'newFactButton',
+  style: 'PRIMARY'
+});
 
 async function getFact(): Promise<string | null> {
   return axios.get<FactResponse>(url)
