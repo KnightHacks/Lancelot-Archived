@@ -34,7 +34,7 @@ const FactCommand: Command = {
     if (fact) {
       // Send message.
       const message = await interaction.reply({
-        content: fact,
+        content: fact.replaceAll('`', '\''),
         fetchReply: true,
         components: [row],
       }) as Message;
@@ -46,7 +46,7 @@ const FactCommand: Command = {
       collector.on('collect', async (collectInteraction) => {
         const fact = await getFact();
         if (fact) {
-          await collectInteraction.update({ content: fact });
+          await collectInteraction.update({ content: fact.replaceAll('`', '\'') });
         } else {
           await collectInteraction.update({ content: 'Error: `something went wrong.`' });
         }
