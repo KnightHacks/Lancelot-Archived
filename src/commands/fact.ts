@@ -53,8 +53,7 @@ const FactCommand: Command = {
       });
     } else {
       await interaction.reply({
-        content: 'Error: `something went wrong.`',
-        fetchReply: true,
+        content: 'Error: `something went wrong.`'
       });
     }
   }
