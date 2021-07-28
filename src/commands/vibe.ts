@@ -88,7 +88,7 @@ const VibeCommand: Command = {
   description: 'Performs a vibe check on the given user.',
   options,
   permissionHandler: inChannelNames(Channels.bot),
-  async run({ interaction, client }) {
+  async run({ interaction, registerUI }) {
     const user = interaction.options.get('user')?.user;
     const sender = interaction.user;
 
@@ -111,7 +111,7 @@ const VibeCommand: Command = {
     await interaction.followUp({
       embeds: [generateVibeEmbed(sender, user ?? sender)],
       fetchReply: true,
-      components: client.registerUI(ui),
+      components: registerUI(ui),
     });
   },
 };
