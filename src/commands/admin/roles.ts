@@ -1,7 +1,7 @@
 import { Command } from '@knighthacks/dispatch';
 import { Client, CommandInteraction, GuildMember, Message, MessageActionRow, MessageSelectMenu } from 'discord.js';
 const roles = [
-  { label: 'OPS', description: 'KnightHacks Operators.' },
+  { label: 'OPS', description: 'The Knight Hacks Operations Team' },
   { label: 'Python', description: 'The Python programming language.' },
   { label: 'Java', description: 'The Java programming language.'},
   { label: 'C++', description: 'The C++ programming language.' },

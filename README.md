@@ -6,7 +6,7 @@
 
 ### Get the discord server template
 
-Ask one of the devs in the discord for the KnightHacks server template.
+Ask one of the devs in the discord for the Knight Hacks server template.
 
 ### Get a Token
 
