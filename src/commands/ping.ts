@@ -1,4 +1,3 @@
-import { CommandInteraction } from 'discord.js';
 import { Command, inChannelNames } from '@knighthacks/dispatch';
 import { Channels } from '../channels';
 
@@ -6,7 +5,7 @@ const PingCommand: Command = {
   name: 'ping',
   description: 'Displays bot ping latency',
   permissionHandler: inChannelNames(Channels.bot),
-  async run(interaction: CommandInteraction) {
+  async run({ interaction }) {
     await interaction.reply(`Pong (${interaction.client.ws.ping}ms)`);
   }
 };

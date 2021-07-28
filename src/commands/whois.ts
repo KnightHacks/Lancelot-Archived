@@ -1,4 +1,4 @@
-import { ApplicationCommandOption, CommandInteraction, MessageEmbed } from 'discord.js';
+import { ApplicationCommandOption, MessageEmbed } from 'discord.js';
 import { Command } from '@knighthacks/dispatch';
 import Colors from '../colors';
 
@@ -14,7 +14,7 @@ const WhoIs: Command = {
   name: 'whois',
   description: 'Displays info about a given user',
   options,
-  async run(interaction: CommandInteraction) {
+  async run({ interaction }) {
     const user = interaction.options.get('user')?.user ?? interaction.user;
     await interaction.defer();
     if(!user || !user.id)

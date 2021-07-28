@@ -19,10 +19,10 @@ async function fetchCookiesData(): Promise<Cookie[]> {
 const crumbl: Command = {
   name: 'crumbl',
   description: 'View the current weekly specialty cookies at Crumbl Cookies!',
-  async run(i) {
-    await i.defer();
+  async run({ interaction }) {
+    await interaction.defer();
     const cookiesData = await fetchCookiesData();
-    await i.followUp({
+    await interaction.followUp({
       content: 'Here are the weekly specialty cookies!',
       embeds: cookiesData.map((c) =>
         new MessageEmbed()

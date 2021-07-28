@@ -1,6 +1,6 @@
 import { Command } from '@knighthacks/dispatch';
 import axios from 'axios';
-import { CommandInteraction, InteractionReplyOptions, Message, MessageEmbed } from 'discord.js';
+import { InteractionReplyOptions, Message, MessageEmbed } from 'discord.js';
 import Colors from '../colors';
 import { singleButtonRow } from '../util/button';
 
@@ -39,7 +39,7 @@ async function getMessage(): Promise<InteractionReplyOptions> {
 const DogCommand: Command = {
   name: 'dog',
   description: 'Downloads an image of a dog from the internet',
-  async run(interaction: CommandInteraction) {
+  async run({ interaction }) {
 
     // Defer interaction while we fetch the image.
     await interaction.defer();

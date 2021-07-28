@@ -1,6 +1,6 @@
 import { Command } from '@knighthacks/dispatch';
 import axios from 'axios';
-import { CommandInteraction, Message } from 'discord.js';
+import { Message } from 'discord.js';
 import { singleButtonRow } from '../util/button';
 
 const url = 'https://uselessfacts.jsph.pl/random.json?language=en';
@@ -28,7 +28,7 @@ async function getFact(): Promise<string | null> {
 const FactCommand: Command = {
   name: 'fact',
   description: 'Get a random fact',
-  async run(interaction: CommandInteraction) {
+  async run({ interaction }) {
     const fact = await getFact();
 
     if (fact) {

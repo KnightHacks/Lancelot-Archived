@@ -1,5 +1,4 @@
 import {
-  Client,
   Command,
   DispatchButton,
   inChannelNames,
@@ -7,7 +6,6 @@ import {
 } from '@knighthacks/dispatch';
 import {
   ApplicationCommandOption,
-  CommandInteraction,
   EmbedFieldData,
   MessageEmbed,
   User,
@@ -90,7 +88,7 @@ const VibeCommand: Command = {
   description: 'Performs a vibe check on the given user.',
   options,
   permissionHandler: inChannelNames(Channels.bot),
-  async run(interaction: CommandInteraction, client: Client) {
+  async run({ interaction, client }) {
     const user = interaction.options.get('user')?.user;
     const sender = interaction.user;
 

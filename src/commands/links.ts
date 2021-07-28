@@ -22,7 +22,7 @@ const row = new MessageActionRow().addComponents(buttons);
 const LinksCommand: Command = {
   name: 'links',
   description: 'Gets helpful links for KnightHacks.',
-  async run(interaction) {
+  async run({ interaction }) {
     await interaction.reply({ content: '**Here\'s some helpful KnightHacks links!**', components: [row] });
   }
 };
