@@ -1,7 +1,7 @@
 import { Command } from '@knighthacks/dispatch';
 import axios, { AxiosError } from 'axios';
 import { ApplicationCommandOptionData, MessageEmbed } from 'discord.js';
-import Colors from '../colors';
+import Colors from '../../colors';
 
 const apiKey = process.env.WEATHER_API_KEY;
 
@@ -42,6 +42,8 @@ function getWeather(city: string): Promise<WeatherResponse | null | string> {
       if (error.response?.data.cod === '404') {
         return `'${city}' is not a valid city.`;
       }
+
+      console.error(error);
 
       return null;
     });
