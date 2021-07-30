@@ -1,8 +1,7 @@
 import {
+  ButtonOptions,
   Command,
-  DispatchButton,
   inChannelNames,
-  UIComponent,
 } from '@knighthacks/dispatch';
 import {
   ApplicationCommandOption,
@@ -10,8 +9,8 @@ import {
   MessageEmbed,
   User,
 } from 'discord.js';
-import { Channels } from '../channels';
-import Colors from '../colors';
+import { Channels } from '../../channels';
+import Colors from '../../colors';
 
 const options: ApplicationCommandOption[] = [
   {
@@ -95,7 +94,7 @@ const VibeCommand: Command = {
     // Show that the bot is thinking.
     await interaction.defer();
 
-    const ui: UIComponent = new DispatchButton({
+    const ui: ButtonOptions = {
       style: 'PRIMARY',
       label: 'Recheck',
       async onClick(i) {
@@ -104,7 +103,7 @@ const VibeCommand: Command = {
           embeds: [generateVibeEmbed(sender, user ?? sender)],
         });
       },
-    });
+    };
 
     // If there's no user, that means it's just a sender check.
     // Defer because the bot is thinking.

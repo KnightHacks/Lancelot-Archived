@@ -1,7 +1,7 @@
 import { Message } from 'discord.js';
 import { Command, inChannelNames } from '@knighthacks/dispatch';
-import { Channels } from '../channels';
-import { singleButtonRow } from '../util/button';
+import { Channels } from '../../channels';
+import { singleButtonRow } from '../../util/button';
 
 const row = singleButtonRow({
   label: 'Flip Again',

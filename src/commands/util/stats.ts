@@ -1,7 +1,7 @@
 import { MessageEmbed } from 'discord.js';
 import { Command, inChannelNames } from '@knighthacks/dispatch';
-import { Channels } from '../channels';
-import Colors from '../colors';
+import { Channels } from '../../channels';
+import Colors from '../../colors';
 
 const StatsCommand: Command = {
   name: 'stats',

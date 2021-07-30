@@ -1,5 +1,5 @@
 import { Command, inChannelNames } from '@knighthacks/dispatch';
-import { Channels } from '../channels';
+import { Channels } from '../../channels';
 
 const PingCommand: Command = {
   name: 'ping',

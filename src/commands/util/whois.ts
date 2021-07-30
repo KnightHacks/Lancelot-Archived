@@ -1,6 +1,6 @@
 import { ApplicationCommandOption, MessageEmbed } from 'discord.js';
 import { Command } from '@knighthacks/dispatch';
-import Colors from '../colors';
+import Colors from '../../colors';
 
 const options: ApplicationCommandOption[] = [
   {

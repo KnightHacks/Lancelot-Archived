@@ -1,7 +1,7 @@
 import { Command } from '@knighthacks/dispatch';
 import axios from 'axios';
 import { Message } from 'discord.js';
-import { singleButtonRow } from '../util/button';
+import { singleButtonRow } from '../../util/button';
 
 const url = 'https://uselessfacts.jsph.pl/random.json?language=en';
 

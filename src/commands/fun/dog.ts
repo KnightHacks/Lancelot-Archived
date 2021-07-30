@@ -1,8 +1,8 @@
 import { Command } from '@knighthacks/dispatch';
 import axios from 'axios';
 import { InteractionReplyOptions, Message, MessageEmbed } from 'discord.js';
-import Colors from '../colors';
-import { singleButtonRow } from '../util/button';
+import Colors from '../../colors';
+import { singleButtonRow } from '../../util/button';
 
 const url = 'https://dog.ceo/api/breeds/image/random';
 
