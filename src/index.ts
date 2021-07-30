@@ -15,5 +15,16 @@ dotenv.config();
   // Start up client.
   await client.login(process.env.DISCORD_TOKEN);
 
+  if (client.isReady()) {
+    client.user.setPresence({
+      activities: [
+        {
+          name: 'Slash Commands be run.',
+          type: 'WATCHING'
+        }
+      ]
+    });
+  }
+
   console.log('Client is now running.');
 })();
