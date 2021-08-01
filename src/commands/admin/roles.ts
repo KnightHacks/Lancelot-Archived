@@ -57,18 +57,16 @@ const RolesCommand: Command = {
       async onSelect({
         defer,
         editReply,
-        reply,
         member,
         values: roleNames,
       }: SelectMenuInteraction) {
+        await defer({ ephemeral: true });
         if (!member || !(member instanceof GuildMember)) {
-          await reply({
+          await editReply({
             content: `Invalid member property: ${member}`,
-            ephemeral: true,
           });
           return;
         }
-        await defer({ ephemeral: true });
         const roles: (Role | undefined)[] = roleNames.map((roleName) =>
           getRole(guild, roleName)
         );
