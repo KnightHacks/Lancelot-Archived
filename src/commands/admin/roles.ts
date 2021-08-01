@@ -52,8 +52,6 @@ const RolesCommand: Command = {
       options: roles.map((role) => ({
         label: role.label,
         description: role.description,
-        // FIXME remove this
-        value: role.label,
       })),
       maxValues: roles.length,
       async onSelect({
