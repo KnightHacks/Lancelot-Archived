@@ -57,12 +57,14 @@ const RolesCommand: Command = {
       async onSelect({
         defer,
         editReply,
+        reply,
         member,
         values: roleNames,
       }: SelectMenuInteraction) {
         if (!member || !(member instanceof GuildMember)) {
           await reply({
             content: `Invalid member property: ${member}`,
+            ephemeral: true,
           });
           return;
         }
