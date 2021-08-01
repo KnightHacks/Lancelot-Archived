@@ -21,7 +21,7 @@ async function getAffirmation(): Promise<string> {
 const AffirmationCommand: Command = {
   name: 'affirmation',
   description: 'Get an affirmation',
-  async run(interaction) {
+  async run({ interaction }) {
     await interaction.defer();
 
     const content = await getAffirmation();
