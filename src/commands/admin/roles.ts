@@ -67,15 +67,12 @@ const RolesCommand: Command = {
           });
           return;
         }
-        const roles: (Role | undefined)[] = roleNames.map((roleName) =>
-          getRole(guild, roleName)
-        );
+        const roles: (Role | undefined)[] = roleNames.map((roleName) => {
+          const role = getRole(guild, roleName);
+          if (!role) console.log(`Role lookup for ${roleName} failed!`);
+          return role;
+        });
         const validRoles = roles.filter((role): role is Role => !!role);
-        // FIXME this error message could be better
-        if (roles.filter((role) => role === undefined).length > 0) {
-          await editReply({ content: 'Role lookup failed!' });
-          return;
-        }
         if (action === 'add') {
           validRoles.forEach((role) => member.roles.add(role));
         } else {
