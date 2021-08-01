@@ -111,7 +111,7 @@ const RolesCommand: Command = {
     },
     {
       name: 'remove',
-      description: 'Remove roles to your account',
+      description: 'Remove roles from your account',
       type: 'SUB_COMMAND'
     },
   ],
