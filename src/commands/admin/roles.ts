@@ -1,4 +1,4 @@
-import { Command, SelectMenuOptions } from '@knighthacks/dispatch';
+import { Command, SelectMenu } from '@knighthacks/dispatch';
 import { Guild, GuildMember, Role, SelectMenuInteraction } from 'discord.js';
 
 const roles = [
@@ -48,7 +48,7 @@ const RolesCommand: Command = {
       return;
     }
     const action = options.getSubcommand() as 'add' | 'remove';
-    const ui: SelectMenuOptions = {
+    const ui: SelectMenu = {
       options: roles.map((role) => ({
         label: role.label,
         description: role.description,

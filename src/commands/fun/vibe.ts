@@ -1,5 +1,5 @@
 import {
-  ButtonOptions,
+  Button,
   Command,
   inChannelNames,
 } from '@knighthacks/dispatch';
@@ -94,7 +94,7 @@ const VibeCommand: Command = {
     // Show that the bot is thinking.
     await interaction.defer();
 
-    const ui: ButtonOptions = {
+    const ui: Button = {
       style: 'PRIMARY',
       label: 'Recheck',
       async onClick(i) {
