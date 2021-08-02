@@ -21,7 +21,7 @@ export async function countingFilter(message: Message): Promise<boolean> {
   }
 
   const previousValue = parseInt(previousMessage.content);
-  const newValue = parseInt(message.content);
+  const newValue = parseFloat(message.content);
   
   // Verify if number is integer
   if (!Number.isInteger(newValue)) {
