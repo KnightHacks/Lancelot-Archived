@@ -1,16 +1,18 @@
 import path from 'path';
 import dotenv from 'dotenv';
 import { Client } from '@knighthacks/dispatch';
+import { countingFilter } from './countingFilter';
 
 // Load env vars.
 dotenv.config();
 
 (async function main() {
   // Create client.
-  const client = new Client({intents: ['GUILDS', 'GUILD_MESSAGES', 'GUILD_PRESENCES']});
+  const client = new Client({intents: ['GUILDS', 'GUILD_MESSAGES', 'GUILD_PRESENCES'], partials: ['MESSAGE']});
 
   // Load commands in.
   await client.registerCommands(path.join(__dirname, 'commands'));
+  client.registerMessageFilters([countingFilter]);
 
   // Start up client.
   await client.login(process.env.DISCORD_TOKEN);
