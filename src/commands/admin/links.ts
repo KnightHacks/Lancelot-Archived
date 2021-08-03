@@ -1,29 +1,11 @@
 import { Command } from '@knighthacks/dispatch';
-import { MessageActionRow, MessageButton } from 'discord.js';
-
-type LinkButtonData = { link: string; label: string };
-const links: LinkButtonData[] = [
-  { link: 'https://www.knighthacks.org/', label: 'Website' },
-  { link: 'https://www.knighthacks.org/linktree', label: 'Link Tree' },
-  { link: 'https://www.knighthacks.org/dues', label: 'Pay Dues' },
-  { link: 'https://www.knighthacks.org/feedback', label: 'Workshop Feedback' },
-  { link: 'https://www.knighthacks.org/ops', label: 'Operations Meetings' },
-];
-
-const buttons: MessageButton[] = links.map(data => {
-  return new MessageButton()
-    .setLabel(data.label)
-    .setStyle('LINK')
-    .setURL(data.link);
-});
-
-const row = new MessageActionRow().addComponents(buttons);
+import { KnightHacksLinkButtons } from '../../common/button';
 
 const LinksCommand: Command = {
   name: 'links',
   description: 'Gets helpful links for Knight Hacks.',
   async run(interaction) {
-    await interaction.reply({ content: '**Here\'s some helpful Knight Hacks links!**', components: [row] });
+    await interaction.reply({ content: '**Here\'s some helpful Knight Hacks links!**', components: [KnightHacksLinkButtons] });
   }
 };
 

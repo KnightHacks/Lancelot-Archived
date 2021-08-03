@@ -2,6 +2,7 @@ import path from 'path';
 import dotenv from 'dotenv';
 import { Client } from '@knighthacks/dispatch';
 import { countingFilter } from './countingFilter';
+import { onWelcome } from './welcomer';
 
 // Load env vars.
 dotenv.config();
@@ -27,6 +28,10 @@ dotenv.config();
       ]
     });
   }
+
+
+  // New user handler
+  client.on('guildMemberAdd', async (member) => onWelcome(client, member));
 
   console.log('Client is now running.');
 })();
