@@ -8,7 +8,7 @@ dotenv.config();
 
 (async function main() {
   // Create client.
-  const client = new Client({intents: ['GUILDS', 'GUILD_MESSAGES', 'GUILD_PRESENCES']});
+  const client = new Client({intents: ['GUILDS', 'GUILD_MESSAGES', 'GUILD_PRESENCES'], partials: ['MESSAGE']});
 
   // Load commands in.
   await client.registerCommands(path.join(__dirname, 'commands'));
