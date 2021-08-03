@@ -21,7 +21,7 @@ export async function sendPaginatedEmbeds(interaction: CommandInteraction, embed
 
   const generateOptionsForPage = (page: number): InteractionReplyOptions => {
 
-    const begining = page === 0;
+    const beginning = page === 0;
     const end = page === embeds.length - 1;
     const currentEmbed = embeds[page];
     
@@ -45,7 +45,7 @@ export async function sendPaginatedEmbeds(interaction: CommandInteraction, embed
       .setLabel(options?.previousLabel ?? 'Previous')
       .setStyle(buttonStyle);
 
-    if (begining) {
+    if (beginning) {
       previousButton.disabled = true;
     }
 
