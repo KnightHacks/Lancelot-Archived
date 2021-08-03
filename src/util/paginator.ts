@@ -1,4 +1,4 @@
-import { CommandInteraction, InteractionReplyOptions, Message, MessageActionRow, MessageButton, MessageButtonStyle, MessageEmbed } from 'discord.js';
+import { CommandInteraction, InteractionReplyOptions, Message, MessageActionRow, MessageButton, MessageButtonStyle, MessageComponentInteraction, MessageEmbed } from 'discord.js';
 
 type PageButtonOptions = {
   style?: Exclude<MessageButtonStyle, 'LINK'>;
@@ -11,7 +11,11 @@ type PageButtonOptions = {
  * @param interaction The interaction to reply to.
  * @param embeds The array of embeds to use.
  */
-export async function sendPaginatedEmbeds(interaction: CommandInteraction, embeds: MessageEmbed[], options?: PageButtonOptions): Promise<void> {
+export async function sendPaginatedEmbeds(
+  interaction: CommandInteraction | MessageComponentInteraction,
+  embeds: MessageEmbed[],
+  options?: PageButtonOptions
+): Promise<void> {
   let currentPage = 0;
 
   // Precheck
