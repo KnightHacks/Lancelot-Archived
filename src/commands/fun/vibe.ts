@@ -1,8 +1,8 @@
 import { ApplicationCommandOption, CommandInteraction, EmbedFieldData, Message, MessageEmbed, User } from 'discord.js';
 import { Command, inChannelNames } from '@knighthacks/dispatch';
-import { Channels } from '../channels';
-import Colors from '../colors';
-import { singleButtonRow } from '../util/button';
+import { Channels } from '../../channels';
+import Colors from '../../colors';
+import { singleButtonRow } from '../../util/button';
 
 const options: ApplicationCommandOption[] = [
   {
