@@ -1,7 +1,7 @@
 import { CommandInteraction, InteractionReplyOptions, Message, MessageActionRow, MessageButton, MessageButtonStyle, MessageEmbed } from 'discord.js';
 
 type PageButtonOptions = {
-  style?: Omit<MessageButtonStyle, 'LINK'>;
+  style?: Exclude<MessageButtonStyle, 'LINK'>;
   nextLabel?: string;
   previousLabel?: string;
 };
@@ -34,7 +34,7 @@ export async function sendPaginatedEmbeds(interaction: CommandInteraction, embed
     const nextButton = new MessageButton()
       .setCustomId('nextButton')
       .setLabel(options?.nextLabel ?? 'Next')
-      .setStyle(buttonStyle as MessageButtonStyle);
+      .setStyle(buttonStyle);
 
     if (end) {
       nextButton.disabled = true;
@@ -43,7 +43,7 @@ export async function sendPaginatedEmbeds(interaction: CommandInteraction, embed
     const previousButton = new MessageButton()
       .setCustomId('previousButton')
       .setLabel(options?.previousLabel ?? 'Previous')
-      .setStyle(buttonStyle as MessageButtonStyle);
+      .setStyle(buttonStyle);
 
     if (begining) {
       previousButton.disabled = true;
