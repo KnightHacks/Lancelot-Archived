@@ -2,13 +2,14 @@ import path from 'path';
 import dotenv from 'dotenv';
 import { Client } from '@knighthacks/dispatch';
 import { countingFilter } from './countingFilter';
+import { onWelcome } from './welcomer';
 
 // Load env vars.
 dotenv.config();
 
 (async function main() {
   // Create client.
-  const client = new Client({intents: ['GUILDS', 'GUILD_MESSAGES', 'GUILD_PRESENCES'], partials: ['MESSAGE']});
+  const client = new Client({intents: ['GUILDS', 'GUILD_MESSAGES', 'GUILD_PRESENCES', 'GUILD_MEMBERS'], partials: ['MESSAGE']});
 
   // Load commands in.
   await client.registerCommands(path.join(__dirname, 'commands'));
@@ -27,6 +28,10 @@ dotenv.config();
       ]
     });
   }
+
+
+  // New user handler
+  client.on('guildMemberAdd', async (member) => onWelcome(client.interactionHandler.registerUI, member));
 
   console.log('Client is now running.');
 })();

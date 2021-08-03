@@ -1,29 +1,5 @@
-import { Command, SelectMenu } from '@knighthacks/dispatch';
-import { Guild, GuildMember, Role, SelectMenuInteraction } from 'discord.js';
-
-const roles = [
-  { label: 'OPS', description: 'The Knight Hacks Operations Team' },
-  { label: 'Python', description: 'The Python programming language.' },
-  { label: 'Java', description: 'The Java programming language.' },
-  { label: 'C++', description: 'The C++ programming language.' },
-  { label: 'C#', description: 'The C# programming language.' },
-  { label: 'JavaScript', description: 'The JavaScript programming language.' },
-  { label: 'Typescript', description: 'The TypeScript programming language.' },
-  {
-    label: 'HTML/CSS',
-    description: 'Static website creation/design technologies.',
-  },
-  { label: 'Rust', description: 'The Rust programming language.' },
-  { label: 'Lua', description: 'The Lua programming language.' },
-  { label: 'Linux', description: 'The Linux kernel.' },
-  { label: 'Windows', description: 'The Windows operating system.' },
-  { label: 'MacOS', description: 'The macOS operating system.' },
-  { label: 'Math', description: 'The subject of mathematics.' },
-  { label: 'Physics', description: 'The subject of physics.' },
-];
-
-const getRole = (guild: Guild, roleName: string) =>
-  guild.roles.cache.find((role) => role.name === roleName);
+import { Command } from '@knighthacks/dispatch';
+import { KnightHacksRolesMenu } from '../../common/selectMenu';
 
 const RolesCommand: Command = {
   name: 'roles',
@@ -40,50 +16,9 @@ const RolesCommand: Command = {
       type: 'SUB_COMMAND',
     },
   ],
-  async run({ interaction: { options, reply, guild }, registerUI }) {
-    if (!guild) {
-      await reply({
-        content: 'Unexpected null guild!',
-      });
-      return;
-    }
+  async run({ interaction: { options, reply }, registerUI }) {
     const action = options.getSubcommand() as 'add' | 'remove';
-    const ui: SelectMenu = {
-      options: roles.map((role) => ({
-        label: role.label,
-        description: role.description,
-      })),
-      maxValues: roles.length,
-      async onSelect({
-        defer,
-        editReply,
-        member,
-        values: roleNames,
-      }: SelectMenuInteraction) {
-        await defer({ ephemeral: true });
-        if (!member || !(member instanceof GuildMember)) {
-          await editReply({
-            content: `Invalid member property: ${member}`,
-          });
-          return;
-        }
-        const roles: (Role | undefined)[] = roleNames.map((roleName) => {
-          const role = getRole(guild, roleName);
-          if (!role) console.log(`Role lookup for ${roleName} failed!`);
-          return role;
-        });
-        const validRoles = roles.filter((role): role is Role => !!role);
-        if (action === 'add') {
-          validRoles.forEach((role) => member.roles.add(role));
-        } else {
-          validRoles.forEach((role) => member.roles.remove(role));
-        }
-        const successMsg = action === 'add' ? 'added' : 'removed';
-        await editReply({
-          content: `Successfully ${successMsg} selected roles.`,
-        });
-      },
-    };
+    const ui = KnightHacksRolesMenu(action);
     await reply({
       content: `Pick Roles to ${action}`,
       components: registerUI(ui),
