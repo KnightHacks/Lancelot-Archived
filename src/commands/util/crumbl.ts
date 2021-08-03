@@ -1,6 +1,7 @@
 import { Command } from '@knighthacks/dispatch';
 import axios from 'axios';
 import { MessageEmbed } from 'discord.js';
+import { sendPaginatedEmbeds } from '../../util/paginator';
 
 interface Cookie {
   name: string;
@@ -22,16 +23,16 @@ const crumbl: Command = {
   async run(i) {
     await i.defer();
     const cookiesData = await fetchCookiesData();
-    await i.followUp({
-      content: 'Here are the weekly specialty cookies!',
-      embeds: cookiesData.map((c) =>
-        new MessageEmbed()
-          .setTitle(c.name)
-          .setDescription(c.description)
-          .setThumbnail(c.image)
-      ),
+
+    const embeds = cookiesData.map((c) => new MessageEmbed()
+      .setTitle(c.name)
+      .setDescription(c.description)
+      .setThumbnail(c.image));
+
+    await sendPaginatedEmbeds(i, embeds, {
+      content: 'Here are the weekly specialty cookies!'
     });
-  },
+  }
 };
 
 export default crumbl;
