@@ -1,7 +1,7 @@
 {
-  "name": "typescript-template",
-  "version": "1.0.1",
-  "description": "A template for running typescript on the nodejs platform",
+  "name": "lancelot",
+  "version": "1.0.0",
+  "description": "The custom discord bot for the Knight Hacks discord",
   "main": "src/index.ts",
   "engines": {
     "node": ">=14.0.0",
