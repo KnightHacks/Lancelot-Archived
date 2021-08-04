@@ -1,4 +1,4 @@
-import { CommandInteraction, Message } from 'discord.js';
+import { Message } from 'discord.js';
 import { Command, inChannelNames } from '@knighthacks/dispatch';
 import { Channels } from '../../channels';
 import { singleButtonRow } from '../../util/button';
@@ -18,7 +18,7 @@ const CoinFlipCommand: Command = {
   name: 'coinflip',
   description: 'Performs a coin flip',
   permissionHandler: inChannelNames(Channels.bot),
-  async run(interaction: CommandInteraction): Promise<void> {
+  async run({ interaction }): Promise<void> {
     const message = await interaction.reply({ 
       content: `${interaction.user.username}, you got ${getFlip()}`,
       fetchReply: true,

@@ -1,5 +1,5 @@
 import { Command } from '@knighthacks/dispatch';
-import { ApplicationCommandOption, CommandInteraction } from 'discord.js';
+import { ApplicationCommandOption } from 'discord.js';
 
 const options: ApplicationCommandOption[] = [
   {
@@ -27,7 +27,7 @@ const eightball: Command = {
   name: 'eightball',
   description : 'Ask a question, and you shall recieve an answer',
   options,
-  async run(interaction: CommandInteraction) {
+  async run({ interaction }) {
     const randIndex = Math.floor(Math.random() * responses.length);
     await interaction.reply(responses[randIndex] ?? '');
   }
