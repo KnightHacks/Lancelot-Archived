@@ -31,7 +31,7 @@ dotenv.config();
 
 
   // New user handler
-  client.on('guildMemberAdd', async (member) => onWelcome(client, member));
+  client.on('guildMemberAdd', async (member) => onWelcome(client.interactionHandler.registerUI, member));
 
   console.log('Client is now running.');
 })();

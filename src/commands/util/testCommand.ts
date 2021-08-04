@@ -1,4 +1,4 @@
-import { CommandInteraction, MessageEmbed } from 'discord.js';
+import { MessageEmbed } from 'discord.js';
 import { Command, inChannelNames } from '@knighthacks/dispatch';
 import { Channels } from '../../channels';
 import { sendPaginatedEmbeds } from '../../util/paginator';
@@ -14,7 +14,7 @@ const command: Command = {
   name: 'test',
   description: 'a test command',
   permissionHandler: inChannelNames(Channels.bot),
-  async run(interaction: CommandInteraction): Promise<void> {
+  async run({ interaction }): Promise<void> {
     await sendPaginatedEmbeds(interaction, [
       embed1,
       embed2,

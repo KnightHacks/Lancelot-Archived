@@ -20,7 +20,7 @@ async function fetchCookiesData(): Promise<Cookie[]> {
 const crumbl: Command = {
   name: 'crumbl',
   description: 'View the current weekly specialty cookies at Crumbl Cookies!',
-  async run(i) {
+  async run({ interaction: i }) {
     await i.defer();
     const cookiesData = await fetchCookiesData();
 

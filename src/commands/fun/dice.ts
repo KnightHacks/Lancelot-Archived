@@ -1,4 +1,4 @@
-import { CommandInteraction, Message, MessageActionRow, MessageButton } from 'discord.js';
+import { Message, MessageActionRow, MessageButton } from 'discord.js';
 import { Command } from '@knighthacks/dispatch';
 
 const numberToString: Record<number, string> = {
@@ -22,7 +22,7 @@ const randNumber = () => Math.floor(Math.random() * 6) + 1; // +1 to exclude 0 a
 const DiceCommand: Command = {
   name: 'dice',
   description: 'Roll a die to get a random number between 1 and 6',
-  async run(interaction: CommandInteraction) {
+  async run({ interaction }) {
     // Send message.
     const message = await interaction.reply({ 
       content: `You rolled a  :${numberToString[randNumber()]}:`, 
