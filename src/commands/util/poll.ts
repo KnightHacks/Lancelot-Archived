@@ -1,5 +1,6 @@
 import { Command } from '@knighthacks/dispatch';
 import { ApplicationCommandOptionData, CommandInteractionOption, Message, MessageActionRow, MessageEmbed, MessageSelectMenu, MessageSelectOptionData, Snowflake, User } from 'discord.js';
+import Colors from '../../colors';
 
 function generateChoiceOptions(numChoices: number): ApplicationCommandOptionData[] {
   const retVal: ApplicationCommandOptionData[] = [];    
@@ -56,7 +57,8 @@ export class PollManager {
         value: `Votes: ${voteCount}`
       };
     }))
-      .setTitle(this.title);
+      .setTitle(this.title)
+      .setColor(Colors.embedColor);
   }
 
   vote(user: User, choice: string): void {
