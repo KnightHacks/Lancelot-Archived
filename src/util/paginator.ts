@@ -5,6 +5,7 @@ type PageButtonOptions = {
   nextLabel?: string;
   previousLabel?: string;
   content?: string;
+  showPagePosition?: boolean;
 };
 
 /**
@@ -55,6 +56,10 @@ export async function sendPaginatedEmbeds(
     }
 
     const row = new MessageActionRow().addComponents([previousButton, nextButton]);
+
+    if ((options?.showPagePosition ?? true) === true) {
+      currentEmbed.setFooter(`Page ${currentPage + 1} of ${embeds.length}`);
+    }
 
     return {
       embeds: [currentEmbed],
