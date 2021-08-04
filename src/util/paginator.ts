@@ -4,6 +4,7 @@ type PageButtonOptions = {
   style?: Exclude<MessageButtonStyle, 'LINK'>;
   nextLabel?: string;
   previousLabel?: string;
+  content?: string;
 };
 
 /**
@@ -63,8 +64,8 @@ export async function sendPaginatedEmbeds(
 
   const messageOptions = generateOptionsForPage(0);
   const message = interaction.deferred ?
-    await interaction.followUp({ ...messageOptions, fetchReply: true }) as Message :
-    await interaction.reply({ ...messageOptions, fetchReply: true }) as Message;
+    await interaction.followUp({ ...messageOptions, fetchReply: true, content: options?.content }) as Message :
+    await interaction.reply({ ...messageOptions, fetchReply: true, content: options?.content }) as Message;
 
   const collector = message.createMessageComponentCollector({ componentType: 'BUTTON' });
 
