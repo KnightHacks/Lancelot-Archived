@@ -134,7 +134,7 @@ const PollCommand: Command = {
     },
     ...generateChoiceOptions(10),
   ],
-  async run(interaction) {
+  async run({ interaction }) {
     const { options } = interaction;
     const title = options.get('title', true).value as string;
     const time = options.get('time', true).value as number;
