@@ -28,7 +28,12 @@ export class PollManager {
   private readonly userVoteMap = new Map<Snowflake, string>();
   private readonly title;
 
-  constructor(title: string, options: CommandInteractionOption[]) {
+
+  constructor(
+    private readonly time: number,
+    title: string,
+    options: CommandInteractionOption[]
+  ) {
     // Initialize vote map
     options.forEach(option => {
 
@@ -58,6 +63,7 @@ export class PollManager {
       };
     }))
       .setTitle(this.title)
+      .setDescription(`Duration: ${this.time} minute(s)`)
       .setColor(Colors.embedColor);
   }
 
@@ -158,7 +164,7 @@ const PollCommand: Command = {
     const normalizedOptions = options.data.filter(option => typeof option.value === 'string' 
       && (option.name !== 'title' && option.name !== 'time'));
 
-    const poll = new PollManager(title, normalizedOptions);
+    const poll = new PollManager(time, title, normalizedOptions);
     const embed = poll.generateEmbed();
 
     const row = new MessageActionRow()
@@ -187,6 +193,7 @@ const PollCommand: Command = {
 
     collector.on('end', async () => {
       const embed = poll.generateEmbed();
+      embed.description = null;
       embed.title = `Results of '${title}':`;
       await message.reply({ content: 'Poll: has concluded:', embeds: [embed] });
     });
