@@ -195,7 +195,7 @@ const PollCommand: Command = {
       const embed = poll.generateEmbed();
       embed.description = null;
       embed.title = `Results of '${title}':`;
-      await message.reply({ content: 'Poll: has concluded:', embeds: [embed] });
+      await message.reply({ content: '**Poll has concluded**', embeds: [embed] });
     });
   }
 };
