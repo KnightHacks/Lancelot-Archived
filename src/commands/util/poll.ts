@@ -192,6 +192,11 @@ const PollCommand: Command = {
     });
 
     collector.on('end', async () => {
+      // Remove select menu since poll is over.
+      if (message.editable) {
+        await message.edit({ components: [] });
+      }
+
       const embed = poll.generateEmbed();
       embed.description = null;
       embed.title = `Results of '${title}':`;

@@ -1,12 +1,16 @@
-import { CommandInteraction, InteractionReplyOptions, Message, MessageActionRow, MessageButton, MessageButtonStyle, MessageComponentInteraction, MessageEmbed } from 'discord.js';
+import { CommandInteraction, InteractionButtonOptions, InteractionReplyOptions, Message, MessageActionRow, MessageButton, MessageComponentInteraction, MessageEmbed } from 'discord.js';
 
 type PageButtonOptions = {
-  style?: Exclude<MessageButtonStyle, 'LINK'>;
+  style?: InteractionButtonOptions['style'];
   nextLabel?: string;
   previousLabel?: string;
   content?: string;
   showPagePosition?: boolean;
+  time?: number;
 };
+
+// Default to half an hour.
+const defaultTime = 1800000;
 
 /**
  * Sends a paginated message from the given embeds.
@@ -72,7 +76,7 @@ export async function sendPaginatedEmbeds(
     await interaction.followUp({ ...messageOptions, fetchReply: true, content: options?.content }) as Message :
     await interaction.reply({ ...messageOptions, fetchReply: true, content: options?.content }) as Message;
 
-  const collector = message.createMessageComponentCollector({ componentType: 'BUTTON' });
+  const collector = message.createMessageComponentCollector({ componentType: 'BUTTON', time: options?.time ?? defaultTime });
 
   collector.on('collect', async collectInteraction => {
 
@@ -89,5 +93,24 @@ export async function sendPaginatedEmbeds(
 
     const replyOptions = generateOptionsForPage(currentPage);
     await collectInteraction.editReply(replyOptions);
+  });
+
+  collector.on('end', async () => {
+    if (!message.editable) {
+      return;
+    }
+    // remove footer if enabled
+    if (options?.showPagePosition === undefined || options?.showPagePosition === true) {
+
+      const [ embed ] = message.embeds;
+
+      if (embed) {
+        embed.footer = null;
+        await message.edit({ components: [], embeds: [embed] });
+        return;
+      }
+    }
+    
+    await message.edit({ components: [] });
   });
 }
