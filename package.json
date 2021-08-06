@@ -44,7 +44,10 @@
   "dependencies": {
     "@knighthacks/dispatch": "^0.1.0-dev-42f61ad",
     "axios": "^0.21.1",
+    "bufferutil": "^4.0.3",
     "discord.js": "^13.0.0",
-    "dotenv": "^10.0.0"
+    "dotenv": "^10.0.0",
+    "utf-8-validate": "^5.0.5",
+    "zlib-sync": "^0.1.7"
   }
 }
