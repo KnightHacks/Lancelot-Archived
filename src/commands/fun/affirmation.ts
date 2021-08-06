@@ -22,7 +22,7 @@ const AffirmationCommand: Command = {
   name: 'affirmation',
   description: 'Get an affirmation',
   async run({ interaction }) {
-    await interaction.defer();
+    await interaction.deferReply();
 
     const content = await getAffirmation();
     const message = await interaction.followUp({ content, components: [row], fetchReply: true }) as Message;

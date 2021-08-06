@@ -92,7 +92,7 @@ const VibeCommand: Command = {
     const sender = interaction.user;
 
     // Show that the bot is thinking.
-    await interaction.defer();
+    await interaction.deferReply();
 
     const ui: Button = {
       style: 'PRIMARY',

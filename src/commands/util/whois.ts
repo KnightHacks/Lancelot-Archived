@@ -16,7 +16,7 @@ const WhoIs: Command = {
   options,
   async run({ interaction }) {
     const user = interaction.options.get('user')?.user ?? interaction.user;
-    await interaction.defer();
+    await interaction.deferReply();
     if(!user || !user.id)
     {
       await interaction.followUp('Please give a valid user');

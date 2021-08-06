@@ -41,7 +41,7 @@ const CatCommand: Command = {
   description: 'Gets a random image of a cat',
   async run({ interaction }) {
     // Defer while we fetch the image.
-    await interaction.defer();
+    await interaction.deferReply();
 
     const message = await getMessage();
     const repliedMessage = await interaction.followUp({ ...message, fetchReply: true }) as Message;

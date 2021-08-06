@@ -30,12 +30,12 @@ function KnightHacksRolesMenu(action: 'add' | 'remove', maybeMember?: GuildMembe
     options: roles,
     maxValues: roles.length,
     async onSelect({
-      defer,
+      deferReply,
       editReply,
       member: interactionMember,
       values: roleNames,
     }: SelectMenuInteraction) {
-      await defer({ ephemeral: true });
+      await deferReply({ ephemeral: true });
       const member: GuildMember = maybeMember ?? interactionMember as GuildMember;
       const roles: (Role | undefined)[] = roleNames.map((roleName) => {
         const role = getRole(member.guild, roleName);

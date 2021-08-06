@@ -72,7 +72,7 @@ const WeatherCommand: Command = {
   options,
   async run({ interaction }) {
     const city: string = interaction.options.get('city')?.value as string ?? 'Orlando';
-    await interaction.defer();
+    await interaction.deferReply();
 
     const weather = await getWeather(city);
     if (!weather) {
