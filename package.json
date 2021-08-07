@@ -42,7 +42,7 @@
     "typescript": "^4.3.5"
   },
   "dependencies": {
-    "@knighthacks/dispatch": "^0.1.0-dev-ef2a916",
+    "@knighthacks/dispatch": "^0.1.0-dev-857e584",
     "axios": "^0.21.1",
     "bufferutil": "^4.0.3",
     "discord.js": "^13.0.1",
