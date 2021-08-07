@@ -22,22 +22,22 @@
   "author": "Suneet Tipirneni",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/suneettipirneni/node-typescript-template/issues"
+    "url": "https://github.com/KnightHacks/Lancelot.git/issues"
   },
-  "homepage": "https://github.com/suneettipirneni/node-typescript-template#readme",
+  "homepage": "https://github.com/KnightHacks/Lancelot.git#readme",
   "devDependencies": {
-    "@babel/core": "^7.14.6",
-    "@babel/preset-env": "^7.14.7",
-    "@babel/preset-typescript": "^7.14.5",
+    "@babel/core": "^7.15.0",
+    "@babel/preset-env": "^7.15.0",
+    "@babel/preset-typescript": "^7.15.0",
     "@types/jest": "^26.0.24",
-    "@types/node": "^16.3.1",
-    "@typescript-eslint/eslint-plugin": "^4.28.2",
-    "@typescript-eslint/parser": "^4.28.2",
+    "@types/node": "^16.4.13",
+    "@typescript-eslint/eslint-plugin": "^4.29.0",
+    "@typescript-eslint/parser": "^4.29.0",
     "babel-jest": "^27.0.6",
-    "eslint": "^7.30.0",
+    "eslint": "^7.32.0",
     "jest": "^27.0.6",
     "nodemon": "^2.0.12",
-    "ts-jest": "^27.0.3",
+    "ts-jest": "^27.0.4",
     "ts-node": "^10.1.0",
     "typescript": "^4.3.5"
   },
@@ -45,7 +45,7 @@
     "@knighthacks/dispatch": "^0.1.0-dev-ef2a916",
     "axios": "^0.21.1",
     "bufferutil": "^4.0.3",
-    "discord.js": "^13.0.0",
+    "discord.js": "^13.0.1",
     "dotenv": "^10.0.0",
     "utf-8-validate": "^5.0.5",
     "zlib-sync": "^0.1.7"
