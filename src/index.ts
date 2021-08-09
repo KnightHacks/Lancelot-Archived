@@ -9,6 +9,8 @@ import { setupSentry } from './sentry';
 // Load env vars.
 dotenv.config();
 
+console.log(process.env.GITHUB_SHA);
+
 // Setup Sentry
 setupSentry();
 
