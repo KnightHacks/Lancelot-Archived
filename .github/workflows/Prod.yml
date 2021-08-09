@@ -151,10 +151,6 @@ jobs:
               sudo docker rm lancelot
               sudo docker login lancelot.azurecr.io -u ${{ secrets.AZURE_CONTAINER_USER}} -p ${{ secrets.AZURE_CONTAINER_PASSWORD}}
               sudo docker pull ${{ secrets.REGISTRY_LOGIN_SERVER}}/lancelot:latest
-              sudo docker run -e DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN}} \
-              -e GUILD_ID=${{ secrets.DISCORD_TOKEN}} \
-              -e WEATHER_API_KEY=${{ secrets.WEATHER_API}} \
-              -e SENTRY_DSN=${{ secrets.SENTRY_DSN}} \
-              --name lancelot -d ${{ secrets.REGISTRY_LOGIN_SERVER}}/lancelot:latest
+              sudo docker run -e DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN}} -e GUILD_ID=${{ secrets.DISCORD_TOKEN}} -e WEATHER_API_KEY=${{ secrets.WEATHER_API}} -e SENTRY_DSN=${{ secrets.SENTRY_DSN}} --name lancelot -d ${{ secrets.REGISTRY_LOGIN_SERVER}}/lancelot:latest
               ./discord.sh --webhook-url=${{ secrets.LANCELOT_WEBHOOK}} --text "Lancelot is deployed, give a minute to boot!"
  
