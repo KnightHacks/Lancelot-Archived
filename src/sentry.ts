@@ -30,5 +30,6 @@ export function setupSentry(): void {
       }),
     ],
     enabled: process.env.NODE_ENV === 'production',
+    debug: true,
   });
 }
