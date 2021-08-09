@@ -147,10 +147,16 @@ jobs:
             username: ${{ secrets.SERVER_USER }}
             key: ${{ secrets.KEY }}
             script: |
+              sudo rm -r .env
+              echo "DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN}}" > .env 
+              echo "GUILD_ID=${{ secrets.DISCORD_TOKEN}}" >> .env 
+              echo "WEATHER_API_KEY=${{ secrets.WEATHER_API}}" >> .env 
+              echo "SENTRY_DSN=${{ secrets.SENTRY_DSN}}" >> .env
+              echo "GITHUB_SHA=$GITHUB_SHA" >> .env
               sudo docker stop lancelot
               sudo docker rm lancelot
               sudo docker login lancelot.azurecr.io -u ${{ secrets.AZURE_CONTAINER_USER}} -p ${{ secrets.AZURE_CONTAINER_PASSWORD}}
               sudo docker pull ${{ secrets.REGISTRY_LOGIN_SERVER}}/lancelot:latest
-              sudo docker run --env-file .env --name lancelot -d ${{ secrets.REGISTRY_LOGIN_SERVER}}/lancelot:latest
+              sudo docker run --env-file .env -d --name lancelot  ${{ secrets.REGISTRY_LOGIN_SERVER}}/lancelot:latest
               ./discord.sh --webhook-url=${{ secrets.LANCELOT_WEBHOOK}} --text "Lancelot is deployed, give a minute to boot!"
  
