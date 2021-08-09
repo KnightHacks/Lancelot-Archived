@@ -63,7 +63,7 @@ jobs:
       - name: Run Build
         run: tsc -p tsconfig.production.json
       - name: Create a new Sentry release.
-        run: ./node_modules/.bin/sentry-cli release new "$GITHUB_SHA"
+        run: ./node_modules/.bin/sentry-cli releases new "$GITHUB_SHA"
       - name: Upload artifacts to release.
         run: ./node_modules/.bin/sentry-cli releases files "$GITHUB_SHA" upload-sourcemaps ./dist
       - name: Finalize release
