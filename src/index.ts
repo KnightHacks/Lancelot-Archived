@@ -3,9 +3,14 @@ import dotenv from 'dotenv';
 import { Client } from '@knighthacks/dispatch';
 import { countingFilter } from './countingFilter';
 import { onWelcome } from './welcomer';
+import * as Sentry from '@sentry/node';
+import { setupSentry } from './sentry';
 
 // Load env vars.
 dotenv.config();
+
+// Setup Sentry
+setupSentry();
 
 (async function main() {
   // Create client.
@@ -33,5 +38,19 @@ dotenv.config();
   // New user handler
   client.on('guildMemberAdd', async (member) => onWelcome(client.eventHandler.registerUI, member));
 
+  const transaction = Sentry.startTransaction({
+    op: 'test',
+    name: 'My First Test Transaction',
+  });
+  
+  setTimeout(() => {
+    try {
+      throw new Error('test');
+    } catch (e) {
+      Sentry.captureException(e);
+    } finally {
+      transaction.finish();
+    }
+  }, 99);
   console.log('Client is now running.');
 })();
