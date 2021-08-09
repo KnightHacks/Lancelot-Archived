@@ -41,8 +41,8 @@ setupSentry();
   // Handle command errors.
   client.onError = (_, error) => {
     const transaction = Sentry.startTransaction({
-      op: 'test',
-      name: 'My First Test Transaction',
+      op: 'Command Running',
+      name: 'Command Execution',
     });
 
     Sentry.captureException(error);
