@@ -150,8 +150,9 @@ jobs:
               sudo rm -r .env
               echo "DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN}}" > .env 
               echo "GUILD_ID=${{ secrets.DISCORD_TOKEN}}" >> .env 
-              "WEATHER_API_KEY=${{ secrets.WEATHER_API}}" >> .env 
-              "SENTRY_DSN=${{ secrets.SENTRY_DSN}}" >> .env
+              echo "WEATHER_API_KEY=${{ secrets.WEATHER_API}}" >> .env 
+              echo "SENTRY_DSN=${{ secrets.SENTRY_DSN}}" >> .env
+              echo "GITHUB_SHA=$GITHUB_SHA" >> .env
               sudo docker stop lancelot
               sudo docker rm lancelot
               sudo docker login lancelot.azurecr.io -u ${{ secrets.AZURE_CONTAINER_USER}} -p ${{ secrets.AZURE_CONTAINER_PASSWORD}}
