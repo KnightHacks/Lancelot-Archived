@@ -15,7 +15,6 @@ const command: Command = {
   description: 'a test command',
   permissionHandler: inChannelNames(Channels.bot),
   async run({ interaction }): Promise<void> {
-    throw new Error('Test Error');
     await sendPaginatedEmbeds(interaction, [
       embed1,
       embed2,
