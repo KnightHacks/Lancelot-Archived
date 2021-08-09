@@ -9,8 +9,6 @@ import { setupSentry } from './sentry';
 // Load env vars.
 dotenv.config();
 
-console.log(process.env.GITHUB_SHA);
-
 // Setup Sentry
 setupSentry();
 
@@ -40,19 +38,16 @@ setupSentry();
   // New user handler
   client.on('guildMemberAdd', async (member) => onWelcome(client.eventHandler.registerUI, member));
 
-  const transaction = Sentry.startTransaction({
-    op: 'test',
-    name: 'My First Test Transaction',
-  });
-  
-  setTimeout(() => {
-    try {
-      throw new Error('test');
-    } catch (e) {
-      Sentry.captureException(e);
-    } finally {
-      transaction.finish();
-    }
-  }, 99);
+  // Handle command errors.
+  client.onError = (_, error) => {
+    const transaction = Sentry.startTransaction({
+      op: 'test',
+      name: 'My First Test Transaction',
+    });
+
+    Sentry.captureException(error);
+    transaction.finish();
+  };
+
   console.log('Client is now running.');
 })();

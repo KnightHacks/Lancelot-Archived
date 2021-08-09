@@ -15,9 +15,6 @@ declare global {
 // @ts-ignore
 global.__rootdir__ = __dirname || process.cwd();
 
-// @ts-ignore
-console.log(global.__rootdir__);
-
 export function setupSentry(): void {
   Sentry.init({
     dsn: process.env.SENTRY_DSN,

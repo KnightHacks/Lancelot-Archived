@@ -43,7 +43,7 @@
     "typescript": "^4.3.5"
   },
   "dependencies": {
-    "@knighthacks/dispatch": "^0.1.0-dev-b6893fb",
+    "@knighthacks/dispatch": "^0.1.0-dev-8c47ecb",
     "@sentry/integrations": "^6.11.0",
     "@sentry/node": "^6.11.0",
     "@sentry/tracing": "^6.11.0",
