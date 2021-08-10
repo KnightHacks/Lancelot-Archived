@@ -40,6 +40,15 @@ setupSentry();
 
   client.on('messageCreate', async message => {
     if (client.isReady()) {
+      const everyone = message.guild?.roles.everyone.id;
+      if (!everyone) {
+        return;
+      }
+
+      if (message.mentions.has(everyone)) {
+        return;
+      }
+
       if (message.mentions.has(client.user)) {
         const index = getRandomIntInclusive(0, replies.length - 1);
         await message.reply(replies[index] ?? 'Something went wrong!');
