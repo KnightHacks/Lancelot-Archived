@@ -5,6 +5,9 @@ import { countingFilter } from './countingFilter';
 import { onWelcome } from './welcomer';
 import * as Sentry from '@sentry/node';
 import { setupSentry } from './sentry';
+import { PresenceData } from 'discord.js';
+import { loadReplies } from './util/jsonLoader';
+import { getRandomIntInclusive } from './util/random';
 
 // Load env vars.
 dotenv.config();
@@ -13,8 +16,18 @@ dotenv.config();
 setupSentry();
 
 (async function main() {
+
+  const presence: PresenceData = {
+    activities: [
+      {
+        name: 'Slash Commands',
+        type: 'WATCHING'
+      }
+    ]
+  };
+
   // Create client.
-  const client = new Client({intents: ['GUILDS', 'GUILD_MESSAGES', 'GUILD_PRESENCES', 'GUILD_MEMBERS'], partials: ['MESSAGE']});
+  const client = new Client({intents: ['GUILDS', 'GUILD_MESSAGES', 'GUILD_PRESENCES', 'GUILD_MEMBERS'], partials: ['MESSAGE'], presence });
 
   // Load commands in.
   await client.registerCommands(path.join(__dirname, 'commands'));
@@ -23,17 +36,16 @@ setupSentry();
   // Start up client.
   await client.login(process.env.DISCORD_TOKEN);
 
-  if (client.isReady()) {
-    client.user.setPresence({
-      activities: [
-        {
-          name: 'Slash Commands be run.',
-          type: 'WATCHING'
-        }
-      ]
-    });
-  }
+  const replies = await loadReplies();
 
+  client.on('messageCreate', async message => {
+    if (client.isReady()) {
+      if (message.mentions.has(client.user)) {
+        const index = getRandomIntInclusive(0, replies.length - 1);
+        await message.reply(replies[index] ?? 'Something went wrong!');
+      }
+    }
+  });
 
   // New user handler
   client.on('guildMemberAdd', async (member) => onWelcome(client.eventHandler.registerUI, member));
