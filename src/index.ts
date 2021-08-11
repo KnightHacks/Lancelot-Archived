@@ -7,7 +7,7 @@ import * as Sentry from '@sentry/node';
 import { setupSentry } from './sentry';
 import { PresenceData } from 'discord.js';
 import { getRandomIntInclusive } from './util/random';
-import replies from '../replies.json';
+import * as replies from '../replies.json';
 
 // Load env vars.
 dotenv.config();
