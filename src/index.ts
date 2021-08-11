@@ -6,8 +6,8 @@ import { onWelcome } from './welcomer';
 import * as Sentry from '@sentry/node';
 import { setupSentry } from './sentry';
 import { PresenceData } from 'discord.js';
-import { loadReplies } from './util/jsonLoader';
 import { getRandomIntInclusive } from './util/random';
+import * as replies from '../replies.json';
 
 // Load env vars.
 dotenv.config();
@@ -35,8 +35,6 @@ setupSentry();
 
   // Start up client.
   await client.login(process.env.DISCORD_TOKEN);
-
-  const replies = await loadReplies();
 
   client.on('messageCreate', async message => {
     if (client.isReady()) {
