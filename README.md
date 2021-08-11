@@ -2,7 +2,7 @@
 
 ## Preparing your environment
 
-- Make sure you're running at least node v14.x
+- Make sure you're running at least node v16.x
 
 ### Get the discord server template
 
