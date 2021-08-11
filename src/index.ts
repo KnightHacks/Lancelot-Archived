@@ -6,8 +6,8 @@ import { onWelcome } from './welcomer';
 import * as Sentry from '@sentry/node';
 import { setupSentry } from './sentry';
 import { PresenceData } from 'discord.js';
-import { loadReplies } from './util/jsonLoader';
 import { getRandomIntInclusive } from './util/random';
+import * as replies from '../replies.json';
 
 // Load env vars.
 dotenv.config();
@@ -36,10 +36,17 @@ setupSentry();
   // Start up client.
   await client.login(process.env.DISCORD_TOKEN);
 
-  const replies = await loadReplies();
-
   client.on('messageCreate', async message => {
     if (client.isReady()) {
+      const everyone = message.guild?.roles.everyone.id;
+      if (!everyone) {
+        return;
+      }
+
+      if (message.mentions.has(everyone)) {
+        return;
+      }
+
       if (message.mentions.has(client.user)) {
         const index = getRandomIntInclusive(0, replies.length - 1);
         await message.reply(replies[index] ?? 'Something went wrong!');
@@ -52,6 +59,7 @@ setupSentry();
 
   // Handle command errors.
   client.onError = (_, error) => {
+    console.error(error);
     const transaction = Sentry.startTransaction({
       op: 'Command Running',
       name: 'Command Execution',
