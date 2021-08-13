@@ -1,21 +1,18 @@
-import { ApplicationCommandOption, MessageEmbed } from 'discord.js';
+import { MessageEmbed } from 'discord.js';
 import { Command } from '@knighthacks/dispatch';
 import Colors from '../../colors';
 
-const options: ApplicationCommandOption[] = [
-  {
-    name: 'user',
-    type: 'USER',
-    description: 'Displays the specified user\'s info. If no user is tagged, displays the author\'s info.',
-  }
-];
-
 const WhoIs: Command = {
-  name: 'whois',
-  description: 'Displays info about a given user',
-  options,
+  type: 'USER',
+  name: 'Get User Statistics',
   async run({ interaction }) {
-    const user = interaction.options.get('user')?.user ?? interaction.user;
+    const guildMember = interaction.guild?.members.cache.get(interaction.targetId);
+    const user = guildMember?.user;
+
+    if (!user) {
+      throw new Error(`Could not perform whois on user with ID: ${interaction.targetId}`);
+    }
+
     await interaction.deferReply();
     if(!user || !user.id)
     {
