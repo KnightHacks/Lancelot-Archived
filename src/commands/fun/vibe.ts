@@ -1,14 +1,12 @@
 import {
   Button,
   Command,
-  inChannelNames,
 } from '@knighthacks/dispatch';
 import {
   EmbedFieldData,
   MessageEmbed,
   User,
 } from 'discord.js';
-import { Channels } from '../../channels';
 import Colors from '../../colors';
 
 
@@ -77,7 +75,6 @@ function generateVibeEmbed(sender: User, recipient: User): MessageEmbed {
 const VibeCommand: Command = {
   name: 'Vibe Check',
   type: 'USER',
-  permissionHandler: inChannelNames(Channels.bot),
   async run({ interaction, registerUI }) {
     const guildMember = interaction.guild?.members.cache.get(interaction.targetId);
     const user = guildMember?.user;
@@ -85,7 +82,7 @@ const VibeCommand: Command = {
     if (!user) {
       throw new Error(`Could not perform whois on user with ID: ${interaction.targetId}`);
     }
-    
+
     const sender = interaction.user;
 
     // Show that the bot is thinking.
