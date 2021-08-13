@@ -4,7 +4,6 @@ import {
   inChannelNames,
 } from '@knighthacks/dispatch';
 import {
-  ApplicationCommandOption,
   EmbedFieldData,
   MessageEmbed,
   User,
@@ -12,13 +11,6 @@ import {
 import { Channels } from '../../channels';
 import Colors from '../../colors';
 
-const options: ApplicationCommandOption[] = [
-  {
-    name: 'user',
-    type: 'USER',
-    description: 'The user to vibe check',
-  },
-];
 
 const categories = [
   { name: 'Royalty', emoji: '👑' },
@@ -83,12 +75,17 @@ function generateVibeEmbed(sender: User, recipient: User): MessageEmbed {
 }
 
 const VibeCommand: Command = {
-  name: 'vibe',
-  description: 'Performs a vibe check on the given user.',
-  options,
+  name: 'Vibe Check',
+  type: 'USER',
   permissionHandler: inChannelNames(Channels.bot),
   async run({ interaction, registerUI }) {
-    const user = interaction.options.get('user')?.user;
+    const guildMember = interaction.guild?.members.cache.get(interaction.targetId);
+    const user = guildMember?.user;
+
+    if (!user) {
+      throw new Error(`Could not perform whois on user with ID: ${interaction.targetId}`);
+    }
+    
     const sender = interaction.user;
 
     // Show that the bot is thinking.
