@@ -1,7 +1,7 @@
 import { MessageEmbed } from 'discord.js';
 import { Command, inChannelNames } from '@knighthacks/dispatch';
 import { Channels } from '../../channels';
-import { sendPaginatedEmbeds } from '../../util/paginator';
+import { sendPaginatedEmbeds } from 'discord.js-embed-pagination';
 
 const embed1 = new MessageEmbed()
   .setTitle('test1');

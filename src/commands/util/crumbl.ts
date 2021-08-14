@@ -1,7 +1,7 @@
 import { Command } from '@knighthacks/dispatch';
 import axios from 'axios';
 import { MessageEmbed } from 'discord.js';
-import { sendPaginatedEmbeds } from '../../util/paginator';
+import { sendPaginatedEmbeds } from 'discord.js-embed-pagination';
 
 interface Cookie {
   name: string;
