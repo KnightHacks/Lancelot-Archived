@@ -6,7 +6,6 @@ const links: LinkButtonData[] = [
   { link: 'https://www.knighthacks.org/membership', label: 'Membership Form' },
   { link: 'https://www.knighthacks.org/linktree', label: 'Link Tree' },
   { link: 'https://www.knighthacks.org/dues', label: 'Pay Dues' },
-  { link: 'https://www.knighthacks.org/feedback', label: 'Workshop Feedback' },
   { link: 'https://www.knighthacks.org/ops', label: 'Operations Meetings' },
 ];
 
