@@ -4,6 +4,7 @@ import { MessageEmbed } from 'discord.js';
 import { camelizeKeys } from 'humps';
 import { sendPaginatedEmbeds } from 'discord.js-embed-pagination';
 import { toTitleCase } from '../../util/formatters';
+import Colors from '../../colors';
 
 const URL = 'https://api.pubsub-api.dev/onsale';
 
@@ -29,6 +30,7 @@ function generateSubEmbed(data: SubData) {
   return new MessageEmbed()
     .setTitle(toTitleCase(data.name))
     .setImage(data.image)
+    .setColor(Colors.embedColor)
     .addField('Price', data.price)
     .addField('On Sale?', data.onSale === 'True' ? 'Yup!' : 'Nope!')
     .addField('Last on Sale', data.lastOnSale);
