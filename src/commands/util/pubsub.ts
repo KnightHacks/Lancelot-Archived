@@ -28,7 +28,7 @@ async function getSubs(): Promise<SubData[] | null> {
 function generateSubEmbed(data: SubData) {
   return new MessageEmbed()
     .setTitle(toTitleCase(data.name))
-    .setThumbnail(data.image)
+    .setImage(data.image)
     .addField('Price', data.price)
     .addField('On Sale?', data.onSale === 'True' ? 'Yup!' : 'Nope!')
     .addField('Last on Sale', data.lastOnSale);
