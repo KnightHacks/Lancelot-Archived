@@ -31,6 +31,12 @@ setupSentry();
 
   // Load commands in.
   await client.registerCommands(path.join(__dirname, 'commands'));
+
+  if (!process.env.GUILD_ID) {
+    throw new Error('GUILD_ID is not set in your env file!');
+  }
+
+  client.setGuildID(process.env.GUILD_ID);
   client.registerMessageFilters([countingFilter]);
 
   // Start up client.
