@@ -65,7 +65,7 @@ function generateEmbed(event: Event): MessageEmbed {
   return embed;
 }
 
-const UCFCalendar: Command = {
+const UCFCalendarCommand: Command = {
   name: 'ucfcal',
   description: 'Get\'s upcoming UCF calendar events.',
   async run({ interaction }) {
@@ -83,4 +83,4 @@ const UCFCalendar: Command = {
   }
 };
 
-export default UCFCalendar;
+export default UCFCalendarCommand;
