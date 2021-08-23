@@ -1,17 +1,28 @@
 import { Command } from '@knighthacks/dispatch';
-import { ApplicationCommandOptionData, CommandInteractionOption, Message, MessageActionRow, MessageEmbed, MessageSelectMenu, MessageSelectOptionData, Snowflake, User } from 'discord.js';
+import {
+  ApplicationCommandOptionData,
+  CommandInteractionOption,
+  Message,
+  MessageActionRow,
+  MessageEmbed,
+  MessageSelectMenu,
+  MessageSelectOptionData,
+  Snowflake,
+  User,
+} from 'discord.js';
 import Colors from '../../colors';
 
-function generateChoiceOptions(numChoices: number): ApplicationCommandOptionData[] {
-  const retVal: ApplicationCommandOptionData[] = [];    
+function generateChoiceOptions(
+  numChoices: number
+): ApplicationCommandOptionData[] {
+  const retVal: ApplicationCommandOptionData[] = [];
   for (let i = 1; i <= numChoices; i++) {
-    
     let required = false;
 
     if (i <= 2) {
       required = true;
     }
-    
+
     retVal.push({
       name: `option${i}`,
       type: 'STRING',
@@ -28,15 +39,13 @@ export class PollManager {
   private readonly userVoteMap = new Map<Snowflake, string>();
   private readonly title;
 
-
   constructor(
     private readonly time: number,
     title: string,
     options: CommandInteractionOption[]
   ) {
     // Initialize vote map
-    options.forEach(option => {
-
+    options.forEach((option) => {
       if (typeof option.value !== 'string') {
         return;
       }
@@ -55,13 +64,16 @@ export class PollManager {
       return bCount - aCount;
     });
 
-    return new MessageEmbed().addFields(entries.map((entry, i) => {
-      const [ optionName, voteCount ] = entry;
-      return {
-        name: `${i + 1}) ${optionName}`,
-        value: `Votes: ${voteCount}`
-      };
-    }))
+    return new MessageEmbed()
+      .addFields(
+        entries.map((entry, i) => {
+          const [optionName, voteCount] = entry;
+          return {
+            name: `${i + 1}) ${optionName}`,
+            value: `Votes: ${voteCount}`,
+          };
+        })
+      )
       .setTitle(this.title)
       .setDescription(`Duration: ${this.time} minute(s)`)
       .setColor(Colors.embedColor);
@@ -109,12 +121,11 @@ export class PollManager {
 }
 
 function generateMenu(options: CommandInteractionOption[]): MessageSelectMenu {
-  const choices: MessageSelectOptionData[] = options.map(option => {
+  const choices: MessageSelectOptionData[] = options.map((option) => {
     return {
       label: option.value as string,
       value: option.value as string,
     };
-    
   });
 
   return new MessageSelectMenu()
@@ -161,17 +172,29 @@ const PollCommand: Command = {
       throw new Error('Could not find channel');
     }
 
-    const normalizedOptions = options.data.filter(option => typeof option.value === 'string' 
-      && (option.name !== 'title' && option.name !== 'time'));
+    const normalizedOptions = options.data.filter(
+      (option) =>
+        typeof option.value === 'string' &&
+        option.name !== 'title' &&
+        option.name !== 'time'
+    );
 
     const poll = new PollManager(time, title, normalizedOptions);
     const embed = poll.generateEmbed();
 
-    const row = new MessageActionRow()
-      .addComponents(generateMenu(normalizedOptions));
+    const row = new MessageActionRow().addComponents(
+      generateMenu(normalizedOptions)
+    );
 
-    const message = await interaction.reply({ embeds: [embed], fetchReply: true, components: [row] }) as Message;
-    const collector = message.createMessageComponentCollector({ componentType: 'SELECT_MENU', time: time * 60000 });
+    const message = (await interaction.reply({
+      embeds: [embed],
+      fetchReply: true,
+      components: [row],
+    })) as Message;
+    const collector = message.createMessageComponentCollector({
+      componentType: 'SELECT_MENU',
+      time: time * 60000,
+    });
 
     collector.on('collect', async (collectInteraction) => {
       await collectInteraction.deferUpdate();
@@ -179,7 +202,7 @@ const PollCommand: Command = {
         return;
       }
 
-      const [ choice ] = collectInteraction.values;
+      const [choice] = collectInteraction.values;
 
       if (!choice) {
         return;
@@ -200,9 +223,12 @@ const PollCommand: Command = {
       const embed = poll.generateEmbed();
       embed.description = null;
       embed.title = `Results of '${title}':`;
-      await message.reply({ content: '**Poll has concluded**', embeds: [embed] });
+      await message.reply({
+        content: '**Poll has concluded**',
+        embeds: [embed],
+      });
     });
-  }
+  },
 };
 
 export default PollCommand;

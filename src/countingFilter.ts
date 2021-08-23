@@ -5,7 +5,9 @@ import { getPrevious } from './util/messages';
 export async function countingFilter(message: Message): Promise<boolean> {
   const previousMessage = await getPrevious(message);
 
-  const countingChannel = message.guild?.channels.cache.find(channel => channel.name === Channels.counting);
+  const countingChannel = message.guild?.channels.cache.find(
+    (channel) => channel.name === Channels.counting
+  );
 
   if (!countingChannel) {
     throw new Error(`Could not find counting channel: ${Channels.counting}`);
@@ -22,13 +24,13 @@ export async function countingFilter(message: Message): Promise<boolean> {
 
   const previousValue = parseInt(previousMessage.content);
   const newValue = parseFloat(message.content);
-  
+
   // Verify if number is integer
   if (!Number.isInteger(newValue)) {
     return false;
   }
 
-  if (newValue === (previousValue + 1)) {
+  if (newValue === previousValue + 1) {
     return true;
   }
 

@@ -16,18 +16,21 @@ dotenv.config();
 setupSentry();
 
 (async function main() {
-
   const presence: PresenceData = {
     activities: [
       {
         name: 'Slash Commands',
-        type: 'WATCHING'
-      }
-    ]
+        type: 'WATCHING',
+      },
+    ],
   };
 
   // Create client.
-  const client = new Client({intents: ['GUILDS', 'GUILD_MESSAGES', 'GUILD_PRESENCES', 'GUILD_MEMBERS'], partials: ['MESSAGE'], presence });
+  const client = new Client({
+    intents: ['GUILDS', 'GUILD_MESSAGES', 'GUILD_PRESENCES', 'GUILD_MEMBERS'],
+    partials: ['MESSAGE'],
+    presence,
+  });
 
   // Load commands in.
   await client.registerCommands(path.join(__dirname, 'commands'));
@@ -42,7 +45,7 @@ setupSentry();
   // Start up client.
   await client.login(process.env.DISCORD_TOKEN);
 
-  client.on('messageCreate', async message => {
+  client.on('messageCreate', async (message) => {
     if (client.isReady()) {
       const everyone = message.guild?.roles.everyone.id;
       if (!everyone) {
@@ -61,7 +64,9 @@ setupSentry();
   });
 
   // New user handler
-  client.on('guildMemberAdd', async (member) => onWelcome(client.eventHandler.registerUI, member));
+  client.on('guildMemberAdd', async (member) =>
+    onWelcome(client.eventHandler.registerUI, member)
+  );
 
   // Handle command errors.
   client.onError = (_, error) => {

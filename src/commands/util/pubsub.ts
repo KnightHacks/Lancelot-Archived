@@ -18,8 +18,9 @@ type SubData = {
 };
 
 async function getSubs(): Promise<SubData[] | null> {
-  return await axios.get<SubData[]>(URL)
-    .then(response => camelizeKeys(response.data) as SubData[])
+  return await axios
+    .get<SubData[]>(URL)
+    .then((response) => camelizeKeys(response.data) as SubData[])
     .catch((error) => {
       console.log(error);
       return null;
@@ -39,7 +40,7 @@ function generateSubEmbed(data: SubData) {
 const PubSubCommand: Command = {
   name: 'pubsub',
   description: 'Fetches the current sales on Publix Subs.',
-  async run ({ interaction }) {
+  async run({ interaction }) {
     await interaction.deferReply();
 
     // We only want a max of ten subs.
@@ -51,7 +52,7 @@ const PubSubCommand: Command = {
 
     const embeds = subs.map(generateSubEmbed);
     await sendPaginatedEmbeds(interaction, embeds);
-  }
+  },
 };
 
 export default PubSubCommand;

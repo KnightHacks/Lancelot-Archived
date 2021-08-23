@@ -11,11 +11,7 @@ interface Cookie {
 }
 
 async function fetchCookiesData(): Promise<Cookie[]> {
-  return (
-    await axios.get(
-      'https://crumbl-api-2.rb32020.workers.dev/'
-    )
-  ).data;
+  return (await axios.get('https://crumbl-api-2.rb32020.workers.dev/')).data;
 }
 
 const crumbl: Command = {
@@ -25,16 +21,18 @@ const crumbl: Command = {
     await i.deferReply();
     const cookiesData = await fetchCookiesData();
 
-    const embeds = cookiesData.map((c) => new MessageEmbed()
-      .setTitle(c.name)
-      .setColor(Colors.embedColor)
-      .setDescription(c.description)
-      .setThumbnail(c.image));
+    const embeds = cookiesData.map((c) =>
+      new MessageEmbed()
+        .setTitle(c.name)
+        .setColor(Colors.embedColor)
+        .setDescription(c.description)
+        .setThumbnail(c.image)
+    );
 
     await sendPaginatedEmbeds(i, embeds, {
-      content: 'Here are the weekly specialty cookies!'
+      content: 'Here are the weekly specialty cookies!',
     });
-  }
+  },
 };
 
 export default crumbl;

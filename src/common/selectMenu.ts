@@ -25,7 +25,10 @@ const roles = [
 const getRole = (guild: Guild, roleName: string) =>
   guild.roles.cache.find((role) => role.name === roleName);
 
-function KnightHacksRolesMenu(action: 'add' | 'remove', maybeMember?: GuildMember): SelectMenu {
+function KnightHacksRolesMenu(
+  action: 'add' | 'remove',
+  maybeMember?: GuildMember
+): SelectMenu {
   const rolesMenu: SelectMenu = {
     options: roles,
     maxValues: roles.length,
@@ -36,7 +39,8 @@ function KnightHacksRolesMenu(action: 'add' | 'remove', maybeMember?: GuildMembe
       values: roleNames,
     }: SelectMenuInteraction) {
       await deferReply({ ephemeral: true });
-      const member: GuildMember = maybeMember ?? interactionMember as GuildMember;
+      const member: GuildMember =
+        maybeMember ?? (interactionMember as GuildMember);
       const roles: (Role | undefined)[] = roleNames.map((roleName) => {
         const role = getRole(member.guild, roleName);
         if (!role) console.log(`Role lookup for ${roleName} failed!`);

@@ -15,8 +15,9 @@ const row = singleButtonRow({
 });
 
 async function getDogImage(): Promise<string | null> {
-  return axios.get<DogResponse>(url)
-    .then(response => response.data.message)
+  return axios
+    .get<DogResponse>(url)
+    .then((response) => response.data.message)
     .catch(() => null);
 }
 
@@ -40,21 +41,24 @@ const DogCommand: Command = {
   name: 'dog',
   description: 'Downloads an image of a dog from the internet',
   async run({ interaction }) {
-
     // Defer interaction while we fetch the image.
     await interaction.deferReply();
 
     const message = await getMessage();
-    const repliedMessage = await interaction.followUp({ ...message, fetchReply: true }) as Message;
+    const repliedMessage = (await interaction.followUp({
+      ...message,
+      fetchReply: true,
+    })) as Message;
 
-    const collector = repliedMessage.createMessageComponentCollector({ componentType: 'BUTTON' });
+    const collector = repliedMessage.createMessageComponentCollector({
+      componentType: 'BUTTON',
+    });
     collector.on('collect', async (i) => {
       await i.deferUpdate();
       const dogMessage = await getMessage();
       await i.editReply(dogMessage);
     });
-
-  }
+  },
 };
 
 export default DogCommand;

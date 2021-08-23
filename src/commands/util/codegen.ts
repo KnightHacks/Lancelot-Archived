@@ -10,11 +10,15 @@ const options: ApplicationCommandOptionData[] = [
     description: 'The source code to format',
     type: 'STRING',
     required: true,
-  }
+  },
 ];
 
 async function getImage(code: string) {
-  const response = await axios.post<Buffer>(url, { code, backgroundColor: 'rgba(0, 0, 0, 0)' }, { responseType: 'arraybuffer' });
+  const response = await axios.post<Buffer>(
+    url,
+    { code, backgroundColor: 'rgba(0, 0, 0, 0)' },
+    { responseType: 'arraybuffer' }
+  );
   return response.data;
 }
 
@@ -29,8 +33,8 @@ const CodeGenCommand: Command = {
     const buffer = await getImage(code);
 
     const attachment = new MessageAttachment(buffer, 'code.png');
-    await interaction.followUp({ files: [attachment]});
-  }
+    await interaction.followUp({ files: [attachment] });
+  },
 };
 
 export default CodeGenCommand;

@@ -38,7 +38,7 @@ export async function onWelcome(
       components: registerUI(KnightHacksRolesMenu('add', member)),
     });
   } catch {
-    console.log('User doesn\'t allow DMs.');
+    console.log("User doesn't allow DMs.");
     return;
   }
 }

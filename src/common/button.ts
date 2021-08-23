@@ -9,7 +9,7 @@ const links: LinkButtonData[] = [
   { link: 'https://www.knighthacks.org/ops', label: 'Operations Meetings' },
 ];
 
-const buttons: MessageButton[] = links.map(data => {
+const buttons: MessageButton[] = links.map((data) => {
   return new MessageButton()
     .setLabel(data.label)
     .setStyle('LINK')

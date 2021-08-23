@@ -24,21 +24,25 @@ const DiceCommand: Command = {
   description: 'Roll a die to get a random number between 1 and 6',
   async run({ interaction }) {
     // Send message.
-    const message = await interaction.reply({ 
-      content: `You rolled a  :${numberToString[randNumber()]}:`, 
+    const message = (await interaction.reply({
+      content: `You rolled a  :${numberToString[randNumber()]}:`,
       fetchReply: true,
       components: [row],
-    }) as Message;
+    })) as Message;
 
     // Create a button collector.
-    const collector = message.createMessageComponentCollector({ componentType: 'BUTTON'});
+    const collector = message.createMessageComponentCollector({
+      componentType: 'BUTTON',
+    });
 
     // Listen for button interactions.
     collector.on('collect', async (collectInteraction) => {
       const rand = Math.floor(Math.random() * 6) + 1;
-      await collectInteraction.update({ content: `You rolled a  :${numberToString[rand]}:` });
+      await collectInteraction.update({
+        content: `You rolled a  :${numberToString[rand]}:`,
+      });
     });
-  }
+  },
 };
 
 export default DiceCommand;

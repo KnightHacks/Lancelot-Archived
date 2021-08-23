@@ -15,8 +15,9 @@ const row = singleButtonRow({
 });
 
 async function getCatImage(): Promise<string | null> {
-  return axios.get<CatResponse>(url)
-    .then(response => response.data[0].url)
+  return axios
+    .get<CatResponse>(url)
+    .then((response) => response.data[0].url)
     .catch(() => null);
 }
 
@@ -44,16 +45,20 @@ const CatCommand: Command = {
     await interaction.deferReply();
 
     const message = await getMessage();
-    const repliedMessage = await interaction.followUp({ ...message, fetchReply: true }) as Message;
+    const repliedMessage = (await interaction.followUp({
+      ...message,
+      fetchReply: true,
+    })) as Message;
 
-    const collector = repliedMessage.createMessageComponentCollector({ componentType: 'BUTTON' });
+    const collector = repliedMessage.createMessageComponentCollector({
+      componentType: 'BUTTON',
+    });
     collector.on('collect', async (i) => {
       await i.deferUpdate();
       const catImage = await getMessage();
       await i.editReply(catImage);
     });
-
-  }
+  },
 };
 
 export default CatCommand;

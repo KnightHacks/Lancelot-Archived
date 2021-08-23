@@ -40,13 +40,6 @@
       }
     ],
     "indent": "off",
-    "@typescript-eslint/indent": [
-      "error",
-      2,
-      {
-        "ignoredNodes": ["TSTypeParameterInstantiation"]
-      }
-    ],
     "quotes": "off",
     "@typescript-eslint/quotes": [
       "error",

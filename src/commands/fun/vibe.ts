@@ -1,14 +1,6 @@
-import {
-  Button,
-  Command,
-} from '@knighthacks/dispatch';
-import {
-  EmbedFieldData,
-  MessageEmbed,
-  User,
-} from 'discord.js';
+import { Button, Command } from '@knighthacks/dispatch';
+import { EmbedFieldData, MessageEmbed, User } from 'discord.js';
 import Colors from '../../colors';
-
 
 const categories = [
   { name: 'Royalty', emoji: '👑' },
@@ -76,11 +68,15 @@ const VibeCommand: Command = {
   name: 'Vibe Check',
   type: 'USER',
   async run({ interaction, registerUI }) {
-    const guildMember = interaction.guild?.members.cache.get(interaction.targetId);
+    const guildMember = interaction.guild?.members.cache.get(
+      interaction.targetId
+    );
     const user = guildMember?.user;
 
     if (!user) {
-      throw new Error(`Could not perform whois on user with ID: ${interaction.targetId}`);
+      throw new Error(
+        `Could not perform whois on user with ID: ${interaction.targetId}`
+      );
     }
 
     const sender = interaction.user;

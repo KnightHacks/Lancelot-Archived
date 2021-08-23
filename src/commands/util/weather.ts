@@ -12,7 +12,7 @@ const options: ApplicationCommandOptionData[] = [
     name: 'city',
     description: 'The City to get weather data from.',
     type: 'STRING',
-  }
+  },
 ];
 
 type WeatherResponse = {
@@ -32,12 +32,14 @@ type WeatherResponse = {
   ];
 };
 
-const normalizeTemp = (temp: number) => Math.round(temp * (9/5) - 459.67).toString() + '°';
+const normalizeTemp = (temp: number) =>
+  Math.round(temp * (9 / 5) - 459.67).toString() + '°';
 
 function getWeather(city: string): Promise<WeatherResponse | null | string> {
   const fetchURL = `${baseURL}appid=${apiKey}&q=${city}`;
-  return axios.get<WeatherResponse>(fetchURL)
-    .then(response => response.data)
+  return axios
+    .get<WeatherResponse>(fetchURL)
+    .then((response) => response.data)
     .catch((error: AxiosError) => {
       if (error.response?.data.cod === '404') {
         return `'${city}' is not a valid city.`;
@@ -50,9 +52,8 @@ function getWeather(city: string): Promise<WeatherResponse | null | string> {
 }
 
 function createWeatherEmbed(city: string, response: WeatherResponse) {
-
   const { main } = response;
-  const [ weather ] = response.weather;
+  const [weather] = response.weather;
 
   return new MessageEmbed()
     .setColor(Colors.embedColor)
@@ -71,7 +72,8 @@ const WeatherCommand: Command = {
   description: 'Gets the latest weather data',
   options,
   async run({ interaction }) {
-    const city: string = interaction.options.get('city')?.value as string ?? 'Orlando';
+    const city: string =
+      (interaction.options.get('city')?.value as string) ?? 'Orlando';
     await interaction.deferReply();
 
     const weather = await getWeather(city);
@@ -87,7 +89,7 @@ const WeatherCommand: Command = {
 
     const embed = createWeatherEmbed(city, weather);
     await interaction.followUp({ embeds: [embed] });
-  }
+  },
 };
 
 export default WeatherCommand;

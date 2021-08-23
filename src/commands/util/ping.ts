@@ -7,7 +7,7 @@ const PingCommand: Command = {
   permissionHandler: inChannelNames(Channels.bot),
   async run({ interaction }) {
     await interaction.reply(`Pong (${interaction.client.ws.ping}ms)`);
-  }
+  },
 };
 
 export default PingCommand;

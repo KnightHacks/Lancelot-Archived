@@ -1,4 +1,8 @@
-import { MessageActionRow, MessageButton, MessageButtonOptions } from 'discord.js';
+import {
+  MessageActionRow,
+  MessageButton,
+  MessageButtonOptions,
+} from 'discord.js';
 
 /**
  * A convenience function for creating a single button in a row.

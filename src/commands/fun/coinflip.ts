@@ -19,18 +19,19 @@ const CoinFlipCommand: Command = {
   description: 'Performs a coin flip',
   permissionHandler: inChannelNames(Channels.bot),
   async run({ interaction }): Promise<void> {
-    const message = await interaction.reply({ 
+    const message = (await interaction.reply({
       content: `${interaction.user.username}, you got ${getFlip()}`,
       fetchReply: true,
       components: [row],
-    }) as Message;
+    })) as Message;
 
-    const collector = message.createMessageComponentCollector({ componentType: 'BUTTON' });
+    const collector = message.createMessageComponentCollector({
+      componentType: 'BUTTON',
+    });
     collector.on('collect', async (i) => {
       await i.update(`${interaction.user.username}, you got ${getFlip()}`);
     });
-
-  }
+  },
 };
 
 export default CoinFlipCommand;

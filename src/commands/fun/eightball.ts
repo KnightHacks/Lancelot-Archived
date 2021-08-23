@@ -7,7 +7,7 @@ const options: ApplicationCommandOption[] = [
     type: 'STRING',
     description: 'Generates a random response to a question',
     required: true,
-  }
+  },
 ];
 
 const responses = [
@@ -20,17 +20,17 @@ const responses = [
   'My hacking sources say not likely!',
   '01101110 01101111',
   'Outlook not so good!',
-  'Don\'t count on it.'
+  "Don't count on it.",
 ];
 
 const eightball: Command = {
   name: 'eightball',
-  description : 'Ask a question, and you shall recieve an answer',
+  description: 'Ask a question, and you shall recieve an answer',
   options,
   async run({ interaction }) {
     const randIndex = Math.floor(Math.random() * responses.length);
     await interaction.reply(responses[randIndex] ?? '');
-  }
+  },
 };
 
 export default eightball;

@@ -10,12 +10,13 @@ type FactResponse = { text: string | null };
 const row = singleButtonRow({
   label: 'New Fact',
   customId: 'newFactButton',
-  style: 'PRIMARY'
+  style: 'PRIMARY',
 });
 
 async function getFact(): Promise<string | null> {
-  return axios.get<FactResponse>(url)
-    .then(response => response.data.text)
+  return axios
+    .get<FactResponse>(url)
+    .then((response) => response.data.text)
     .catch((e) => {
       // Spam limit on api.
       if (e.response.status === 429) {
@@ -33,30 +34,36 @@ const FactCommand: Command = {
 
     if (fact) {
       // Send message.
-      const message = await interaction.reply({
-        content: fact.replaceAll('`', '\''),
+      const message = (await interaction.reply({
+        content: fact.replaceAll('`', "'"),
         fetchReply: true,
         components: [row],
-      }) as Message;
+      })) as Message;
 
       // Create a button collector.
-      const collector = message.createMessageComponentCollector({ componentType: 'BUTTON'});
+      const collector = message.createMessageComponentCollector({
+        componentType: 'BUTTON',
+      });
 
       // Listen for button interactions.
       collector.on('collect', async (collectInteraction) => {
         const fact = await getFact();
         if (fact) {
-          await collectInteraction.update({ content: fact.replaceAll('`', '\'') });
+          await collectInteraction.update({
+            content: fact.replaceAll('`', "'"),
+          });
         } else {
-          await collectInteraction.update({ content: 'Error: `something went wrong.`' });
+          await collectInteraction.update({
+            content: 'Error: `something went wrong.`',
+          });
         }
       });
     } else {
       await interaction.reply({
-        content: 'Error: `something went wrong.`'
+        content: 'Error: `something went wrong.`',
       });
     }
-  }
+  },
 };
 
 export default FactCommand;

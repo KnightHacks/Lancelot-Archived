@@ -47,22 +47,25 @@ const options: ApplicationCommandOptionData[] = [
       {
         name: 'NextYear',
         value: 'NextYear',
-      }
-    ]
-  }
+      },
+    ],
+  },
 ];
 
-async function getEvents(range?: RelativeDateRange): Promise<ClubEvent[] | undefined> {
-  const apiData = await axios.get<{ events: APIClubEvent[] }>(URL, {
-    params: {
-      count: 10,
-      rdate: range,
-    }
-  })
-    .then(response => response.data.events)
+async function getEvents(
+  range?: RelativeDateRange
+): Promise<ClubEvent[] | undefined> {
+  const apiData = await axios
+    .get<{ events: APIClubEvent[] }>(URL, {
+      params: {
+        count: 10,
+        rdate: range,
+      },
+    })
+    .then((response) => response.data.events)
     .catch(() => undefined);
 
-  const events: ClubEvent[] | undefined = apiData?.map(event => ({
+  const events: ClubEvent[] | undefined = apiData?.map((event) => ({
     ...event,
     start: new Date(event.start),
     end: new Date(event.end),
@@ -80,7 +83,10 @@ function generateEmbed(event: ClubEvent) {
     .addField('Location', event.location)
     .addField('Starts', event.start.toLocaleString())
     .addField('Ends', event.end.toLocaleString())
-    .addField('Tags', event.tags.reduce((str, tag) => str + `${tag} `));
+    .addField(
+      'Tags',
+      event.tags.reduce((str, tag) => str + `${tag} `)
+    );
 }
 
 const ClubEventsCommand: Command = {
@@ -90,7 +96,9 @@ const ClubEventsCommand: Command = {
   async run({ interaction }) {
     await interaction.deferReply();
 
-    const range = interaction.options.getString('range') as RelativeDateRange | undefined;
+    const range = interaction.options.getString('range') as
+      | RelativeDateRange
+      | undefined;
 
     const events = await getEvents(range);
 
@@ -106,7 +114,7 @@ const ClubEventsCommand: Command = {
 
     const embeds = events.map(generateEmbed);
     await sendPaginatedEmbeds(interaction, embeds);
-  }
+  },
 };
 
 export default ClubEventsCommand;

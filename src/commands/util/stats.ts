@@ -8,7 +8,6 @@ const StatsCommand: Command = {
   description: 'Displays statistics for this guild',
   permissionHandler: inChannelNames(Channels.bot),
   async run({ interaction }) {
-
     const members = interaction.guild?.members.cache;
     const { guild } = interaction;
 
@@ -17,8 +16,9 @@ const StatsCommand: Command = {
       return;
     }
 
-    const totalOnline = members
-      .filter((member => member.presence?.status === 'online')).size;
+    const totalOnline = members.filter(
+      (member) => member.presence?.status === 'online'
+    ).size;
     const totalMembers = members.size;
     const owner = (await guild.fetchOwner()).displayName;
 
@@ -32,10 +32,13 @@ const StatsCommand: Command = {
       .addField('Owner:', owner)
       .addField('Total Online:', totalOnline.toString())
       .addField('Total Members:', totalMembers.toString())
-      .addField('Nitro Boosters: ', guild.premiumSubscriptionCount?.toString() ?? '0');
+      .addField(
+        'Nitro Boosters: ',
+        guild.premiumSubscriptionCount?.toString() ?? '0'
+      );
 
     await interaction.reply({ embeds: [embed] });
-  }
+  },
 };
 
 export default StatsCommand;
