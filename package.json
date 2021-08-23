@@ -24,6 +24,9 @@
   "bugs": {
     "url": "https://github.com/KnightHacks/Lancelot.git/issues"
   },
+  "prettier": {
+    "singleQuote": true
+  },
   "homepage": "https://github.com/KnightHacks/Lancelot.git#readme",
   "devDependencies": {
     "@babel/core": "^7.15.0",

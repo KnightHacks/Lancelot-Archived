@@ -10,6 +10,7 @@ export interface UCFCalendar {
   url: string;
   terms: Term[];
 }
+
 export interface Term {
   name: string;
   year: number;
@@ -18,6 +19,7 @@ export interface Term {
   isPrimary: boolean;
   events: Event[];
 }
+
 export interface Event {
   uid: number;
   summary: string;
@@ -35,8 +37,9 @@ export interface Event {
 }
 
 async function getUCFEvents() {
-  const events = await axios.get<UCFCalendar>(URL)
-    .then(response => response.data.terms[0]?.events)
+  const events = await axios
+    .get<UCFCalendar>(URL)
+    .then((response) => response.data.terms[0]?.events)
     .catch(() => null);
 
   if (!events) {
@@ -44,7 +47,9 @@ async function getUCFEvents() {
   }
 
   // Filter out only academic dates
-  return events.filter(event => event.category === 'Academic Dates and Deadlines').slice(0, 10);
+  return events
+    .filter((event) => event.category === 'Academic Dates and Deadlines')
+    .slice(0, 10);
 }
 
 function generateEmbed(event: Event): MessageEmbed {
@@ -58,7 +63,7 @@ function generateEmbed(event: Event): MessageEmbed {
   }
 
   if (event.tags) {
-    const tags: string = event.tags.map(event => `\`${event}\``).join(', ');
+    const tags: string = event.tags.map((event) => `\`${event}\``).join(', ');
     embed.addField('Tags', tags);
   }
 
@@ -67,7 +72,7 @@ function generateEmbed(event: Event): MessageEmbed {
 
 const UCFCalendarCommand: Command = {
   name: 'ucfcal',
-  description: 'Get\'s upcoming UCF calendar events.',
+  description: "Get's upcoming UCF calendar events.",
   async run({ interaction }) {
     await interaction.deferReply();
 
@@ -80,7 +85,7 @@ const UCFCalendarCommand: Command = {
 
     const embeds = events.map(generateEmbed);
     await sendPaginatedEmbeds(interaction, embeds);
-  }
+  },
 };
 
 export default UCFCalendarCommand;
