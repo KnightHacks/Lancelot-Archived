@@ -13,7 +13,8 @@
     "start:dev": "NODE_ENV=development nodemon --exec ts-node --files ./src/index.ts",
     "start:prod": "export NODE_ENV=production && tsc -p tsconfig.production.json && node ./dist/index.js",
     "test": "jest ./src/__tests__",
-    "lint": "eslint ./src"
+    "lint": "eslint ./src",
+    "pre-commit": "lint-staged"
   },
   "repository": {
     "type": "git",
@@ -24,8 +25,11 @@
   "bugs": {
     "url": "https://github.com/KnightHacks/Lancelot.git/issues"
   },
-  "prettier": {
-    "singleQuote": true
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "prettier --write",
+      "eslint --fix"
+    ]
   },
   "homepage": "https://github.com/KnightHacks/Lancelot.git#readme",
   "devDependencies": {
@@ -58,6 +62,9 @@
     "discord.js-embed-pagination": "^0.5.2",
     "dotenv": "^10.0.0",
     "humps": "^2.0.1",
+    "husky": "^7.0.1",
+    "lint-staged": "^11.1.2",
+    "prettier": "^2.3.2",
     "utf-8-validate": "^5.0.5",
     "zlib-sync": "^0.1.7"
   }
