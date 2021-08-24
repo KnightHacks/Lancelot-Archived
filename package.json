@@ -14,7 +14,8 @@
     "start:prod": "export NODE_ENV=production && tsc -p tsconfig.production.json && node ./dist/index.js",
     "test": "jest ./src/__tests__",
     "lint": "eslint ./src",
-    "pre-commit": "lint-staged"
+    "pre-commit": "lint-staged",
+    "postinstall": "husky install"
   },
   "repository": {
     "type": "git",
