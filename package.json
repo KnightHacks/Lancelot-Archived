@@ -41,6 +41,7 @@
     "@types/humps": "^2.0.1",
     "@types/jest": "^26.0.24",
     "@types/node": "^16.4.13",
+    "@types/node-cron": "^2.0.4",
     "@typescript-eslint/eslint-plugin": "^4.29.0",
     "@typescript-eslint/parser": "^4.29.0",
     "babel-jest": "^27.0.6",
@@ -65,6 +66,7 @@
     "humps": "^2.0.1",
     "husky": "^7.0.1",
     "lint-staged": "^11.1.2",
+    "node-cron": "^3.0.0",
     "prettier": "^2.3.2",
     "utf-8-validate": "^5.0.5",
     "zlib-sync": "^0.1.7"
