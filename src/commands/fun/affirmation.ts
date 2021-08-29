@@ -1,14 +1,7 @@
 import { Command } from '@knighthacks/dispatch';
 import axios from 'axios';
-import { Message } from 'discord.js';
-import { singleButtonRow } from '../../util/button';
 
 const url = 'https://www.affirmations.dev/';
-const row = singleButtonRow({
-  label: 'Another!',
-  style: 'PRIMARY',
-  customId: 'affirmationButton',
-});
 
 type AffirmationResponse = { affirmation: string };
 
@@ -22,24 +15,21 @@ async function getAffirmation(): Promise<string> {
 const AffirmationCommand: Command = {
   name: 'affirmation',
   description: 'Get an affirmation',
-  async run({ interaction }) {
+  async run({ interaction, registerUI }) {
     await interaction.deferReply();
 
     const content = await getAffirmation();
-    const message = (await interaction.followUp({
+    interaction.followUp({
       content,
-      components: [row],
-      fetchReply: true,
-    })) as Message;
-
-    const collector = message.createMessageComponentCollector({
-      componentType: 'BUTTON',
-    });
-    collector.on('collect', async (collectInteraction) => {
-      await collectInteraction.deferUpdate();
-
-      const content = await getAffirmation();
-      await collectInteraction.editReply({ content });
+      components: registerUI({
+        style: 'PRIMARY',
+        label: 'Another!',
+        async onClick({ deferUpdate, editReply }) {
+          await deferUpdate();
+          const content = await getAffirmation();
+          await editReply({ content });
+        },
+      }),
     });
   },
 };

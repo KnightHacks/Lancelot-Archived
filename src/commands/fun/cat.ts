@@ -1,18 +1,15 @@
-import { Command } from '@knighthacks/dispatch';
+import { Command, UI } from '@knighthacks/dispatch';
 import axios from 'axios';
-import { InteractionReplyOptions, Message, MessageEmbed } from 'discord.js';
+import {
+  InteractionReplyOptions,
+  MessageActionRowOptions,
+  MessageEmbed,
+} from 'discord.js';
 import Colors from '../../colors';
-import { singleButtonRow } from '../../util/button';
 
 const url = 'https://api.thecatapi.com/v1/images/search';
 
 type CatResponse = [{ url: string }];
-
-const row = singleButtonRow({
-  label: 'Another!',
-  customId: 'catButton',
-  style: 'PRIMARY',
-});
 
 async function getCatImage(): Promise<string | null> {
   return axios
@@ -21,7 +18,9 @@ async function getCatImage(): Promise<string | null> {
     .catch(() => null);
 }
 
-async function getMessage(): Promise<InteractionReplyOptions> {
+async function getMessage(
+  registerUI: (ui: UI) => MessageActionRowOptions[]
+): Promise<InteractionReplyOptions> {
   // Get the image URL.
   const catImageURL = await getCatImage();
 
@@ -34,30 +33,29 @@ async function getMessage(): Promise<InteractionReplyOptions> {
     .setColor(Colors.embedColor)
     .setImage(catImageURL);
 
-  return { embeds: [embed], components: [row] };
+  return {
+    embeds: [embed],
+    components: registerUI({
+      style: 'PRIMARY',
+      label: 'Another!',
+      async onClick({ deferUpdate, editReply }) {
+        await deferUpdate();
+        const catImage = await getMessage(registerUI);
+        await editReply(catImage);
+      },
+    }),
+  };
 }
 
 const CatCommand: Command = {
   name: 'cat',
   description: 'Gets a random image of a cat',
-  async run({ interaction }) {
+  async run({ interaction, registerUI }) {
     // Defer while we fetch the image.
     await interaction.deferReply();
 
-    const message = await getMessage();
-    const repliedMessage = (await interaction.followUp({
-      ...message,
-      fetchReply: true,
-    })) as Message;
-
-    const collector = repliedMessage.createMessageComponentCollector({
-      componentType: 'BUTTON',
-    });
-    collector.on('collect', async (i) => {
-      await i.deferUpdate();
-      const catImage = await getMessage();
-      await i.editReply(catImage);
-    });
+    const message = await getMessage(registerUI);
+    await interaction.followUp(message);
   },
 };
 
