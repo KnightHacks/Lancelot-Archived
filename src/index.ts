@@ -45,10 +45,6 @@ setupSentry();
   // Start up client.
   await client.login(process.env.DISCORD_TOKEN);
 
-  client.on('ready', async (client) => {
-    await client.application.commands.set([]);
-  });
-
   client.on('messageCreate', async (message) => {
     if (client.isReady()) {
       const everyone = message.guild?.roles.everyone.id;
