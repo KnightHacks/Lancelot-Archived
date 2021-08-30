@@ -6,7 +6,7 @@ import { onWelcome } from './welcomer';
 import * as Sentry from '@sentry/node';
 import { setupSentry } from './sentry';
 import { PresenceData } from 'discord.js';
-import { getRandomIntInclusive } from './util/random';
+import * as random from './util/random';
 import replies from './replies.json';
 
 // Load env vars.
@@ -57,8 +57,7 @@ setupSentry();
       }
 
       if (message.mentions.has(client.user)) {
-        const index = getRandomIntInclusive(0, replies.length - 1);
-        await message.reply(replies[index] ?? 'Something went wrong!');
+        await message.reply(random.choice(replies) ?? 'Something went wrong!');
       }
     }
   });

@@ -1,5 +1,5 @@
 import { Command } from '@knighthacks/dispatch';
-import { KnightHacksLinkButtons } from '../../common/button';
+import { KnightHacksLinkButtons } from '../../components/KnightHacksLinkButtons';
 
 const LinksCommand: Command = {
   name: 'links',
