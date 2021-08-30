@@ -1,6 +1,6 @@
 import { UI } from '@knighthacks/dispatch';
 import { GuildMember, MessageActionRow } from 'discord.js';
-import { KnightHacksLinkButtons } from './common/button';
+import { KnightHacksLinkButtons } from './common/KnightHacksLinkButtons';
 import { KnightHacksRolesMenu } from './common/KnightHacksRolesMenu';
 
 const welcomeMessage = `
