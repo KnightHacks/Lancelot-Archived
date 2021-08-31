@@ -13,6 +13,7 @@ const command: Command = {
   permissionHandler: inChannelNames(Channels.bot),
   async run({ interaction }): Promise<void> {
     await sendPaginatedEmbeds(interaction, [embed1, embed2, embed3], {
+      content: process.env.GUILD_ID,
       nextLabel: 'Bar',
       previousLabel: 'foo',
       style: 'DANGER',
