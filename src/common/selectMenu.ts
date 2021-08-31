@@ -22,8 +22,61 @@ const roles = [
   { label: 'Physics', description: 'The subject of physics.' },
 ];
 
+const majors = [
+  'Computer Science',
+  'Computer Engineering',
+  'Information Technology',
+  'Biology',
+  'Chemistry',
+  'Mathematics',
+  'Communication',
+  'Performing Arts',
+  'Graphic Design',
+  'Psychology',
+  'Buisness',
+  'Medical',
+  'Nursing',
+  'Hospitality',
+];
+
 const getRole = (guild: Guild, roleName: string) =>
   guild.roles.cache.find((role) => role.name === roleName);
+
+export function KnightHacksMajorsMenu(
+  action: 'add' | 'remove',
+  maybeMember?: GuildMember
+): SelectMenu {
+  const rolesMenu: SelectMenu = {
+    options: majors.map((major) => ({ label: major })),
+    maxValues: 2,
+    async onSelect({
+      deferReply,
+      editReply,
+      member: interactionMember,
+      values: majorNames,
+    }: SelectMenuInteraction) {
+      await deferReply({ ephemeral: true });
+      const member: GuildMember =
+        maybeMember ?? (interactionMember as GuildMember);
+      const roles: (Role | undefined)[] = majorNames.map((roleName) => {
+        const role = getRole(member.guild, roleName);
+        if (!role) console.log(`Role lookup for ${roleName} failed!`);
+        return role;
+      });
+      const validRoles = roles.filter((role): role is Role => !!role);
+      if (action === 'add') {
+        validRoles.forEach((role) => member.roles.add(role));
+      } else {
+        validRoles.forEach((role) => member.roles.remove(role));
+      }
+      const successMsg = action === 'add' ? 'added' : 'removed';
+      await editReply({
+        content: `Successfully ${successMsg} selected majors.`,
+      });
+    },
+  };
+  return rolesMenu;
+}
 
 function KnightHacksRolesMenu(
   action: 'add' | 'remove',
