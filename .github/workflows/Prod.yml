@@ -155,6 +155,7 @@ jobs:
             echo "GITHUB_SHA=${{ github.sha }}" >> .env
             sudo docker stop lancelot
             sudo docker rm lancelot
+            sudo docker image prune -a -f --filter "until=24h"
             sudo docker login lancelot.azurecr.io -u ${{ secrets.AZURE_CONTAINER_USER}} -p ${{ secrets.AZURE_CONTAINER_PASSWORD}}
             sudo docker pull ${{ secrets.REGISTRY_LOGIN_SERVER}}/lancelot:${{ github.sha }}
             sudo docker run --env-file .env -d --name lancelot  ${{ secrets.REGISTRY_LOGIN_SERVER}}/lancelot:${{ github.sha }}
