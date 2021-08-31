@@ -1,5 +1,5 @@
 import { Command } from '@knighthacks/dispatch';
-import { KnightHacksMajorsMenu } from '../../common/selectMenu';
+import { KnightHacksMajorsMenu } from '../../components/KnightHacksRolesMenu';
 
 const MajorsCommand: Command = {
   name: 'majors',
