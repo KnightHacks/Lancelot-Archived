@@ -1,7 +1,10 @@
 import { UI } from '@knighthacks/dispatch';
 import { GuildMember, MessageActionRow } from 'discord.js';
 import { KnightHacksLinkButtons } from './components/KnightHacksLinkButtons';
-import { KnightHacksRolesMenu } from './components/KnightHacksRolesMenu';
+import {
+  KnightHacksMajorsMenu,
+  KnightHacksRolesMenu,
+} from './components/KnightHacksRolesMenu';
 
 const welcomeMessage = `
 **Hi! I'm Lancelot, the discord bot made for Knight Hacks**
@@ -14,6 +17,11 @@ In the Knight Hacks discord if you type \`/\` it'll give a list of the commands 
 const rolesMessage = `
 __**Roles**__
 To add roles, select them from the drop-down. Adding specific roles will grant you access to channels.
+`;
+
+const majorsMessage = `
+__**Majors**__
+To add majors, select them from the drop-down.
 `;
 
 const linksMessage = `
@@ -36,6 +44,10 @@ export async function onWelcome(
     await DM.send({
       content: rolesMessage,
       components: registerUI(KnightHacksRolesMenu('add', member)),
+    });
+    await DM.send({
+      content: majorsMessage,
+      components: registerUI(KnightHacksMajorsMenu('add', member)),
     });
   } catch {
     console.log("User doesn't allow DMs.");
