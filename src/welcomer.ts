@@ -1,7 +1,7 @@
 import { UI } from '@knighthacks/dispatch';
 import { GuildMember, MessageActionRow } from 'discord.js';
-import { KnightHacksLinkButtons } from './common/button';
-import { KnightHacksRolesMenu } from './common/selectMenu';
+import { KnightHacksLinkButtons } from './components/KnightHacksLinkButtons';
+import { KnightHacksRolesMenu } from './components/KnightHacksRolesMenu';
 
 const welcomeMessage = `
 **Hi! I'm Lancelot, the discord bot made for Knight Hacks**
