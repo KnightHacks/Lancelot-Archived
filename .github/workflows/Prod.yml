@@ -6,7 +6,7 @@ name: Node.js Prod
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   Build:
@@ -68,7 +68,7 @@ jobs:
         run: ./node_modules/.bin/sentry-cli releases files "$GITHUB_SHA" upload-sourcemaps ./dist
       - name: Finalize release
         run: ./node_modules/.bin/sentry-cli releases finalize "$GITHUB_SHA"
-        
+
   Test:
     runs-on: ubuntu-latest
     steps:
@@ -118,45 +118,44 @@ jobs:
         run: npm ci
       - name: Run Linter
         run: npm run lint
-   # Dockerize the bot to be sent to azure containter registery
+    # Dockerize the bot to be sent to azure containter registery
   Deploy:
     runs-on: ubuntu-latest
     steps:
-        - name: Check out code into the node module
-          uses: actions/checkout@v2
-        # step 1: Docker login        
-        - name: 'Docker login'
-          uses: azure/docker-login@v1
-          with:
-            login-server: ${{ secrets.REGISTRY_LOGIN_SERVER}}
-            username: ${{ secrets.REGISTRY_USERNAME }}
-            password: ${{ secrets.REGISTRY_PASSWORD }}
-            
-        # step 2: Build Docker Image  
-        - name: Build Docker
-          run: |
-            docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER}}/lancelot
-        
-        # step 3: Push Docker to Azure Registry  
-        - name: Push Docker
-          run: docker push ${{ secrets.REGISTRY_LOGIN_SERVER}}/lancelot
-          
-        - uses: appleboy/ssh-action@master
-          with:
-            host: ${{ secrets.SERVER_IP }}
-            username: ${{ secrets.SERVER_USER }}
-            key: ${{ secrets.KEY }}
-            script: |
-              sudo rm -r .env
-              echo "DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN}}" > .env 
-              echo "GUILD_ID=${{ secrets.GUILD_ID }}" >> .env 
-              echo "WEATHER_API_KEY=${{ secrets.WEATHER_API}}" >> .env 
-              echo "SENTRY_DSN=${{ secrets.SENTRY_DSN}}" >> .env
-              echo "GITHUB_SHA=${{ github.sha }}" >> .env
-              sudo docker stop lancelot
-              sudo docker rm lancelot
-              sudo docker login lancelot.azurecr.io -u ${{ secrets.AZURE_CONTAINER_USER}} -p ${{ secrets.AZURE_CONTAINER_PASSWORD}}
-              sudo docker pull ${{ secrets.REGISTRY_LOGIN_SERVER}}/lancelot:latest
-              sudo docker run --env-file .env -d --name lancelot  ${{ secrets.REGISTRY_LOGIN_SERVER}}/lancelot:latest
-              ./discord.sh --webhook-url=${{ secrets.LANCELOT_WEBHOOK}} --text "Lancelot is deployed, give a minute to boot!"
- 
+      - name: Check out code into the node module
+        uses: actions/checkout@v2
+      # step 1: Docker login
+      - name: 'Docker login'
+        uses: azure/docker-login@v1
+        with:
+          login-server: ${{ secrets.REGISTRY_LOGIN_SERVER}}
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+
+      # step 2: Build Docker Image
+      - name: Build Docker
+        run: |
+          docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER}}/lancelot
+
+      # step 3: Push Docker to Azure Registry
+      - name: Push Docker
+        run: docker push ${{ secrets.REGISTRY_LOGIN_SERVER}}/lancelot
+
+      - uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.KEY }}
+          script: |
+            sudo rm -r .env
+            echo "DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN}}" > .env 
+            echo "GUILD_ID=${{ secrets.GUILD_ID }}" >> .env 
+            echo "WEATHER_API_KEY=${{ secrets.WEATHER_API}}" >> .env 
+            echo "SENTRY_DSN=${{ secrets.SENTRY_DSN}}" >> .env
+            echo "GITHUB_SHA=${{ github.sha }}" >> .env
+            sudo docker stop lancelot
+            sudo docker rm lancelot
+            sudo docker login lancelot.azurecr.io -u ${{ secrets.AZURE_CONTAINER_USER}} -p ${{ secrets.AZURE_CONTAINER_PASSWORD}}
+            sudo docker pull ${{ secrets.REGISTRY_LOGIN_SERVER}}/lancelot:${{ secrets.GITHUB_SHA }}
+            sudo docker run --env-file .env -d --name lancelot  ${{ secrets.REGISTRY_LOGIN_SERVER}}/lancelot:${{ secrets.GITHUB_SHA }}
+            ./discord.sh --webhook-url=${{ secrets.LANCELOT_WEBHOOK}} --text "Lancelot is deployed, give a minute to boot!"
