@@ -1,5 +1,7 @@
 import { Command } from '@knighthacks/dispatch';
 import { API, ClubEvent } from '@knighthacks/hackathon';
+import { RelativeDate } from '@knighthacks/hackathon/dist/controllers/club';
+import dayjs from 'dayjs';
 import { ApplicationCommandOptionData, MessageEmbed } from 'discord.js';
 import { sendPaginatedEmbeds } from 'discord.js-embed-pagination';
 import Colors from '../../colors';
@@ -35,18 +37,19 @@ const options: ApplicationCommandOptionData[] = [
 ];
 
 function generateEmbed(event: ClubEvent) {
+  const parsedStart = dayjs(event.start);
+  const parsedEnd = dayjs(event.end);
+
   return new MessageEmbed()
     .setTitle(event.name)
     .setAuthor(event.presenter)
     .setColor(Colors.embedColor)
     .setDescription(event.description)
     .addField('Location', event.location)
-    .addField('Starts', event.start.toLocaleString())
-    .addField('Ends', event.end.toLocaleString())
-    .addField(
-      'Tags',
-      event.tags.reduce((str, tag) => str + `${tag} `)
-    );
+    .addField('Date', parsedStart.format('MMMM Do'), true)
+    .addField('Starts', parsedStart.format('h:mm a'), true)
+    .addField('Ends', parsedEnd.format('h:mm a'), true)
+    .addField('Tags', event.tags.map((tag) => `\`${tag}\``).join(', '));
 }
 
 const ClubEventsCommand: Command = {
@@ -56,11 +59,15 @@ const ClubEventsCommand: Command = {
   async run({ interaction }) {
     await interaction.deferReply();
 
-    // const range = interaction.options.getString('range') as
-    //   | RelativeDateRange
-    //   | undefined;
+    const range = interaction.options.getString('range') as
+      | RelativeDate
+      | undefined;
 
-    const events = await hackathon.club.getEvents();
+    const events = await hackathon.club.getEvents({
+      rdate: range ?? 'Today',
+      confirmed: true,
+      count: 10,
+    });
 
     if (events === undefined) {
       await interaction.followUp('Error fetching events');

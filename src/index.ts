@@ -8,6 +8,10 @@ import { setupSentry } from './sentry';
 import { PresenceData } from 'discord.js';
 import * as random from './util/random';
 import replies from './replies.json';
+import dayjs from 'dayjs';
+import advancedTimestamp from 'dayjs/plugin/advancedFormat';
+
+dayjs.extend(advancedTimestamp);
 
 // Load env vars.
 dotenv.config();
