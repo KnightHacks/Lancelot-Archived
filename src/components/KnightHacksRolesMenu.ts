@@ -33,7 +33,7 @@ const majors = [
   'Performing Arts',
   'Graphic Design',
   'Psychology',
-  'Buisness',
+  'Business',
   'Medical',
   'Nursing',
   'Hospitality',
