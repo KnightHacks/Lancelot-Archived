@@ -1,30 +1,12 @@
 import { Command } from '@knighthacks/dispatch';
-import axios from 'axios';
+import { API, ClubEvent } from '@knighthacks/hackathon';
 import { ApplicationCommandOptionData, MessageEmbed } from 'discord.js';
 import { sendPaginatedEmbeds } from 'discord.js-embed-pagination';
 import Colors from '../../colors';
 
-const URL = 'https://api.knighthacks.org/api/club/get_events/?confirmed=true';
+// type RelativeDateRange = 'Today' | 'NextWeek' | 'NextMonth' | 'NextYear';
 
-type RelativeDateRange = 'Today' | 'NextWeek' | 'NextMonth' | 'NextYear';
-
-interface BaseClubEvent {
-  description: string;
-  location: string;
-  name: string;
-  presenter: string;
-  tags: string[];
-}
-
-interface APIClubEvent extends BaseClubEvent {
-  start: string;
-  end: string;
-}
-
-interface ClubEvent extends BaseClubEvent {
-  start: Date;
-  end: Date;
-}
+const hackathon = new API();
 
 const options: ApplicationCommandOptionData[] = [
   {
@@ -52,28 +34,6 @@ const options: ApplicationCommandOptionData[] = [
   },
 ];
 
-async function getEvents(
-  range?: RelativeDateRange
-): Promise<ClubEvent[] | undefined> {
-  const apiData = await axios
-    .get<{ events: APIClubEvent[] }>(URL, {
-      params: {
-        count: 10,
-        rdate: range,
-      },
-    })
-    .then((response) => response.data.events)
-    .catch(() => undefined);
-
-  const events: ClubEvent[] | undefined = apiData?.map((event) => ({
-    ...event,
-    start: new Date(event.start),
-    end: new Date(event.end),
-  }));
-
-  return events;
-}
-
 function generateEmbed(event: ClubEvent) {
   return new MessageEmbed()
     .setTitle(event.name)
@@ -96,11 +56,11 @@ const ClubEventsCommand: Command = {
   async run({ interaction }) {
     await interaction.deferReply();
 
-    const range = interaction.options.getString('range') as
-      | RelativeDateRange
-      | undefined;
+    // const range = interaction.options.getString('range') as
+    //   | RelativeDateRange
+    //   | undefined;
 
-    const events = await getEvents(range);
+    const events = await hackathon.club.getEvents();
 
     if (events === undefined) {
       await interaction.followUp('Error fetching events');
