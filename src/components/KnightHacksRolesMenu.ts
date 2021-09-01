@@ -26,6 +26,7 @@ const majors = [
   'Computer Science',
   'Computer Engineering',
   'Information Technology',
+  'Engineering',
   'Biology',
   'Chemistry',
   'Mathematics',
