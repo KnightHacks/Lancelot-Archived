@@ -29,6 +29,7 @@ const majors = [
   'Biology',
   'Chemistry',
   'Mathematics',
+  'Physics',
   'Communication',
   'Performing Arts',
   'Graphic Design',
