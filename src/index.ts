@@ -10,7 +10,11 @@ import * as random from './util/random';
 import replies from './replies.json';
 import dayjs from 'dayjs';
 import advancedTimestamp from 'dayjs/plugin/advancedFormat';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
 
+dayjs.extend(utc);
+dayjs.extend(timezone);
 dayjs.extend(advancedTimestamp);
 
 // Load env vars.

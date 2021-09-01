@@ -37,8 +37,8 @@ const options: ApplicationCommandOptionData[] = [
 ];
 
 function generateEmbed(event: ClubEvent) {
-  const parsedStart = dayjs(event.start);
-  const parsedEnd = dayjs(event.end);
+  const parsedStart = dayjs(event.start).tz('America/New_York');
+  const parsedEnd = dayjs(event.end).tz('America/New_York');
 
   return new MessageEmbed()
     .setTitle(event.name)
