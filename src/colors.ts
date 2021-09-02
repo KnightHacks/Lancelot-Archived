@@ -1,7 +1,5 @@
-import { ColorResolvable } from 'discord.js';
-
 const Colors = {
-  embedColor: '#7ce4f7' as ColorResolvable,
+  embedColor: '#303a7a' as const,
 };
 
 export default Colors;
