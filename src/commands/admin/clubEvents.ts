@@ -1,7 +1,6 @@
 import { Command } from '@knighthacks/dispatch';
 import { API, ClubEvent } from '@knighthacks/hackathon';
 import { RelativeDate } from '@knighthacks/hackathon/dist/controllers/club';
-import dayjs from 'dayjs';
 import { ApplicationCommandOptionData, MessageEmbed } from 'discord.js';
 import { sendPaginatedEmbeds } from 'discord.js-embed-pagination';
 import Colors from '../../colors';
@@ -37,8 +36,8 @@ const options: ApplicationCommandOptionData[] = [
 ];
 
 function generateEmbed(event: ClubEvent) {
-  const parsedStart = dayjs(event.start).tz('America/New_York');
-  const parsedEnd = dayjs(event.end).tz('America/New_York');
+  const unixStartTime = event.start.getTime() / 1000;
+  const unixEndTime = event.end.getTime() / 1000;
 
   return new MessageEmbed()
     .setTitle(event.name)
@@ -46,9 +45,9 @@ function generateEmbed(event: ClubEvent) {
     .setColor(Colors.embedColor)
     .setDescription(event.description)
     .addField('Location', event.location)
-    .addField('Date', parsedStart.format('MMMM Do'), true)
-    .addField('Starts', parsedStart.format('h:mm a'), true)
-    .addField('Ends', parsedEnd.format('h:mm a'), true)
+    .addField('Date', `<t:${unixStartTime}:D>`, true)
+    .addField('Starts', `<t:${unixStartTime}:t>`, true)
+    .addField('Ends', `<t:${unixEndTime}:t>`, true)
     .addField('Tags', event.tags.map((tag) => `\`${tag}\``).join(', '));
 }
 
