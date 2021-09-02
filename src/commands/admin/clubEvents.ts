@@ -51,6 +51,23 @@ function generateEmbed(event: ClubEvent) {
     .addField('Tags', event.tags.map((tag) => `\`${tag}\``).join(', '));
 }
 
+export async function getEmbedEvents(
+  range?: RelativeDate
+): Promise<MessageEmbed[] | undefined> {
+  const events = await hackathon.club.getEvents({
+    rdate: range ?? 'Today',
+    confirmed: true,
+    count: 10,
+  });
+
+  if (events === undefined) {
+    return undefined;
+  }
+
+  const embeds = events.map(generateEmbed);
+  return embeds;
+}
+
 const ClubEventsCommand: Command = {
   name: 'clubevents',
   description: 'Fetches upcoming Knight Hacks club events.',
@@ -62,23 +79,18 @@ const ClubEventsCommand: Command = {
       | RelativeDate
       | undefined;
 
-    const events = await hackathon.club.getEvents({
-      rdate: range ?? 'Today',
-      confirmed: true,
-      count: 10,
-    });
+    const embeds = await getEmbedEvents(range);
 
-    if (events === undefined) {
+    if (embeds === undefined) {
       await interaction.followUp('Error fetching events');
       return;
     }
 
-    if (events.length === 0) {
+    if (embeds.length === 0) {
       await interaction.followUp('There are no events during this period.');
       return;
     }
 
-    const embeds = events.map(generateEmbed);
     await sendPaginatedEmbeds(interaction, embeds, {
       pageLabel: 'Event',
       nextLabel: 'Next Event',

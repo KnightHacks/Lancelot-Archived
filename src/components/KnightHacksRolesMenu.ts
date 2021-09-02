@@ -51,6 +51,7 @@ export function KnightHacksMajorsMenu(
   const rolesMenu: SelectMenu = {
     options: majors.map((major) => ({ label: major })),
     maxValues: 2,
+    placeholder: 'Select Majors',
     async onSelect({
       deferReply,
       editReply,
@@ -87,6 +88,7 @@ function KnightHacksRolesMenu(
   const rolesMenu: SelectMenu = {
     options: roles,
     maxValues: roles.length,
+    placeholder: 'Select Roles',
     async onSelect({
       deferReply,
       editReply,
