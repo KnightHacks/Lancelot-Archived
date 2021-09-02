@@ -79,7 +79,11 @@ const ClubEventsCommand: Command = {
     }
 
     const embeds = events.map(generateEmbed);
-    await sendPaginatedEmbeds(interaction, embeds);
+    await sendPaginatedEmbeds(interaction, embeds, {
+      pageLabel: 'Event',
+      nextLabel: 'Next Event',
+      previousLabel: 'Previous Event',
+    });
   },
 };
 

@@ -32,9 +32,9 @@ function generateSubEmbed(data: SubData) {
     .setTitle(toTitleCase(data.name))
     .setImage(data.image)
     .setColor(Colors.embedColor)
-    .addField('Price', data.price)
-    .addField('On Sale?', data.onSale === 'True' ? 'Yup!' : 'Nope!')
-    .addField('Last on Sale', data.lastOnSale);
+    .addField('Price', data.price, true)
+    .addField('On Sale?', data.onSale === 'True' ? 'Yup!' : 'Nope!', true)
+    .addField('Last on Sale', data.lastOnSale, true);
 }
 
 const PubSubCommand: Command = {
@@ -51,7 +51,11 @@ const PubSubCommand: Command = {
     }
 
     const embeds = subs.map(generateSubEmbed);
-    await sendPaginatedEmbeds(interaction, embeds);
+    await sendPaginatedEmbeds(interaction, embeds, {
+      nextLabel: 'Next Sub',
+      previousLabel: 'Previous Sub',
+      pageLabel: 'Sub',
+    });
   },
 };
 

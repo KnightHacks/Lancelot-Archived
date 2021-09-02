@@ -31,6 +31,9 @@ const crumbl: Command = {
 
     await sendPaginatedEmbeds(i, embeds, {
       content: 'Here are the weekly specialty cookies!',
+      pageLabel: 'Cookie',
+      nextLabel: 'Next Cookie',
+      previousLabel: 'Previous Cookie',
     });
   },
 };
