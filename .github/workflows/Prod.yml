@@ -110,42 +110,6 @@ jobs:
       - name: Run Linter
         run: npm run lint
 
-  Sentry:
-    runs-on: ubuntu-latest
-    env:
-      SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-      SENTRY_ORG: 'knight-hacks'
-      SENTRY_PROJECT: 'discord-bot'
-      SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: '${{ env.NODE_VERSION }}'
-          registry-url: 'https://registry.npmjs.org'
-      - uses: actions/cache@v2
-        env:
-          cache-name: cache-node-modules
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
-      - name: Install Dependencies
-        run: npm ci
-        env:
-          NPM_CONFIG_PRODUCTION: false
-      - name: Run Build
-        run: tsc -p tsconfig.production.json
-      - name: Create a new Sentry release.
-        run: ./node_modules/.bin/sentry-cli releases new "$GITHUB_SHA"
-      - name: Upload artifacts to release.
-        run: ./node_modules/.bin/sentry-cli releases files "$GITHUB_SHA" upload-sourcemaps ./dist
-      - name: Finalize release
-        run: ./node_modules/.bin/sentry-cli releases finalize "$GITHUB_SHA"
-
   Staging:
     name: Deploy to Staging
     needs:
