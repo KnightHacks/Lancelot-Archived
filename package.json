@@ -55,7 +55,7 @@
   },
   "dependencies": {
     "@knighthacks/dispatch": "^0.1.0-dev-c398d1f",
-    "@knighthacks/hackathon": "^0.1.0-dev-f44e24e",
+    "@knighthacks/hackathon": "^0.1.0-dev-4316e92",
     "@sentry/integrations": "^6.11.0",
     "@sentry/node": "^6.11.0",
     "@sentry/tracing": "^6.11.0",
