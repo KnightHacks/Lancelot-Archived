@@ -3,20 +3,33 @@
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
 name: Node.js Prod
+concurrency: deploy_workflow
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+
+env:
+  NODE_VERSION: 16.x
+  CLUSTER_NAME: 2021-hackathon-k8s
+  REGISTRY_NAME: knighthacks2021
+  CLUSTER_RESOURCE_GROUP: 2021-hackathon-k8s-cluster
+  SECRET: lancelotpullsecret
 
 jobs:
+
   Build:
+    name: Build the App
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+
       - uses: actions/setup-node@v2
         with:
-          node-version: '16.x'
+          node-version: '${{ env.NODE_VERSION }}'
           registry-url: 'https://registry.npmjs.org'
+
       - uses: actions/cache@v2
         env:
           cache-name: cache-node-modules
@@ -27,12 +40,76 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
+
       - name: Install Dependencies
         run: npm ci
         env:
           NPM_CONFIG_PRODUCTION: false
+
       - name: Run Build
         run: npm run build
+
+  Test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '${{ env.NODE_VERSION }}'
+          registry-url: 'https://registry.npmjs.org'
+
+      - uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+
+      - name: Install Dependencies
+        run: npm ci
+        env:
+          NPM_CONFIG_PRODUCTION: false
+
+      - name: Run Build
+        run: npm run build
+
+      - name: Run Tests
+        run: npm test
+
+  Lint:
+    name: Run Linter
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '${{ env.NODE_VERSION }}'
+          registry-url: 'https://registry.npmjs.org'
+
+      - uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run Linter
+        run: npm run lint
+
   Sentry:
     runs-on: ubuntu-latest
     env:
@@ -44,7 +121,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
-          node-version: '16.x'
+          node-version: '${{ env.NODE_VERSION }}'
           registry-url: 'https://registry.npmjs.org'
       - uses: actions/cache@v2
         env:
@@ -69,14 +146,95 @@ jobs:
       - name: Finalize release
         run: ./node_modules/.bin/sentry-cli releases finalize "$GITHUB_SHA"
 
-  Test:
+  Staging:
+    name: Deploy to Staging
+    needs:
+      - Build
+      - Test
+      - Lint
     runs-on: ubuntu-latest
+    environment: Staging
+    env:
+      NAMESPACE: staging
     steps:
       - uses: actions/checkout@v2
+
+      - name: Connect to ACR
+        uses: azure/docker-login@v1
+        with:
+          login-server: ${{ secrets.K8S_ACR_REGISTRY_LOGIN_SERVER }}
+          username: ${{ secrets.K8S_ACR_REGISTRY_USERNAME }}
+          password: ${{ secrets.K8S_ACR_REGISTRY_PASSWORD }}
+
+      - name: Build and Push to ACR
+        run: |
+          docker build . -t ${{ env.REGISTRY_NAME }}.azurecr.io/lancelot:${{ github.sha }}
+          docker push ${{ env.REGISTRY_NAME }}.azurecr.io/lancelot:${{ github.sha }}
+
+      - name: Set AKS Context
+        uses: azure/aks-set-context@v1
+        with:
+          creds: '${{ secrets.AZURE_CREDENTIALS }}'
+          cluster-name: ${{ env.CLUSTER_NAME }}
+          resource-group: ${{ env.CLUSTER_RESOURCE_GROUP }}
+
+      - name: Create k8s namespace if it doesn't exist
+        run: |
+          kubectl create namespace ${{ env.NAMESPACE }} --dry-run -o json | kubectl apply -f -
+
+      - name: Create image pull secret for ACR
+        uses: azure/k8s-create-secret@v1
+        with:
+          container-registry-url: ${{ env.REGISTRY_NAME }}.azurecr.io
+          container-registry-username: ${{ secrets.REGISTRY_USERNAME }}
+          container-registry-password: ${{ secrets.REGISTRY_PASSWORD }}
+          secret-name: ${{ env.SECRET }}
+          namespace: ${{ env.NAMESPACE }}
+
+      - name: Create lancelot secret
+        uses: azure/k8s-create-secret@v1
+        with:
+          secret-name: kh-lancelot-secret
+          namespace: ${{ env.NAMESPACE }}
+          secret-type: generic
+          arguments: >
+            --from-literal=DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }}
+            --from-literal=GUILD_ID=${{ secrets.GUILD_ID }}
+            --from-literal=WEATHER_API_KEY=${{ secrets.WEATHER_API_KEY }}
+            --from-literal=SENTRY_DSN=${{ secrets.SENTRY_DSN }}
+            --from-literal=SENTRY_ENV=${{ secrets.SENTRY_ENV }}
+            --from-literal=GITHUB_SHA=${{ secrets.GITHUB_SHA }}
+
+      - name: Deploy to AKS
+        uses: azure/k8s-deploy@v1
+        with:
+          manifests: |
+            manifests/bot.yml
+          images: '${{ env.REGISTRY_NAME }.azurecr.io/lancelot:${{ github.sha }}'
+          imagepullsecrets: |
+            ${{ env.SECRET }}
+            kh-lancelot-secret
+          namespace: ${{ env.NAMESPACE }}
+
+      - name: Send Webhook that bot has been deployed to Staging
+        run: |
+          ./discord.sh --webhook-url=${{ secrets.LANCELOT_WEBHOOK}} --text "Lancelot is deployed to Staging, give a minute to boot!"
+
+  StagingSentry:
+    name: Create Staging release for Sentry
+    needs: Staging
+    runs-on: ubuntu-latest
+    environment: Staging
+    env:
+      NAMESPACE: staging
+    steps: 
+      - uses: actions/checkout@v2
+
       - uses: actions/setup-node@v2
         with:
-          node-version: '16.x'
+          node-version: '${{ env.NODE_VERSION }}'
           registry-url: 'https://registry.npmjs.org'
+
       - uses: actions/cache@v2
         env:
           cache-name: cache-node-modules
@@ -87,23 +245,99 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
+
       - name: Install Dependencies
         run: npm ci
         env:
           NPM_CONFIG_PRODUCTION: false
-      - name: Run Build
-        run: npm run build
-      - name: Run Tests
-        run: npm test
 
-  Lint:
+      - name: Run Build
+        run: tsc -p tsconfig.production.json
+
+      - name: Create Sentry release
+        uses: getsentry/action-release@v1
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: knight-hacks
+          SENTRY_PROJECT: discord-bot
+        with:
+          environment: ${{ env.NAMESPACE }}
+          sourcemaps: ./dist
+
+  Production:
+    name: Deploy to Production
+    needs: Staging
     runs-on: ubuntu-latest
+    environment: Production
+    env:
+      NAMESPACE: production
     steps:
       - uses: actions/checkout@v2
+
+      - name: Set AKS Context
+        uses: azure/aks-set-context@v1
+        with:
+          creds: '${{ secrets.AZURE_CREDENTIALS }}'
+          cluster-name: ${{ env.CLUSTER_NAME }}
+          resource-group: ${{ env.CLUSTER_RESOURCE_GROUP }}
+
+      - name: Create k8s namespace if it doesn't exist
+        run: |
+          kubectl create namespace ${{ env.NAMESPACE }} --dry-run -o json | kubectl apply -f -
+
+      - name: Create image pull secret for ACR
+        uses: azure/k8s-create-secret@v1
+        with:
+          container-registry-url: ${{ env.REGISTRY_NAME }}.azurecr.io
+          container-registry-username: ${{ secrets.REGISTRY_USERNAME }}
+          container-registry-password: ${{ secrets.REGISTRY_PASSWORD }}
+          secret-name: ${{ env.SECRET }}
+          namespace: ${{ env.NAMESPACE }}
+
+      - name: Create lancelot secret
+        uses: azure/k8s-create-secret@v1
+        with:
+          secret-name: kh-lancelot-secret
+          namespace: ${{ env.NAMESPACE }}
+          secret-type: generic
+          arguments: >
+            --from-literal=DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }}
+            --from-literal=GUILD_ID=${{ secrets.GUILD_ID }}
+            --from-literal=WEATHER_API_KEY=${{ secrets.WEATHER_API_KEY }}
+            --from-literal=SENTRY_DSN=${{ secrets.SENTRY_DSN }}
+            --from-literal=SENTRY_ENV=${{ secrets.SENTRY_ENV }}
+            --from-literal=GITHUB_SHA=${{ secrets.GITHUB_SHA }}
+
+      - name: Deploy to AKS
+        uses: azure/k8s-deploy@v1
+        with:
+          manifests: |
+            manifests/bot.yml
+          images: '${{ env.REGISTRY_NAME }.azurecr.io/lancelot:${{ github.sha }}'
+          imagepullsecrets: |
+            ${{ env.SECRET }}
+            kh-lancelot-secret
+          namespace: ${{ env.NAMESPACE }}
+
+      - name: Send Webhook that bot has been deployed to Production
+        run: |
+          ./discord.sh --webhook-url=${{ secrets.LANCELOT_WEBHOOK}} --text "Lancelot is deployed to Production, give a minute to boot!"
+            
+  ProductionSentry:
+    name: Create Production release for Sentry
+    needs: Production
+    runs-on: ubuntu-latest
+    environment: Production
+    env:
+      NAMESPACE: production
+    steps: 
+      - uses: actions/checkout@v2
+
       - uses: actions/setup-node@v2
         with:
-          node-version: '16.x'
+          node-version: '${{ env.NODE_VERSION }}'
           registry-url: 'https://registry.npmjs.org'
+
       - uses: actions/cache@v2
         env:
           cache-name: cache-node-modules
@@ -114,49 +348,21 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
+
       - name: Install Dependencies
         run: npm ci
-      - name: Run Linter
-        run: npm run lint
-    # Dockerize the bot to be sent to azure containter registery
-  Deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out code into the node module
-        uses: actions/checkout@v2
-      # step 1: Docker login
-      - name: 'Docker login'
-        uses: azure/docker-login@v1
+        env:
+          NPM_CONFIG_PRODUCTION: false
+
+      - name: Run Build
+        run: tsc -p tsconfig.production.json
+
+      - name: Create Sentry release
+        uses: getsentry/action-release@v1
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: knight-hacks
+          SENTRY_PROJECT: discord-bot
         with:
-          login-server: ${{ secrets.REGISTRY_LOGIN_SERVER}}
-          username: ${{ secrets.REGISTRY_USERNAME }}
-          password: ${{ secrets.REGISTRY_PASSWORD }}
-
-      # step 2: Build Docker Image
-      - name: Build Docker
-        run: |
-          docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER}}/lancelot:${{ github.sha }}
-
-      # step 3: Push Docker to Azure Registry
-      - name: Push Docker
-        run: docker push ${{ secrets.REGISTRY_LOGIN_SERVER}}/lancelot:${{ github.sha }}
-
-      - uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SERVER_IP }}
-          username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.KEY }}
-          script: |
-            sudo rm -r .env
-            echo "DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN}}" > .env 
-            echo "GUILD_ID=${{ secrets.GUILD_ID }}" >> .env 
-            echo "WEATHER_API_KEY=${{ secrets.WEATHER_API}}" >> .env 
-            echo "SENTRY_DSN=${{ secrets.SENTRY_DSN}}" >> .env
-            echo "GITHUB_SHA=${{ github.sha }}" >> .env
-            sudo docker stop lancelot
-            sudo docker rm lancelot
-            sudo docker image prune -a -f --filter "until=24h"
-            sudo docker login lancelot.azurecr.io -u ${{ secrets.AZURE_CONTAINER_USER}} -p ${{ secrets.AZURE_CONTAINER_PASSWORD}}
-            sudo docker pull ${{ secrets.REGISTRY_LOGIN_SERVER}}/lancelot:${{ github.sha }}
-            sudo docker run --env-file .env -d --name lancelot  ${{ secrets.REGISTRY_LOGIN_SERVER}}/lancelot:${{ github.sha }}
-            ./discord.sh --webhook-url=${{ secrets.LANCELOT_WEBHOOK}} --text "Lancelot is deployed, give a minute to boot!"
+          environment: ${{ env.NAMESPACE }}
+          sourcemaps: ./dist

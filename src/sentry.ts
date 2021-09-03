@@ -18,7 +18,7 @@ global.__rootdir__ = __dirname || process.cwd();
 export function setupSentry(): void {
   Sentry.init({
     dsn: process.env.SENTRY_DSN,
-    environment: process.env.NODE_ENV,
+    environment: process.env.SENTRY_ENV || process.env.NODE_ENV,
     release: process.env.GITHUB_SHA,
     integrations: [
       new RewriteFrames({
