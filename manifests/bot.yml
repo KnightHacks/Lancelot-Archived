@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kh-lancelot
+spec:
+  selector:
+    matchLabels:
+      app: kh-lancelot
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: kh-lancelot
+    spec:
+      containers:
+        - name: kh-lancelot
+          image: knighthacks2021.azurecr.io/lancelot
+          envFrom:
+            - secretRef:
+                name: kh-lancelot-secret
