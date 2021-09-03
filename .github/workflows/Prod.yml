@@ -210,7 +210,7 @@ jobs:
         with:
           manifests: |
             manifests/bot.yml
-          images: '${{ env.REGISTRY_NAME }.azurecr.io/lancelot:${{ github.sha }}'
+          images: '${{ env.REGISTRY_NAME }}.azurecr.io/lancelot:${{ github.sha }}'
           imagepullsecrets: |
             ${{ env.SECRET }}
             kh-lancelot-secret
@@ -313,7 +313,7 @@ jobs:
         with:
           manifests: |
             manifests/bot.yml
-          images: '${{ env.REGISTRY_NAME }.azurecr.io/lancelot:${{ github.sha }}'
+          images: '${{ env.REGISTRY_NAME }}.azurecr.io/lancelot:${{ github.sha }}'
           imagepullsecrets: |
             ${{ env.SECRET }}
             kh-lancelot-secret
