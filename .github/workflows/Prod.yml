@@ -180,9 +180,9 @@ jobs:
             kh-lancelot-secret
           namespace: ${{ env.NAMESPACE }}
 
-      - name: Send Webhook that bot has been deployed to Staging
-        run: |
-          ./discord.sh --webhook-url=${{ secrets.LANCELOT_WEBHOOK}} --text "Lancelot is deployed to Staging, give a minute to boot!"
+#      - name: Send Webhook that bot has been deployed to Staging
+#        run: |
+#          ./discord.sh --webhook-url=${{ secrets.LANCELOT_WEBHOOK}} --text "Lancelot is deployed to Staging, give a minute to boot!"
 
   StagingSentry:
     name: Create Staging release for Sentry
@@ -283,9 +283,9 @@ jobs:
             kh-lancelot-secret
           namespace: ${{ env.NAMESPACE }}
 
-      - name: Send Webhook that bot has been deployed to Production
-        run: |
-          ./discord.sh --webhook-url=${{ secrets.LANCELOT_WEBHOOK}} --text "Lancelot is deployed to Production, give a minute to boot!"
+#      - name: Send Webhook that bot has been deployed to Production
+#        run: |
+#          ./discord.sh --webhook-url=${{ secrets.LANCELOT_WEBHOOK}} --text "Lancelot is deployed to Production, give a minute to boot!"
             
   ProductionSentry:
     name: Create Production release for Sentry
