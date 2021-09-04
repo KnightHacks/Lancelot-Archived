@@ -291,7 +291,6 @@ jobs:
     name: Create Production release for Sentry
     needs: Production
     runs-on: ubuntu-latest
-    environment: Production
     env:
       NAMESPACE: production
     steps: 
