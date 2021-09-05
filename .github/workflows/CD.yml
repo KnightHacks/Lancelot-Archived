@@ -166,8 +166,8 @@ jobs:
             --from-literal=GUILD_ID=${{ secrets.GUILD_ID }}
             --from-literal=WEATHER_API_KEY=${{ secrets.WEATHER_API_KEY }}
             --from-literal=SENTRY_DSN=${{ secrets.SENTRY_DSN }}
-            --from-literal=SENTRY_ENV=${{ secrets.SENTRY_ENV }}
-            --from-literal=GITHUB_SHA=${{ secrets.GITHUB_SHA }}
+            --from-literal=SENTRY_ENV=${{ env.NAMESPACE }}
+            --from-literal=GITHUB_SHA=${{ github.sha }}
 
       - name: Deploy to AKS
         uses: azure/k8s-deploy@v1
@@ -269,8 +269,8 @@ jobs:
             --from-literal=GUILD_ID=${{ secrets.GUILD_ID }}
             --from-literal=WEATHER_API_KEY=${{ secrets.WEATHER_API_KEY }}
             --from-literal=SENTRY_DSN=${{ secrets.SENTRY_DSN }}
-            --from-literal=SENTRY_ENV=${{ secrets.SENTRY_ENV }}
-            --from-literal=GITHUB_SHA=${{ secrets.GITHUB_SHA }}
+            --from-literal=SENTRY_ENV=${{ env.NAMESPACE }}
+            --from-literal=GITHUB_SHA=${{ github.sha }}
 
       - name: Deploy to AKS
         uses: azure/k8s-deploy@v1
