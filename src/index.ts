@@ -36,14 +36,14 @@ setupSentry();
     throw new Error('GUILD_ID is not set in your env file!');
   }
 
+  // Start up client.
+  await client.login(process.env.DISCORD_TOKEN);
+
   // Load commands in.
   client.setGuildID(process.env.GUILD_ID);
   await client.registerCommands(path.join(__dirname, 'commands'));
 
   client.registerMessageFilters([countingFilter]);
-
-  // Start up client.
-  await client.login(process.env.DISCORD_TOKEN);
 
   client.on('messageCreate', async (message) => {
     if (client.isReady()) {
@@ -79,5 +79,5 @@ setupSentry();
     transaction.finish();
   };
 
-  console.log('Client is now running.');
+  console.log('Lancelot is now running.');
 })();
