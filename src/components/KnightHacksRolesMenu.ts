@@ -1,4 +1,4 @@
-import { SelectMenu } from '@knighthacks/dispatch';
+import { SelectMenu } from '@knighthacks/scythe';
 import { SelectMenuInteraction, GuildMember, Role, Guild } from 'discord.js';
 
 const roles = [

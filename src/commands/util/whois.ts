@@ -1,5 +1,5 @@
 import { MessageEmbed } from 'discord.js';
-import { Command } from '@knighthacks/dispatch';
+import { Command } from '@knighthacks/scythe';
 import Colors from '../../colors';
 
 const WhoIs: Command = {

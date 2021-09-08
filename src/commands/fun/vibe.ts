@@ -1,4 +1,4 @@
-import { Button, Command } from '@knighthacks/dispatch';
+import { Button, Command } from '@knighthacks/scythe';
 import { EmbedFieldData, MessageEmbed, User } from 'discord.js';
 import Colors from '../../colors';
 

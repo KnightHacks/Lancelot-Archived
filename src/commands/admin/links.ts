@@ -1,4 +1,4 @@
-import { Command } from '@knighthacks/dispatch';
+import { Command } from '@knighthacks/scythe';
 import { KnightHacksLinkButtons } from '../../components/KnightHacksLinkButtons';
 
 const LinksCommand: Command = {

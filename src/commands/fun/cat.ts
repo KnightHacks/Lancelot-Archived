@@ -1,4 +1,4 @@
-import { Command, UI } from '@knighthacks/dispatch';
+import { Command, UI } from '@knighthacks/scythe';
 import axios from 'axios';
 import {
   InteractionReplyOptions,

@@ -1,4 +1,4 @@
-import { Command } from '@knighthacks/dispatch';
+import { Command } from '@knighthacks/scythe';
 import axios from 'axios';
 
 const url = 'https://www.affirmations.dev/';

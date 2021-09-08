@@ -1,4 +1,4 @@
-import { Command } from '@knighthacks/dispatch';
+import { Command } from '@knighthacks/scythe';
 import { API, ClubEvent } from '@knighthacks/hackathon';
 import { RelativeDate } from '@knighthacks/hackathon/dist/controllers/club';
 import { ApplicationCommandOptionData, MessageEmbed } from 'discord.js';

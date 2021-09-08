@@ -1,6 +1,6 @@
 import path from 'path';
 import dotenv from 'dotenv';
-import { Client } from '@knighthacks/dispatch';
+import { Client } from '@knighthacks/scythe';
 import { countingFilter } from './countingFilter';
 import { onWelcome } from './welcomer';
 import * as Sentry from '@sentry/node';

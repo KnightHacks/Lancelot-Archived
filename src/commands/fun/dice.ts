@@ -1,4 +1,4 @@
-import { Command } from '@knighthacks/dispatch';
+import { Command } from '@knighthacks/scythe';
 
 const numberToString: Record<number, string> = {
   1: 'one',

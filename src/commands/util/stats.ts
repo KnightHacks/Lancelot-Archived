@@ -1,5 +1,5 @@
 import { MessageEmbed } from 'discord.js';
-import { Command, inChannelNames } from '@knighthacks/dispatch';
+import { Command, inChannelNames } from '@knighthacks/scythe';
 import { Channels } from '../../channels';
 import Colors from '../../colors';
 

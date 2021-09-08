@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { UI } from '@knighthacks/dispatch';
+import { UI } from '@knighthacks/scythe';
 import { GuildMember, MessageActionRow } from 'discord.js';
 import { KnightHacksLinkButtons } from './components/KnightHacksLinkButtons';
 import {

@@ -1,4 +1,4 @@
-import { Command } from '@knighthacks/dispatch';
+import { Command } from '@knighthacks/scythe';
 import { KnightHacksRolesMenu } from '../../components/KnightHacksRolesMenu';
 
 const RolesCommand: Command = {

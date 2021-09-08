@@ -1,4 +1,4 @@
-import { Command } from '@knighthacks/dispatch';
+import { Command } from '@knighthacks/scythe';
 
 const URL = 'https://github.com/KnightHacks/Lancelot';
 

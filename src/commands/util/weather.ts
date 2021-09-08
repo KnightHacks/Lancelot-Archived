@@ -1,4 +1,4 @@
-import { Command } from '@knighthacks/dispatch';
+import { Command } from '@knighthacks/scythe';
 import axios, { AxiosError } from 'axios';
 import { ApplicationCommandOptionData, MessageEmbed } from 'discord.js';
 import Colors from '../../colors';
