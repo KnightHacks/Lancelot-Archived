@@ -35,6 +35,8 @@ const majors = [
   'Chemistry',
   'Mathematics',
   'Physics',
+  'Digital Media - Web Design',
+  'Digital Media - Game Design',
   'Communication',
   'Performing Arts',
   'Graphic Design',
