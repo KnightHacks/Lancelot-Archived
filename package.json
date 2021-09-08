@@ -37,6 +37,8 @@
     "@babel/core": "^7.15.0",
     "@babel/preset-env": "^7.15.0",
     "@babel/preset-typescript": "^7.15.0",
+    "@commitlint/cli": "^13.1.0",
+    "@commitlint/config-conventional": "^13.1.0",
     "@sentry/cli": "^1.68.0",
     "@types/humps": "^2.0.1",
     "@types/jest": "^26.0.24",
