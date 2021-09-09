@@ -1,5 +1,11 @@
 # Lancelot
 
+The custom-made discord bot for the KnightHacks Discord.
+
+<details>
+<summary>Setting up your environment</summary>
+<br>
+
 ## Preparing your environment
 
 - Make sure you're running at least node v16.x
@@ -86,6 +92,11 @@ follow the link, which will prompt you to add the bot to a server you
 administer.
 
 You should now be able to run `npm start` and start developing!
+</details>
+
+<details>
+<summary>Available Scripts</summary>
+<br>
 
 ## Available Scripts
 
@@ -114,3 +125,4 @@ Compiles the source files.
 ### `npm run lint`
 
 Lints all of the source files.
+</details>
