@@ -1,6 +1,6 @@
 # Lancelot
 
-The custom-made discord bot for the KnightHacks Discord.
+The custom-made discord bot for the KnightHacks Discord server, powered by [scythe](https://github.com/KnightHacks/scythe)
 
 <details>
 <summary>Setting up your environment</summary>
