@@ -41,7 +41,7 @@ function generateEmbed(event: ClubEvent) {
 
   return new MessageEmbed()
     .setTitle(event.name)
-    .setAuthor(event.presenter)
+    .setAuthor(event.presenter.name)
     .setColor(Colors.embedColor)
     .setDescription(event.description)
     .addField('Location', event.location)

@@ -56,7 +56,7 @@
     "typescript": "^4.4.2"
   },
   "dependencies": {
-    "@knighthacks/hackathon": "^0.1.0-dev-fb53d14",
+    "@knighthacks/hackathon": "^0.1.0-dev-f4f3c62",
     "@knighthacks/scythe": "^0.1.0-dev-66541fb",
     "@sentry/integrations": "^6.11.0",
     "@sentry/node": "^6.11.0",
