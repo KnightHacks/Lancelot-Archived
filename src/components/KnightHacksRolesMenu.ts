@@ -4,13 +4,13 @@ import { SelectMenuInteraction, GuildMember, Role, Guild } from 'discord.js';
 const roles = [
   {
     label: 'Communications Team',
-    description: 'The KnightHacks Communication Team',
-    emoji: '640281343040946177',
+    description: 'The Knight Hacks Communication Team',
+    emoji: '892851216072183868',
   },
   {
     label: 'OPS',
     description: 'The Knight Hacks Operations Team',
-    emoji: '640281343040946177',
+    emoji: '892851216072183868',
   },
   {
     label: 'Python',
@@ -40,7 +40,7 @@ const roles = [
   {
     label: 'JavaScript',
     description: 'The JavaScript programming language.',
-    emoji: '626922021112119316',
+    emoji: '892848919984345118',
   },
   {
     label: 'Typescript',
@@ -75,10 +75,18 @@ const roles = [
   {
     label: 'MacOS',
     description: 'The macOS operating system.',
-    emoji: '626921264363339786',
+    emoji: '892848628157272134',
   },
-  { label: 'Math', description: 'The subject of mathematics.' },
-  { label: 'Physics', description: 'The subject of physics.' },
+  {
+    label: 'Math',
+    description: 'The subject of mathematics.',
+    emoji: '632647801590906940',
+  },
+  {
+    label: 'Physics',
+    description: 'The subject of physics.',
+    emoji: '892849713433423922',
+  },
 ];
 
 const majors = [
