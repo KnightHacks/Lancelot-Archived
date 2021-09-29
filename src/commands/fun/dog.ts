@@ -50,6 +50,7 @@ async function getMessage(
 const DogCommand: Command = {
   name: 'dog',
   description: 'Downloads an image of a dog from the internet',
+  cooldown: 60,
   async run({ interaction, registerUI }) {
     // Defer interaction while we fetch the image.
     await interaction.deferReply();

@@ -26,6 +26,7 @@ const CodeGenCommand: Command = {
   name: 'code',
   description: 'Generate a screenshot of your code',
   options,
+  cooldown: 60,
   async run({ interaction }) {
     await interaction.deferReply();
 

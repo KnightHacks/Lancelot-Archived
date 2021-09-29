@@ -50,6 +50,7 @@ async function getMessage(
 const CatCommand: Command = {
   name: 'cat',
   description: 'Gets a random image of a cat',
+  cooldown: 60,
   async run({ interaction, registerUI }) {
     // Defer while we fetch the image.
     await interaction.deferReply();
