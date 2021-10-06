@@ -1,7 +1,7 @@
 import { Command } from '@knighthacks/scythe';
-import { ApplicationCommandOption } from 'discord.js';
+import { ApplicationCommandOptionData } from 'discord.js';
 
-const options: ApplicationCommandOption[] = [
+const options: ApplicationCommandOptionData[] = [
   {
     name: 'question',
     type: 'STRING',

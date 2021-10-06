@@ -1,7 +1,9 @@
 import { Command, UI } from '@knighthacks/scythe';
 import axios from 'axios';
 import {
+  BaseMessageComponentOptions,
   InteractionReplyOptions,
+  MessageActionRow,
   MessageActionRowOptions,
   MessageEmbed,
 } from 'discord.js';
@@ -19,7 +21,12 @@ async function getCatImage(): Promise<string | null> {
 }
 
 async function getMessage(
-  registerUI: (ui: UI) => MessageActionRowOptions[]
+  registerUI: (
+    ui: UI
+  ) => (
+    | MessageActionRow
+    | (Required<BaseMessageComponentOptions> & MessageActionRowOptions)
+  )[]
 ): Promise<InteractionReplyOptions> {
   // Get the image URL.
   const catImageURL = await getCatImage();
