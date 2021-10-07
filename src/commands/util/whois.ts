@@ -30,9 +30,9 @@ const WhoIs: Command = {
     const embed = new MessageEmbed({
       color: Colors.embedColor,
       timestamp: interaction.createdTimestamp,
+      author: { name: 'User Server Profile', iconURL: user.avatarURL() ?? '' },
       title: `User Info - ${user.username}`,
-      thumbnail: { url: user.avatarURL() ?? '' },
-      footer: { text: `Requested by ${interaction.member?.user.username}` },
+      thumbnail: { url: guildMember.avatarURL() ?? user.avatarURL() ?? '' },
       fields: [
         { name: 'ID: ', value: user.id, inline: false },
         { name: 'Display Name: ', value: user.username, inline: false },
@@ -44,6 +44,7 @@ const WhoIs: Command = {
         { name: 'Joined Server On: ', value: userJoinedAt, inline: false },
       ],
     });
+
     await interaction.followUp({ embeds: [embed] });
   },
 };
