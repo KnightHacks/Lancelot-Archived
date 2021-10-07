@@ -11,7 +11,7 @@ const WhoIs: Command = {
     );
     const user = guildMember?.user;
 
-    if (!user) {
+    if (!user || !guildMember) {
       throw new Error(
         `Could not perform whois on user with ID: ${interaction.targetId}`
       );
@@ -22,10 +22,6 @@ const WhoIs: Command = {
       await interaction.followUp('Please give a valid user');
       return;
     }
-    // ! used since the command would have never ran if the user wasnt in the server
-    const userJoinedAt =
-      interaction.guild?.members.cache.get(user.id)?.joinedAt?.toUTCString() ??
-      '<N/A>';
 
     const embed = new MessageEmbed({
       color: Colors.embedColor,
@@ -38,10 +34,14 @@ const WhoIs: Command = {
         { name: 'Display Name: ', value: user.username, inline: false },
         {
           name: 'Created Account On: ',
-          value: user.createdAt.toUTCString(),
+          value: `<t:${Math.floor(user.createdTimestamp / 1000)}:D>`,
           inline: false,
         },
-        { name: 'Joined Server On: ', value: userJoinedAt, inline: false },
+        {
+          name: 'Joined Server On: ',
+          value: `<t:${Math.floor(guildMember.joinedTimestamp ?? 0 / 1000)}:D>`,
+          inline: false,
+        },
       ],
     });
 
