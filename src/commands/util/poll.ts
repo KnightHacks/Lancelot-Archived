@@ -2,7 +2,6 @@ import { Command } from '@knighthacks/scythe';
 import {
   ApplicationCommandOptionData,
   CommandInteractionOption,
-  Message,
   MessageActionRow,
   MessageEmbed,
   MessageSelectMenu,
@@ -186,11 +185,11 @@ const PollCommand: Command = {
       generateMenu(normalizedOptions)
     );
 
-    const message = (await interaction.reply({
+    const message = await interaction.reply({
       embeds: [embed],
       fetchReply: true,
       components: [row],
-    })) as Message;
+    });
     const collector = message.createMessageComponentCollector({
       componentType: 'SELECT_MENU',
       time: time * 60000,

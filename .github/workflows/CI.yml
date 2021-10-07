@@ -6,7 +6,7 @@ name: CI
 
 on:
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   Build:
@@ -33,7 +33,7 @@ jobs:
           NPM_CONFIG_PRODUCTION: false
       - name: Run Build
         run: npm run build
-          
+
   Test:
     runs-on: ubuntu-latest
     steps:
