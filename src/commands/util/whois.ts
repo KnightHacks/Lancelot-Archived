@@ -26,8 +26,11 @@ const WhoIs: Command = {
     const embed = new MessageEmbed({
       color: Colors.embedColor,
       timestamp: interaction.createdTimestamp,
-      author: { name: 'User Server Profile', iconURL: user.avatarURL() ?? '' },
-      title: `User Info - ${user.username}`,
+      author: {
+        name: `${user.username}#${user.discriminator}`,
+        iconURL: user.avatarURL() ?? '',
+      },
+      title: 'User Info',
       thumbnail: { url: guildMember.avatarURL() ?? user.avatarURL() ?? '' },
       fields: [
         { name: 'ID: ', value: user.id, inline: false },
@@ -39,7 +42,9 @@ const WhoIs: Command = {
         },
         {
           name: 'Joined Server On: ',
-          value: `<t:${Math.floor(guildMember.joinedTimestamp ?? 0 / 1000)}:D>`,
+          value: guildMember.joinedTimestamp
+            ? `<t:${Math.floor(guildMember.joinedTimestamp / 1000)}:D>`
+            : 'Unknown',
           inline: false,
         },
       ],
