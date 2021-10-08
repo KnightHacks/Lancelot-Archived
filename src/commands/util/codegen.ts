@@ -1,6 +1,7 @@
 import { Command } from '@knighthacks/scythe';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { ApplicationCommandOptionData, MessageAttachment } from 'discord.js';
+import { Buffer } from 'buffer';
 
 const url = 'https://carbonara.vercel.app/api/cook';
 
@@ -14,10 +15,18 @@ const options: ApplicationCommandOptionData[] = [
 ];
 
 async function getImage(code: string) {
-  const response = await axios.post<Buffer>(
+  const response = await axios.post<
+    Record<string, string>,
+    AxiosResponse<Buffer>
+  >(
     url,
-    { code, backgroundColor: 'rgba(0, 0, 0, 0)' },
-    { responseType: 'arraybuffer' }
+    {
+      code,
+      backgroundColor: 'rgba(0, 0, 0, 0)',
+    },
+    {
+      responseType: 'arraybuffer',
+    }
   );
   return response.data;
 }

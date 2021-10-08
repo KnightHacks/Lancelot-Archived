@@ -41,7 +41,7 @@ function getWeather(city: string): Promise<WeatherResponse | null | string> {
     .get<WeatherResponse>(fetchURL)
     .then((response) => response.data)
     .catch((error: AxiosError) => {
-      if (error.response?.data.cod === '404') {
+      if (error.response?.status === 404) {
         return `'${city}' is not a valid city.`;
       }
 
