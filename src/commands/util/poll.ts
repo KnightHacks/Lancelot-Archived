@@ -155,7 +155,7 @@ const PollCommand: Command = {
   async run({ interaction }) {
     const { options } = interaction;
     const title = options.getString('title', true);
-    const time = options.getNumber('time', true);
+    const time = options.getInteger('time', true);
 
     if (time > 60) {
       await interaction.reply({
