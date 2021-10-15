@@ -39,16 +39,19 @@ function generateEmbed(event: ClubEvent) {
   const unixStartTime = event.start.getTime() / 1000;
   const unixEndTime = event.end.getTime() / 1000;
 
-  return new MessageEmbed()
-    .setTitle(event.name)
-    .setAuthor(event.presenter.name)
-    .setColor(Colors.embedColor)
-    .setDescription(event.description)
-    .addField('Location', event.location)
-    .addField('Date', `<t:${unixStartTime}:D>`, true)
-    .addField('Starts', `<t:${unixStartTime}:t>`, true)
-    .addField('Ends', `<t:${unixEndTime}:t>`, true)
-    .addField('Tags', event.tags.map((tag) => `\`${tag}\``).join(', '));
+  return (
+    new MessageEmbed()
+      .setTitle(event.name)
+      // @ts-expect-error update node api
+      .setAuthor(event.presenter.name)
+      .setColor(Colors.embedColor)
+      .setDescription(event.description)
+      .addField('Location', event.location)
+      .addField('Date', `<t:${unixStartTime}:D>`, true)
+      .addField('Starts', `<t:${unixStartTime}:t>`, true)
+      .addField('Ends', `<t:${unixEndTime}:t>`, true)
+      .addField('Tags', event.tags.map((tag) => `\`${tag}\``).join(', '))
+  );
 }
 
 export async function getEmbedEvents(
