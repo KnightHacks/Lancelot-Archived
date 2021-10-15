@@ -22,8 +22,6 @@ const StatsCommand: Command = {
     const totalMembers = members.size;
     const owner = (await guild.fetchOwner()).displayName;
 
-    console.log(interaction.guild?.iconURL());
-
     const embed = new MessageEmbed()
       .setColor(Colors.embedColor)
       .setTitle(`Server Info - ${guild.name}`)

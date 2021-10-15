@@ -39,7 +39,7 @@ const CodeGenCommand: Command = {
   async run({ interaction }) {
     await interaction.deferReply();
 
-    const code = interaction.options.get('input', true).value as string;
+    const code = interaction.options.getString('input', true);
     const buffer = await getImage(code);
 
     const attachment = new MessageAttachment(buffer, 'code.png');

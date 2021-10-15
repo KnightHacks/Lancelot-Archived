@@ -72,8 +72,7 @@ const WeatherCommand: Command = {
   description: 'Gets the latest weather data',
   options,
   async run({ interaction }) {
-    const city: string =
-      (interaction.options.get('city')?.value as string) ?? 'Orlando';
+    const city: string = interaction.options.getString('city') ?? 'Orlando';
     await interaction.deferReply();
 
     const weather = await getWeather(city);
