@@ -67,6 +67,17 @@ setupSentry();
     onWelcome(client.eventHandler.registerUI, member)
   );
 
+  client.on('messageCreate', async (message) => {
+    if (message.author.id === client.user?.id) {
+      return;
+    }
+    if (message.content.includes('notch')) {
+      await message.reply(
+        'I see you may be talking about the new Macbook Pro screen notch\nThere are many places besides the Knight Hacks Discord to discuss this topic, here are a few:\n\n- https://twitter.com\n- r/apple\n- https://support.apple.com/'
+      );
+    }
+  });
+
   // Handle command errors.
   client.onError = (_, error) => {
     console.error(error);
