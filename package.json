@@ -74,6 +74,7 @@
     "lint-staged": "^11.2.3",
     "prettier": "^2.4.1",
     "utf-8-validate": "^5.0.7",
-    "zlib-sync": "^0.1.7"
+    "zlib-sync": "^0.1.7",
+		"node-schedule": "^2.0.0"
   }
 }
