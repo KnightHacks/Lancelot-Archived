@@ -40,9 +40,26 @@ export default async function setupProcess(client: Client) {
   const scheduleData = process.env.PROBLEM_SEND_TIME;
   if (!scheduleData) throw new Error('Could not load problem send time.');
 
-  triggerHour = Number(scheduleData.substring(0, 2));
-  triggerMinute = Number(scheduleData.substring(3, 5));
-  const AM = scheduleData.substring(5).toLowerCase() === 'am';
+  const split = scheduleData.split(':');
+
+  if (split.length !== 2)
+    throw new Error(
+      'Splitting problem send time by the colon did not produce two parts.'
+    );
+  else if (split[0]!.length > 2 || split[1]!.length !== 4)
+    throw new Error('Invalid time string format.');
+
+  triggerHour = parseInt(split[0]!);
+  triggerMinute = parseInt(split[1]!.substring(0, split[1]!.length - 2));
+  const AM = split[1]?.substring(split[1].length - 2).toLowerCase() === 'am';
+
+  if (
+    triggerHour < 1 ||
+    triggerHour > 12 ||
+    triggerMinute < 0 ||
+    triggerMinute > 59
+  )
+    throw new Error('Problem send time is not valid.');
 
   // Fix the hour to be 0-23 range
   if (AM) triggerHour %= 12;
