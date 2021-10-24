@@ -3,10 +3,7 @@ import { runProcess } from './util/sendProblems';
 import { getAllProblems } from './util/retrieveProblems';
 import { Problem } from './util/problemTypes';
 import { Client, Guild } from 'discord.js';
-
-// This module doesn't work as an import
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const schedule = require('node-schedule');
+import { RecurrenceRule, scheduleJob } from 'node-schedule';
 
 // --------- Problem Storage ---------
 
@@ -40,18 +37,18 @@ export default async function setupProcess(client: Client) {
   const scheduleData = process.env.PROBLEM_SEND_TIME;
   if (!scheduleData) throw new Error('Could not load problem send time.');
 
-  const split = scheduleData.split(':');
+  const split = scheduleData.split(':') as [string, string];
 
   if (split.length !== 2)
     throw new Error(
       'Splitting problem send time by the colon did not produce two parts.'
     );
-  else if (split[0]!.length > 2 || split[1]!.length !== 4)
+  else if (split[0].length > 2 || split[1].length < 3)
     throw new Error('Invalid time string format.');
 
-  triggerHour = parseInt(split[0]!);
-  triggerMinute = parseInt(split[1]!.substring(0, split[1]!.length - 2));
-  const AM = split[1]?.substring(split[1].length - 2).toLowerCase() === 'am';
+  triggerHour = parseInt(split[0]);
+  triggerMinute = parseInt(split[1].substring(0, split[1].length - 2));
+  const AM = split[1].substring(split[1].length - 2).toLowerCase() === 'am';
 
   if (
     triggerHour < 1 ||
@@ -75,25 +72,24 @@ export default async function setupProcess(client: Client) {
   if (!guild)
     throw new Error('Could not retrieve the guild matching GUILD_ID.');
 
-  const allProblems: Problem[][] = await getAllProblems();
+  const [easyBank, mediumBank, hardBank] = await getAllProblems();
 
-  if (!allProblems[0] || allProblems[0].length === 0)
-    throw new Error('No easy problems retrieved.');
-  else if (!allProblems[1] || allProblems[1].length === 0)
+  if (easyBank.length === 0) throw new Error('No easy problems retrieved.');
+  else if (mediumBank.length === 0)
     throw new Error('No medium problems retrieved.');
-  else if (!allProblems[2] || allProblems[2].length === 0)
+  else if (hardBank.length === 0)
     throw new Error('No hard problems retrieved.');
 
-  easyProblems = allProblems[0];
-  mediumProblems = allProblems[1];
-  hardProblems = allProblems[2];
+  easyProblems = easyBank;
+  mediumProblems = mediumBank;
+  hardProblems = hardBank;
 
-  const rule = new schedule.RecurrenceRule();
+  const rule = new RecurrenceRule();
   rule.hour = triggerHour;
   rule.minute = triggerMinute;
   rule.tz = 'America/New_York';
 
-  schedule.scheduleJob(rule, () => {
+  scheduleJob(rule, () => {
     generateNextProblems();
     runProcess(client, [
       easyProblems[easyIndex]!,
