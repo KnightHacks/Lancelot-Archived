@@ -159,24 +159,22 @@ const getProblemEmbed = async (problem: Problem): Promise<MessageEmbed> => {
 };
 
 const generateSimilarString = (info: ProblemInfo): string => {
-  let build = '';
-  info.similarQuestions.forEach((question) => {
-    build += question.difficulty + ' - ' + question.url + '\n';
-  });
+  const build = info.similarQuestions.reduce((accumulated, question) => {
+    return accumulated + question.difficulty + ' - ' + question.url + '\n';
+  }, '');
   return build === '' ? 'None' : build;
 };
 
 const generateTagsString = (info: ProblemInfo): string => {
-  let build = '';
-  info.similarQuestions.forEach((topic) => {
-    if (!topic) {
+  const build = info.similarQuestions.reduce((accumulated, topic) => {
+    if (!topic)
       throw new Error(
         'Trying to generate string of problem topics from an undefined ProblemInfo object. Full similarQuestions array: ' +
           info.similarQuestions
       );
-    }
 
-    build += topic.name + ' - ' + topic.url + '\n';
-  });
+    return accumulated + topic.name + ' - ' + topic.url + '\n';
+  }, '');
+
   return build === '' ? 'None' : build;
 };
