@@ -72,23 +72,13 @@ export const getAllProblems = async (): Promise<
             : hardProblems;
 
         const newProbObj = {
-          name: prob.stat.question__title
-            ? prob.stat.question__title
-            : 'Name Unavailable',
-          slug: prob.stat.question__title_slug
-            ? prob.stat.question__title_slug
-            : 'slug-unavailable',
-          numAttempts: prob.stat.total_submitted
-            ? prob.stat.total_submitted
-            : 0,
-          numAccepts: prob.stat.total_acs ? prob.stat.total_acs : 0,
-          difficulty: prob.difficulty.level
-            ? prob.difficulty.level
-            : Difficulty.NONE,
+          name: prob.stat.question__title ?? 'Name Unavailable',
+          slug: prob.stat.question__title_slug ?? 'slug-unavailable',
+          numAttempts: prob.stat.total_submitted ?? 0,
+          numAccepts: prob.stat.total_acs ?? 0,
+          difficulty: prob.difficulty.level ?? Difficulty.NONE,
           URL: `https://leetcode.com/problems/${prob.stat.question__title_slug}/`,
-          id: prob.stat.frontend_question_id
-            ? prob.stat.frontend_question_id
-            : 0,
+          id: prob.stat.frontend_question_id ?? 0,
         };
 
         pushTo.push(newProbObj);
@@ -174,9 +164,7 @@ export const getAdditionalProblemInfo = async (
   const questionData = response.data.data.question;
 
   let similarQuestionsArray: SimilarProblemInfo[] = [];
-  const simQsString = questionData.similarQuestions
-    ? questionData.similarQuestions
-    : '[]';
+  const simQsString = questionData.similarQuestions ?? '[]';
   if (simQsString && simQsString !== '[]') {
     // There are topics to parse
     // Remove [], then split the objects
@@ -189,27 +177,27 @@ export const getAdditionalProblemInfo = async (
     similarQuestionsArray = tempStrArray.map((str: string) => {
       const parsedObj = JSON.parse(str);
       return {
-        name: parsedObj.title,
-        slug: parsedObj.titleSlug,
-        difficulty: parsedObj.difficulty,
+        name: parsedObj.title ?? '',
+        slug: parsedObj.titleSlug ?? '',
+        difficulty: parsedObj.difficulty ?? Difficulty.NONE,
         url: `https://leetcode.com/problems/${parsedObj.titleSlug}/`,
       };
     });
   }
 
-  const topicTags = questionData.topicTags ? questionData.topicTags : [];
+  const topicTags = questionData.topicTags ?? [];
   const topicsArray: Topic[] = topicTags.map((tagObj: TagData) => {
     return {
-      name: tagObj.name,
-      slug: tagObj.slug,
+      name: tagObj.name ?? '',
+      slug: tagObj.slug ?? '',
       url: `https://leetcode.com/tag/${tagObj.slug}/`,
     };
   });
 
   const ret = {
-    likes: questionData.likes ? questionData.likes : 0,
-    dislikes: questionData.dislikes ? questionData.dislikes : 0,
-    htmlContent: questionData.content ? questionData.content : '',
+    likes: questionData.likes ?? 0,
+    dislikes: questionData.dislikes ?? 0,
+    htmlContent: questionData.content ?? '',
     similarQuestions: similarQuestionsArray,
     topics: topicsArray,
   };

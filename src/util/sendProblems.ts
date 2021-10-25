@@ -93,7 +93,6 @@ export const sendProblems = async (
   problemData: Problem[]
 ): Promise<void> => {
   // Index 0 is easy problem, index 1 is medium problem, index 2 is hard problem
-
   const channelData: string | undefined = process.env.PROBLEM_CHANNEL;
 
   if (!channelData) {
@@ -108,7 +107,7 @@ export const sendProblems = async (
     if (!sendProblem) {
       throw new Error(
         'Could not send the ' +
-          (i === 0 ? 'easy' : i === 1 ? 'medium' : 'hard') +
+          getDifficultyString(i + 1) +
           ' problem, which was undefined.'
       );
     }
