@@ -8,6 +8,7 @@ import { setupSentry } from './sentry';
 import { PresenceData } from 'discord.js';
 import * as random from './util/random';
 import replies from './replies.json';
+import setupProcess from './problemSchedule';
 
 // Load env vars.
 dotenv.config();
@@ -90,5 +91,6 @@ setupSentry();
     transaction.finish();
   };
 
+  await setupProcess(client);
   console.log('Lancelot is now running.');
 })();
