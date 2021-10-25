@@ -9,6 +9,7 @@ import {
 } from 'discord.js';
 import { Problem, ProblemInfo, getDifficultyString } from './problemTypes';
 import { getAdditionalProblemInfo } from './retrieveProblems';
+import * as channels from '../problemChannels.json';
 
 const days = [
   'Sunday',
@@ -46,7 +47,7 @@ export const runProcess = (
   if (!postChannel)
     throw new Error(
       'Could not find the text channel ' +
-        process.env.PROBLEM_CHANNEL +
+        channels.problemChannel +
         ' in the specified guild.'
     );
 
@@ -59,7 +60,7 @@ export const getChannel = (client: Client): TextChannel => {
   // Go back through and look for all channels 'easy', 'medium', and 'hard' with
   // .parentId = .id of the category channel
 
-  const channelData: string | undefined = process.env.PROBLEM_CHANNEL;
+  const channelData: string | undefined = channels.problemChannel;
 
   if (!channelData) {
     throw new Error(
@@ -93,7 +94,7 @@ export const sendProblems = async (
   problemData: Problem[]
 ): Promise<void> => {
   // Index 0 is easy problem, index 1 is medium problem, index 2 is hard problem
-  const channelData: string | undefined = process.env.PROBLEM_CHANNEL;
+  const channelData: string | undefined = channels.problemChannel;
 
   if (!channelData) {
     throw new Error(

@@ -79,6 +79,21 @@ setupSentry();
     }
   });
 
+  client.on('debug', (message) => {
+    console.log(message);
+  });
+
+  client.on('messageCreate', async (message) => {
+    if (!message.channel.isThread()) {
+      return;
+    }
+
+    const member = await message.channel.members.fetch('386337006764032002');
+    const thing = await message.channel.members.fetch();
+    console.log(member);
+    console.log(thing);
+  });
+
   // Handle command errors.
   client.onError = (_, error) => {
     console.error(error);

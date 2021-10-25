@@ -4,6 +4,7 @@ import { getAllProblems } from './util/retrieveProblems';
 import { Problem } from './util/problemTypes';
 import { Client, Guild } from 'discord.js';
 import { RecurrenceRule, scheduleJob } from 'node-schedule';
+import * as channels from './problemChannels.json';
 
 // --------- Problem Storage ---------
 
@@ -34,7 +35,7 @@ export default async function setupProcess(client: Client) {
   let triggerHour = 0,
     triggerMinute = 0;
 
-  const scheduleData = process.env.PROBLEM_SEND_TIME;
+  const scheduleData = channels.problemSendTime;
   if (!scheduleData) throw new Error('Could not load problem send time.');
 
   const split = scheduleData.split(':') as [string, string];
