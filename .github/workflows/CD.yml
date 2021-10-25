@@ -167,6 +167,8 @@ jobs:
             --from-literal=SENTRY_DSN=${{ secrets.SENTRY_DSN }}
             --from-literal=SENTRY_ENV=${{ env.NAMESPACE }}
             --from-literal=GITHUB_SHA=${{ github.sha }}
+            --from-literal=PROBLEM_SEND_TIME=${{ secrets.PROBLEM_SEND_TIME }}
+            --from-literal=PROBLEM_SEND_TIME=${{ secrets.PROBLEM_CHANNEL }}
 
       - name: Deploy to AKS
         uses: azure/k8s-deploy@v1
@@ -270,6 +272,8 @@ jobs:
             --from-literal=SENTRY_DSN=${{ secrets.SENTRY_DSN }}
             --from-literal=SENTRY_ENV=${{ env.NAMESPACE }}
             --from-literal=GITHUB_SHA=${{ github.sha }}
+            --from-literal=PROBLEM_SEND_TIME=${{ secrets.PROBLEM_SEND_TIME }}
+            --from-literal=PROBLEM_SEND_TIME=${{ secrets.PROBLEM_CHANNEL }}
 
       - name: Deploy to AKS
         uses: azure/k8s-deploy@v1
