@@ -68,32 +68,6 @@ setupSentry();
     onWelcome(client.eventHandler.registerUI, member)
   );
 
-  client.on('messageCreate', async (message) => {
-    if (message.author.id === client.user?.id) {
-      return;
-    }
-    if (message.content.includes('notch')) {
-      await message.reply(
-        'I see you may be talking about the new Macbook Pro screen notch\nThere are many places besides the Knight Hacks Discord to discuss this topic, here are a few:\n\n- https://twitter.com\n- r/apple\n- https://support.apple.com/'
-      );
-    }
-  });
-
-  client.on('debug', (message) => {
-    console.log(message);
-  });
-
-  client.on('messageCreate', async (message) => {
-    if (!message.channel.isThread()) {
-      return;
-    }
-
-    const member = await message.channel.members.fetch('386337006764032002');
-    const thing = await message.channel.members.fetch();
-    console.log(member);
-    console.log(thing);
-  });
-
   // Handle command errors.
   client.onError = (_, error) => {
     console.error(error);
