@@ -160,17 +160,20 @@ const getProblemEmbed = async (problem: Problem): Promise<MessageEmbed> => {
 
 const generateSimilarString = (info: ProblemInfo): string => {
   const build = info.similarQuestions.reduce((accumulated, question) => {
+    if (!question)
+      throw new Error(
+        'Trying to generate string of similar problems from an undefined ProblemInfo object. Full similarQuestions array.'
+      );
     return accumulated + question.difficulty + ' - ' + question.url + '\n';
   }, '');
   return build === '' ? 'None' : build;
 };
 
 const generateTagsString = (info: ProblemInfo): string => {
-  const build = info.similarQuestions.reduce((accumulated, topic) => {
+  const build = info.topics.reduce((accumulated, topic) => {
     if (!topic)
       throw new Error(
-        'Trying to generate string of problem topics from an undefined ProblemInfo object. Full similarQuestions array: ' +
-          info.similarQuestions
+        'Trying to generate string of topics from an undefined ProblemInfo object.'
       );
 
     return accumulated + topic.name + ' - ' + topic.url + '\n';
