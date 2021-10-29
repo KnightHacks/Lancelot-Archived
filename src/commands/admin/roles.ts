@@ -22,6 +22,7 @@ const RolesCommand: Command = {
     await reply({
       content: `Pick Roles to ${action}`,
       components: registerUI(ui),
+      ephemeral: true,
     });
   },
 };

@@ -22,6 +22,7 @@ const MajorsCommand: Command = {
     await interaction.reply({
       content: `Pick Majors to ${action}`,
       components: registerUI(ui),
+      ephemeral: true,
     });
   },
 };
