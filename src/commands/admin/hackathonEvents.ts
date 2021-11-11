@@ -50,7 +50,7 @@ const HackathonEventsCommand: Command = {
   name: 'hackathonevents',
   description: 'Fetches upcoming hackathon events.',
   async run({ interaction }) {
-    interaction.deferReply();
+    await interaction.deferReply();
     const embeds = await getEmbedEvents();
 
     if (embeds === undefined) {
