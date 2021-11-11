@@ -18,8 +18,14 @@ interface APIHackathonEvent {
 }
 
 function generateEmbed(event: APIHackathonEvent) {
-  const unixStartTime = new Date(event.date_time).getTime() / 1000;
-  const unixEndTime = new Date(event.end_date_time).getTime() / 1000;
+  const adjustedStart = new Date(event.date_time);
+  adjustedStart.setUTCHours(adjustedStart.getUTCHours() + 5);
+
+  const adjustedEnd = new Date(event.end_date_time);
+  adjustedEnd.setUTCHours(adjustedEnd.getUTCHours() + 5);
+
+  const unixStartTime = adjustedStart.getTime() / 1000;
+  const unixEndTime = adjustedEnd.getTime() / 1000;
 
   return new MessageEmbed()
     .setTitle(event.name)
