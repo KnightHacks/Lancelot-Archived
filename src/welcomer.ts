@@ -16,10 +16,10 @@ __**Slash Commands**__
 In the Knight Hacks discord if you type \`/\` it'll give a list of the commands I have to offer.
 
 __**Roles**__
-To add roles, select them from the drop-down. Adding specific roles will grant you access to channels.
+To add roles, head over to the #bot-spam and run \`/roles add\`.
 
 __**Majors**__
-To add majors, select them from the drop-down.
+To add roles, head over to the #bot-spam and run \`/roles add\`.
 
 __**Events**__
 Below is the list of upcoming events we have planned.

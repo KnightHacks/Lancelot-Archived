@@ -3,16 +3,6 @@ import { SelectMenuInteraction, GuildMember, Role, Guild } from 'discord.js';
 
 const roles = [
   {
-    label: '2021 Hacker',
-    description: 'A partipant in Knight Hacks 2021',
-    emoji: '892851216072183868',
-  },
-  {
-    label: 'Communications Team',
-    description: 'The Knight Hacks Communication Team',
-    emoji: '892851216072183868',
-  },
-  {
     label: 'OPS',
     description: 'The Knight Hacks Operations Team',
     emoji: '892851216072183868',
