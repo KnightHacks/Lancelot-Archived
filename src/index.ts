@@ -43,6 +43,7 @@ setupSentry();
   // Load commands in.
   client.setGuildID(process.env.GUILD_ID);
   await client.registerCommands(path.join(__dirname, 'commands'));
+  client.registerAutocompleteHandlers(path.join(__dirname, 'autocomplete'));
 
   client.registerMessageFilters([countingFilter]);
 
