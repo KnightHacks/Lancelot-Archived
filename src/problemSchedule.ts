@@ -8,11 +8,13 @@ import * as channels from './problemChannels.json';
 
 // --------- Problem Storage ---------
 
-let easyProblems: Problem[], mediumProblems: Problem[], hardProblems: Problem[];
+let easyProblems: Problem[];
+let mediumProblems: Problem[];
+let hardProblems: Problem[];
 
-let easyIndex = 0,
-  mediumIndex = 0,
-  hardIndex = 0;
+let easyIndex = 0;
+let mediumIndex = 0;
+let hardIndex = 0;
 
 // --------- Main execution ---------
 
@@ -32,8 +34,8 @@ const generateNextProblems = (): Problem[] => {
 
 export default async function setupProcess(client: Client) {
   // 24 hour clock
-  let triggerHour = 0,
-    triggerMinute = 0;
+  let triggerHour = 0;
+  let triggerMinute = 0;
 
   const scheduleData = channels.problemSendTime;
   if (!scheduleData) throw new Error('Could not load problem send time.');
