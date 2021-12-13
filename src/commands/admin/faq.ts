@@ -29,13 +29,8 @@ const FAQCommand: Command = {
 
     const user = interaction.options.getUser('tag');
 
-    let response = '';
-
-    if (user) {
-      response += `Response for user ${user}:\n\n`;
-    }
-
-    response += answer;
+    const response = `${user ? `Response for user ${user}:\n\n` : ''}${answer}`;
+    
     await interaction.reply(response);
   },
 };
