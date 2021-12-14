@@ -35,10 +35,9 @@ setupSentry();
     guildID: process.env.GUILD_ID,
     discordToken: process.env.DISCORD_TOKEN,
     commandsPath: path.join(__dirname, 'commands'),
+    autoCompletePath: path.join(__dirname, 'autocomplete'),
     messageFilters: [countingFilter],
   });
-
-  client.registerAutocompleteHandlers(path.join(__dirname, 'autocomplete'));
 
   client.on('messageCreate', async (message) => {
     if (client.isReady()) {
