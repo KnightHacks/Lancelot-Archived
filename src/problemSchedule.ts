@@ -2,7 +2,7 @@
 import { runProcess } from './util/sendProblems';
 import { getAllProblems } from './util/retrieveProblems';
 import { Problem } from './util/problemTypes';
-import { Client, Guild } from 'discord.js';
+import { Client } from 'discord.js';
 import { RecurrenceRule, scheduleJob } from 'node-schedule';
 import * as channels from './problemChannels.json';
 
@@ -64,16 +64,6 @@ export default async function setupProcess(client: Client) {
   // Fix the hour to be 0-23 range
   if (AM) triggerHour %= 12;
   else if (triggerHour !== 12) triggerHour += 12;
-
-  if (!process.env.GUILD_ID || !client.guilds.cache.get(process.env.GUILD_ID))
-    throw new Error('Could not retrieve GUILD_ID from env variables.');
-
-  const guild: Guild | undefined = client.guilds.cache.get(
-    process.env.GUILD_ID
-  );
-
-  if (!guild)
-    throw new Error('Could not retrieve the guild matching GUILD_ID.');
 
   const [easyBank, mediumBank, hardBank] = await getAllProblems();
 
