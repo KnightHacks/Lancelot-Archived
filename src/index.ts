@@ -27,24 +27,20 @@ setupSentry();
   };
 
   // Create client.
-  const client = new Client({
+  const client = await Client.create({
     intents: ['GUILDS', 'GUILD_MESSAGES', 'GUILD_PRESENCES', 'GUILD_MEMBERS'],
     partials: ['MESSAGE'],
     presence,
+    guildID: process.env.GUILD_ID,
+    discordToken: process.env.DISCORD_TOKEN,
+    commandsPath: path.join(__dirname, 'commands'),
   });
 
   if (!process.env.GUILD_ID) {
     throw new Error('GUILD_ID is not set in your env file!');
   }
 
-  // Start up client.
-  await client.login(process.env.DISCORD_TOKEN);
-
-  // Load commands in.
-  client.setGuildID(process.env.GUILD_ID);
-  await client.registerCommands(path.join(__dirname, 'commands'));
   client.registerAutocompleteHandlers(path.join(__dirname, 'autocomplete'));
-
   client.registerMessageFilters([countingFilter]);
 
   client.on('messageCreate', async (message) => {
