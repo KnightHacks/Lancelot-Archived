@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { runProcess } from './util/sendProblems';
+import { getChannel, sendProblems } from './util/sendProblems';
 import { getAllProblems } from './util/retrieveProblems';
 import { Problem } from './util/problemTypes';
-import { Client } from 'discord.js';
+import { Client, TextChannel } from 'discord.js';
 import { RecurrenceRule, scheduleJob } from 'node-schedule';
 import * as channels from './problemChannels.json';
 
@@ -82,9 +82,18 @@ export default async function setupProcess(client: Client) {
   rule.minute = triggerMinute;
   rule.tz = 'America/New_York';
 
+  const postChannel: TextChannel = getChannel(client);
+
+  if (!postChannel)
+    throw new Error(
+      'Could not find the text channel ' +
+        channels.problemChannel +
+        ' in the specified guild.'
+    );
+
   scheduleJob(rule, () => {
     generateNextProblems();
-    runProcess(client, [
+    sendProblems(postChannel, [
       easyProblems[easyIndex]!,
       mediumProblems[mediumIndex]!,
       hardProblems[hardIndex]!,
