@@ -32,7 +32,7 @@ const generateNextProblems = (): Problem[] => {
   return newProblems;
 };
 
-export default async function setupProcess(client: Client) {
+export default async function setupDailyProblems(client: Client) {
   // 24 hour clock
   let triggerHour = 0;
   let triggerMinute = 0;

@@ -7,7 +7,7 @@ import * as Sentry from '@sentry/node';
 import { setupSentry } from './sentry';
 import * as random from './util/random';
 import replies from './replies.json';
-import setupProcess from './problemSchedule';
+import setupDailyProblems from './problemSchedule';
 
 // Load env vars.
 dotenv.config();
@@ -74,6 +74,6 @@ setupSentry();
     transaction.finish();
   };
 
-  await setupProcess(client);
+  await setupDailyProblems(client);
   console.log('Lancelot is now running.');
 })();
