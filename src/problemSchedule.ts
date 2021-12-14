@@ -1,18 +1,20 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { runProcess } from './util/sendProblems';
+import { getChannel, sendProblems } from './util/sendProblems';
 import { getAllProblems } from './util/retrieveProblems';
 import { Problem } from './util/problemTypes';
-import { Client, Guild } from 'discord.js';
+import { Client, TextChannel } from 'discord.js';
 import { RecurrenceRule, scheduleJob } from 'node-schedule';
 import * as channels from './problemChannels.json';
 
 // --------- Problem Storage ---------
 
-let easyProblems: Problem[], mediumProblems: Problem[], hardProblems: Problem[];
+let easyProblems: Problem[];
+let mediumProblems: Problem[];
+let hardProblems: Problem[];
 
-let easyIndex = 0,
-  mediumIndex = 0,
-  hardIndex = 0;
+let easyIndex = 0;
+let mediumIndex = 0;
+let hardIndex = 0;
 
 // --------- Main execution ---------
 
@@ -30,10 +32,10 @@ const generateNextProblems = (): Problem[] => {
   return newProblems;
 };
 
-export default async function setupProcess(client: Client) {
+export default async function setupDailyProblems(client: Client) {
   // 24 hour clock
-  let triggerHour = 0,
-    triggerMinute = 0;
+  let triggerHour = 0;
+  let triggerMinute = 0;
 
   const scheduleData = channels.problemSendTime;
   if (!scheduleData) throw new Error('Could not load problem send time.');
@@ -63,16 +65,6 @@ export default async function setupProcess(client: Client) {
   if (AM) triggerHour %= 12;
   else if (triggerHour !== 12) triggerHour += 12;
 
-  if (!process.env.GUILD_ID || !client.guilds.cache.get(process.env.GUILD_ID))
-    throw new Error('Could not retrieve GUILD_ID from env variables.');
-
-  const guild: Guild | undefined = client.guilds.cache.get(
-    process.env.GUILD_ID
-  );
-
-  if (!guild)
-    throw new Error('Could not retrieve the guild matching GUILD_ID.');
-
   const [easyBank, mediumBank, hardBank] = await getAllProblems();
 
   if (easyBank.length === 0) throw new Error('No easy problems retrieved.');
@@ -90,9 +82,18 @@ export default async function setupProcess(client: Client) {
   rule.minute = triggerMinute;
   rule.tz = 'America/New_York';
 
+  const postChannel: TextChannel = getChannel(client);
+
+  if (!postChannel)
+    throw new Error(
+      'Could not find the text channel ' +
+        channels.problemChannel +
+        ' in the specified guild.'
+    );
+
   scheduleJob(rule, () => {
     generateNextProblems();
-    runProcess(client, [
+    sendProblems(postChannel, [
       easyProblems[easyIndex]!,
       mediumProblems[mediumIndex]!,
       hardProblems[hardIndex]!,

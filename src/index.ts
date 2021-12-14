@@ -5,10 +5,9 @@ import { countingFilter } from './countingFilter';
 import { onWelcome } from './welcomer';
 import * as Sentry from '@sentry/node';
 import { setupSentry } from './sentry';
-import { PresenceData } from 'discord.js';
 import * as random from './util/random';
 import replies from './replies.json';
-import setupProcess from './problemSchedule';
+import setupDailyProblems from './problemSchedule';
 
 // Load env vars.
 dotenv.config();
@@ -17,35 +16,28 @@ dotenv.config();
 setupSentry();
 
 (async function main() {
-  const presence: PresenceData = {
-    activities: [
-      {
-        name: 'Slash Commands',
-        type: 'WATCHING',
-      },
-    ],
-  };
-
-  // Create client.
-  const client = new Client({
-    intents: ['GUILDS', 'GUILD_MESSAGES', 'GUILD_PRESENCES', 'GUILD_MEMBERS'],
-    partials: ['MESSAGE'],
-    presence,
-  });
-
   if (!process.env.GUILD_ID) {
     throw new Error('GUILD_ID is not set in your env file!');
   }
 
-  // Start up client.
-  await client.login(process.env.DISCORD_TOKEN);
-
-  // Load commands in.
-  client.setGuildID(process.env.GUILD_ID);
-  await client.registerCommands(path.join(__dirname, 'commands'));
-  client.registerAutocompleteHandlers(path.join(__dirname, 'autocomplete'));
-
-  client.registerMessageFilters([countingFilter]);
+  // Create client.
+  const client = await Client.create({
+    intents: ['GUILDS', 'GUILD_MESSAGES', 'GUILD_PRESENCES', 'GUILD_MEMBERS'],
+    partials: ['MESSAGE'],
+    presence: {
+      activities: [
+        {
+          name: 'Slash Commands',
+          type: 'WATCHING',
+        },
+      ],
+    },
+    guildID: process.env.GUILD_ID,
+    discordToken: process.env.DISCORD_TOKEN,
+    commandsPath: path.join(__dirname, 'commands'),
+    autoCompletePath: path.join(__dirname, 'autocomplete'),
+    messageFilters: [countingFilter],
+  });
 
   client.on('messageCreate', async (message) => {
     if (client.isReady()) {
@@ -81,6 +73,6 @@ setupSentry();
     transaction.finish();
   };
 
-  await setupProcess(client);
+  await setupDailyProblems(client);
   console.log('Lancelot is now running.');
 })();

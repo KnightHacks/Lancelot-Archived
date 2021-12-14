@@ -30,9 +30,5 @@ export async function countingFilter(message: Message): Promise<boolean> {
     return false;
   }
 
-  if (newValue === previousValue + 1) {
-    return true;
-  }
-
-  return false;
+  return newValue === previousValue + 1;
 }

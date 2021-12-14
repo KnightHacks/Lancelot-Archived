@@ -38,22 +38,6 @@ const months = [
 
 // --------- Execution Functions ---------
 
-export const runProcess = (
-  client: Client,
-  currentProblems: Problem[]
-): void => {
-  const postChannel: TextChannel = getChannel(client);
-
-  if (!postChannel)
-    throw new Error(
-      'Could not find the text channel ' +
-        channels.problemChannel +
-        ' in the specified guild.'
-    );
-
-  sendProblems(postChannel, currentProblems);
-};
-
 export const getChannel = (client: Client): TextChannel => {
   // Go through once and look for channel with name 'Daily Challenge Problems' and type 'GUILD_CATEGORY'
   // Get the .id of that category
