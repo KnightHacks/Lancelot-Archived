@@ -141,9 +141,9 @@ jobs:
           cluster-name: ${{ env.CLUSTER_NAME }}
           resource-group: ${{ env.CLUSTER_RESOURCE_GROUP }}
 
-      - name: Create k8s namespace if it doesn't exist
-        run: |
-          kubectl create namespace ${{ env.NAMESPACE }} --dry-run=none -o json | kubectl apply -f -
+#       - name: Create k8s namespace if it doesn't exist
+#         run: |
+#           kubectl create namespace ${{ env.NAMESPACE }} --dry-run=none -o json | kubectl apply -f -
 
       - name: Create image pull secret for ACR
         uses: azure/k8s-create-secret@v1
