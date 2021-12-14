@@ -5,7 +5,6 @@ import { countingFilter } from './countingFilter';
 import { onWelcome } from './welcomer';
 import * as Sentry from '@sentry/node';
 import { setupSentry } from './sentry';
-import { PresenceData } from 'discord.js';
 import * as random from './util/random';
 import replies from './replies.json';
 import setupProcess from './problemSchedule';
@@ -17,15 +16,6 @@ dotenv.config();
 setupSentry();
 
 (async function main() {
-  const presence: PresenceData = {
-    activities: [
-      {
-        name: 'Slash Commands',
-        type: 'WATCHING',
-      },
-    ],
-  };
-
   if (!process.env.GUILD_ID) {
     throw new Error('GUILD_ID is not set in your env file!');
   }
@@ -34,7 +24,14 @@ setupSentry();
   const client = await Client.create({
     intents: ['GUILDS', 'GUILD_MESSAGES', 'GUILD_PRESENCES', 'GUILD_MEMBERS'],
     partials: ['MESSAGE'],
-    presence,
+    presence: {
+      activities: [
+        {
+          name: 'Slash Commands',
+          type: 'WATCHING',
+        },
+      ],
+    },
     guildID: process.env.GUILD_ID,
     discordToken: process.env.DISCORD_TOKEN,
     commandsPath: path.join(__dirname, 'commands'),
