@@ -1,9 +1,16 @@
 import { Message } from 'discord.js';
+import fetch from 'node-fetch';
 
 const ghRegex = /https?:\/\/github.com\/([\d\w-.]+\/[\d\w-.]+)/;
 const contentsRegex = /\{\+path\}/;
 
 const githubAPI = 'https://api.github.com/repos/';
+
+interface GitHubResponse {
+  value: {
+    content?: string;
+  };
+}
 
 const checkForLicense = async (message: Message) => {
   if (message.content) {
@@ -11,21 +18,24 @@ const checkForLicense = async (message: Message) => {
     if (matches) {
       const repo = await fetch(githubAPI + matches[1]).then((b) => b.json());
       if (repo.license === null) {
-        const responses = await Promise.allSettled([
-          fetch(repo.contents_url.replace(contentsRegex, 'README')).then((b) =>
-            b.json()
-          ),
-          fetch(repo.contents_url.replace(contentsRegex, 'README.md')).then(
-            (b) => b.json()
-          ),
-        ]);
+        const responses: GitHubResponse[] = <GitHubResponse[]>(
+          await Promise.allSettled(
+            [
+              fetch(repo.contents_url.replace(contentsRegex, 'README')).then(
+                (b) => b.json()
+              ),
+              fetch(repo.contents_url.replace(contentsRegex, 'README.md')).then(
+                (b) => b.json()
+              ),
+            ].filter((x) => 'value' in x)
+          )
+        );
 
         const isCopyrightAsserted = responses
-          .filter((r) => 'value' in r && 'content' in r.value)
-          .map((r) => (<any>r).value.content)
+          .filter((r) => 'content' in r.value)
+          .map((r) => <string>r.value.content)
           .map((base64) => Buffer.from(base64, 'base64').toString('utf-8'))
           .map((content) => {
-            console.log(content);
             return ['copyright', 'license']
               .map((term) => content.toLowerCase().includes(term))
               .reduce((acc, cur) => acc || cur);
