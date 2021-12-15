@@ -31,11 +31,12 @@ const checkForLicense = async (message: Message) => {
 
         const isCopyrightAsserted = responses
           .filter((r) => 'value' in r && 'content' in r.value)
-          .map((r) => <string>r.value.content)
-          .map((base64) => Buffer.from(base64, 'base64').toString('utf-8'))
-          .map((content) => {
+          .map((r) => {
+            const buffer = Buffer.from(r.value.content!, 'base64').toString(
+              'utf-8'
+            );
             return ['copyright', 'license']
-              .map((term) => content.toLowerCase().includes(term))
+              .map((term) => buffer.toLowerCase().includes(term))
               .reduce((acc, cur) => acc || cur);
           })
           .reduce((acc, cur) => acc || cur, false);
