@@ -30,9 +30,12 @@ const checkForLicense = async (message: Message) => {
         );
 
         const isCopyrightAsserted = responses
-          .filter((r) => 'value' in r && 'content' in r.value)
+          .filter(
+            (r): r is { value: { content: string } } =>
+              'value' in r && 'content' in r.value
+          )
           .map((r) => {
-            const buffer = Buffer.from(r.value.content!, 'base64').toString(
+            const buffer = Buffer.from(r.value.content, 'base64').toString(
               'utf-8'
             );
             return ['copyright', 'license']
