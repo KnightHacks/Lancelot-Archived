@@ -19,20 +19,18 @@ const checkForLicense = async (message: Message) => {
       const repo = await fetch(githubAPI + matches[1]).then((b) => b.json());
       if (repo.license === null) {
         const responses: GitHubResponse[] = <GitHubResponse[]>(
-          await Promise.allSettled(
-            [
-              fetch(repo.contents_url.replace(contentsRegex, 'README')).then(
-                (b) => b.json()
-              ),
-              fetch(repo.contents_url.replace(contentsRegex, 'README.md')).then(
-                (b) => b.json()
-              ),
-            ].filter((x) => 'value' in x)
-          )
+          await Promise.allSettled([
+            fetch(repo.contents_url.replace(contentsRegex, 'README')).then(
+              (b) => b.json()
+            ),
+            fetch(repo.contents_url.replace(contentsRegex, 'README.md')).then(
+              (b) => b.json()
+            ),
+          ])
         );
 
         const isCopyrightAsserted = responses
-          .filter((r) => 'content' in r.value)
+          .filter((r) => 'value' in r && 'content' in r.value)
           .map((r) => <string>r.value.content)
           .map((base64) => Buffer.from(base64, 'base64').toString('utf-8'))
           .map((content) => {
