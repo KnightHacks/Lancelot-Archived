@@ -17,47 +17,45 @@ interface FailedGitHubResponse {
 }
 
 const checkForLicense = async (message: Message) => {
-  if (message.content) {
-    const matches = message.content.match(ghRegex);
-    if (matches) {
-      const repo = await fetch(githubAPI + matches[1]).then((b) => b.json());
-      if (repo.license === null) {
-        const responses = <PromiseSettledResult<GitHubResponse>[]>(
-          await Promise.allSettled([
-            fetch(repo.contents_url.replace(contentsRegex, 'README')).then(
-              (b) => b.json()
-            ),
-            fetch(repo.contents_url.replace(contentsRegex, 'README.md')).then(
-              (b) => b.json()
-            ),
-          ])
+  const matches = message.content.match(ghRegex);
+  if (matches) {
+    const repo = await fetch(githubAPI + matches[1]).then((b) => b.json());
+    if (repo.license === null) {
+      const responses = <PromiseSettledResult<GitHubResponse>[]>(
+        await Promise.allSettled([
+          fetch(repo.contents_url.replace(contentsRegex, 'README')).then((b) =>
+            b.json()
+          ),
+          fetch(repo.contents_url.replace(contentsRegex, 'README.md')).then(
+            (b) => b.json()
+          ),
+        ])
+      );
+
+      const content: string =
+        responses.filter(
+          (
+            response
+          ): response is PromiseFulfilledResult<SuccessfulGitHubResponse> =>
+            response.status === 'fulfilled' && 'content' in response.value
+        )[0]?.value.content ?? '';
+
+      const buffer = Buffer.from(content, 'base64')
+        .toString('utf-8')
+        .toLowerCase();
+
+      const isCopyrightOrLicensePresent = ['copyright', 'license']
+        .map((term) => buffer.includes(term))
+        .reduce((acc, cur) => acc || cur);
+
+      if (!isCopyrightOrLicensePresent) {
+        message.reply(
+          `No license detected on <${matches[0]}>! ` +
+            'Check out https://choosealicense.com to learn why having a ' +
+            'license is important and for advice choosing an appropriate one.' +
+            "\n\nIf you don't want to make your code open source, consider " +
+            'adding an explicit copyright statement to make your intentions clear.'
         );
-
-        const content: string =
-          responses.filter(
-            (
-              response
-            ): response is PromiseFulfilledResult<SuccessfulGitHubResponse> =>
-              response.status === 'fulfilled' && 'content' in response.value
-          )[0]?.value.content ?? '';
-
-        const buffer = Buffer.from(content, 'base64')
-          .toString('utf-8')
-          .toLowerCase();
-
-        const isCopyrightOrLicensePresent = ['copyright', 'license']
-          .map((term) => buffer.includes(term))
-          .reduce((acc, cur) => acc || cur);
-
-        if (!isCopyrightOrLicensePresent) {
-          message.reply(
-            `No license detected on <${matches[0]}>! ` +
-              'Check out https://choosealicense.com to learn why having a ' +
-              'license is important and for advice choosing an appropriate one.' +
-              "\n\nIf you don't want to make your code open source, consider " +
-              'adding an explicit copyright statement to make your intentions clear.'
-          );
-        }
       }
     }
   }
