@@ -22,14 +22,13 @@ const checkForLicense = async (message: Message) => {
     const repo = await fetch(githubAPI + matches[1]).then((b) => b.json());
     if (repo.license === null) {
       const responses = <PromiseSettledResult<GitHubResponse>[]>(
-        await Promise.allSettled([
-          fetch(repo.contents_url.replace(contentsRegex, 'README')).then((b) =>
-            b.json()
-          ),
-          fetch(repo.contents_url.replace(contentsRegex, 'README.md')).then(
-            (b) => b.json()
-          ),
-        ])
+        await Promise.allSettled(
+          ['README', 'README.md'].map((x) =>
+            fetch(repo.contents_url.replace(contentsRegex, x)).then((b) =>
+              b.json()
+            )
+          )
+        )
       );
 
       const content: string =
