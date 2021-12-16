@@ -6,7 +6,14 @@ const PingCommand: Command = {
   description: 'Displays bot ping latency',
   permissionHandler: inChannelNames(Channels.bot),
   async run({ interaction }) {
-    await interaction.reply(`Pong (${interaction.client.ws.ping}ms)`);
+    const message = await interaction.reply({
+      content: 'Ping!',
+      fetchReply: true,
+    });
+
+    await message.edit(
+      `Pong! ${message.createdTimestamp - interaction.createdTimestamp}ms`
+    );
   },
 };
 

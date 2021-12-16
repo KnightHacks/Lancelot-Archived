@@ -11,7 +11,7 @@
     "build": "tsc",
     "start": "npm run start:dev",
     "start:dev": "NODE_ENV=development nodemon --exec ts-node --files ./src/index.ts",
-    "start:prod": "export NODE_ENV=production && tsc -p tsconfig.production.json && node ./dist/index.js",
+    "start:prod": "export NODE_ENV=production && tsc -p tsconfig.production.json && node --enable-source-maps ./dist/index.js",
     "test": "jest ./src/__tests__",
     "lint": "eslint --fix ./src",
     "format": "prettier --write ./src",
