@@ -5,10 +5,11 @@ import { countingFilter } from './countingFilter';
 import { onWelcome } from './welcomer';
 import * as Sentry from '@sentry/node';
 import { setupSentry } from './sentry';
-import { PresenceData } from 'discord.js';
+import { Message, PresenceData } from 'discord.js';
 import * as random from './util/random';
 import replies from './replies.json';
 import setupProcess from './problemSchedule';
+import { checkForLicense } from './licenseChecker';
 
 // Load env vars.
 dotenv.config();
@@ -61,6 +62,17 @@ setupSentry();
       if (message.mentions.has(client.user)) {
         await message.reply(random.choice(replies) ?? 'Something went wrong!');
       }
+    }
+  });
+
+  const isThisBotAuthor = (message: Message): boolean => {
+    return message.author.id === client.user?.id;
+  };
+
+  // license checker
+  client.on('messageCreate', (message) => {
+    if (!isThisBotAuthor(message)) {
+      checkForLicense(message);
     }
   });
 

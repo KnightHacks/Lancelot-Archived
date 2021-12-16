@@ -30,7 +30,7 @@ const FAQCommand: Command = {
     const user = interaction.options.getUser('tag');
 
     const response = `${user ? `Response for user ${user}:\n\n` : ''}${answer}`;
-    
+
     await interaction.reply(response);
   },
 };
