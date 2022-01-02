@@ -214,11 +214,6 @@ const PollCommand: Command = {
     });
 
     collector.on('end', async () => {
-      // If message was deleted don't bother.
-      if (message.deleted) {
-        return;
-      }
-
       // Remove select menu since poll is over.
       if (message.editable) {
         await message.edit({ components: [] });

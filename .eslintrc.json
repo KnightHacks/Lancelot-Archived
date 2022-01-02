@@ -9,7 +9,7 @@
     "node": true,
     "es6": true
   },
-  "plugins": ["@typescript-eslint", "prettier"],
+  "plugins": ["@typescript-eslint", "deprecation", "prettier"],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
@@ -48,6 +48,7 @@
       {
         "avoidEscape": true
       }
-    ]
+    ],
+    "deprecation/deprecation": "warn"
   }
 }

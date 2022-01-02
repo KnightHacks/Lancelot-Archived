@@ -53,15 +53,18 @@ function generateVibeEmbed(sender: User, recipient: User): MessageEmbed {
 
   // Create embed and add fields, and return.
   return new MessageEmbed()
-    .setAuthor(recipient.username, recipient.avatarURL() ?? undefined) // This is whatever.
+    .setAuthor({
+      name: recipient.username,
+      iconURL: recipient.avatarURL() ?? undefined,
+    })
     .setDescription(status)
     .setTitle('Vibe Check')
     .addFields(fields)
     .setColor(Colors.embedColor)
-    .setFooter(
-      `checked by ${sender.username}`,
-      sender.avatarURL() ?? undefined
-    );
+    .setFooter({
+      text: `checked by ${sender.username}`,
+      iconURL: sender.avatarURL() ?? undefined,
+    });
 }
 
 const VibeCommand: Command = {
