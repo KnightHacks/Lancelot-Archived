@@ -213,7 +213,12 @@ const PollCommand: Command = {
       await collectInteraction.editReply({ embeds: [updatedEmbed] });
     });
 
-    collector.on('end', async () => {
+    collector.on('end', async (_, reason) => {
+      // Message is deleted we cannot edit it.
+      if (reason === 'messageDelete') {
+        return;
+      }
+
       // Remove select menu since poll is over.
       if (message.editable) {
         await message.edit({ components: [] });
