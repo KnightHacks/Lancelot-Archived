@@ -60,7 +60,7 @@ const MDNCommand: Command = {
 
     if (documents.length < 1) {
       await interaction.followUp({
-        content: `No results matching the query '${query}'were found`,
+        content: `No results matching the query '${query}' were found`,
         ephemeral: true,
       });
       return;

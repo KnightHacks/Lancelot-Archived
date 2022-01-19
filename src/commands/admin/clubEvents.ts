@@ -2,7 +2,7 @@ import { Command } from '@knighthacks/scythe';
 import { API, ClubEvent } from '@knighthacks/hackathon';
 import { RelativeDate } from '@knighthacks/hackathon/dist/controllers/club';
 import { ApplicationCommandOptionData, MessageEmbed } from 'discord.js';
-import { sendPaginatedEmbeds } from 'discord.js-embed-pagination';
+// import { sendPaginatedEmbeds } from 'discord.js-embed-pagination';
 import Colors from '../../colors';
 
 // type RelativeDateRange = 'Today' | 'NextWeek' | 'NextMonth' | 'NextYear';
@@ -76,28 +76,28 @@ const ClubEventsCommand: Command = {
   description: 'Fetches upcoming Knight Hacks club events.',
   options,
   async run({ interaction }) {
-    await interaction.deferReply();
+    // await interaction.deferReply();
+    // const range = interaction.options.getString('range') as
+    //   | RelativeDate
+    //   | undefined;
+    // const embeds = await getEmbedEvents(range);
+    // if (embeds === undefined) {
+    //   await interaction.followUp('Error fetching events');
+    //   return;
+    // }
+    // if (embeds.length === 0) {
+    //   await interaction.followUp('There are no events during this period.');
+    //   return;
+    // }
+    // await sendPaginatedEmbeds(interaction, embeds, {
+    //   pageLabel: 'Event',
+    //   nextLabel: 'Next Event',
+    //   previousLabel: 'Previous Event',
+    // });
 
-    const range = interaction.options.getString('range') as
-      | RelativeDate
-      | undefined;
-
-    const embeds = await getEmbedEvents(range);
-
-    if (embeds === undefined) {
-      await interaction.followUp('Error fetching events');
-      return;
-    }
-
-    if (embeds.length === 0) {
-      await interaction.followUp('There are no events during this period.');
-      return;
-    }
-
-    await sendPaginatedEmbeds(interaction, embeds, {
-      pageLabel: 'Event',
-      nextLabel: 'Next Event',
-      previousLabel: 'Previous Event',
+    await interaction.reply({
+      content: "Club events aren't available right now.",
+      ephemeral: true,
     });
   },
 };
