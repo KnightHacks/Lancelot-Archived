@@ -1,36 +1,6 @@
 import { Command } from '@knighthacks/scythe';
 import { ApplicationCommandOptionData, MessageEmbed } from 'discord.js';
-import fetch from 'node-fetch';
-
-const MDNBase = 'https://developer.mozilla.org';
-const searchMDNURL = (query: string) =>
-  `${MDNBase}/api/v1/search?q=${query}` as const;
-
-interface MDNDocument {
-  mdn_url: string;
-  score: number;
-  title: string;
-  locale: string;
-  slug: string;
-  popularity: number;
-  summary: string;
-  highlight: MDNDocumentHighlight;
-}
-
-interface MDNDocumentHighlight {
-  body: string[];
-  title: string;
-}
-
-interface MDNResponse {
-  documents: MDNDocument[];
-}
-
-async function searchMDN(query: string): Promise<MDNDocument[]> {
-  return await fetch(searchMDNURL(query))
-    .then((res) => res.json())
-    .then((json) => (json as MDNResponse).documents);
-}
+import { MDNBase, MDNDocument, searchMDN } from '../../util/mdn';
 
 const options: ApplicationCommandOptionData[] = [
   {
@@ -38,6 +8,7 @@ const options: ApplicationCommandOptionData[] = [
     description: 'The lookup query for MDN documentation.',
     type: 'STRING',
     required: true,
+    autocomplete: true,
   },
 ];
 
