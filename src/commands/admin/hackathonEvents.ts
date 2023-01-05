@@ -1,6 +1,6 @@
+import { EmbedBuilder } from '@discordjs/builders';
 import { Command } from '@knighthacks/scythe';
 import axios from 'axios';
-import { MessageEmbed } from 'discord.js';
 import { sendPaginatedEmbeds } from 'discord.js-embed-pagination';
 import Colors from '../../colors';
 
@@ -27,20 +27,22 @@ function generateEmbed(event: APIHackathonEvent) {
   const unixStartTime = adjustedStart.getTime() / 1000;
   const unixEndTime = adjustedEnd.getTime() / 1000;
 
-  return new MessageEmbed()
+  return new EmbedBuilder()
     .setTitle(event.name)
     .setDescription(event.description)
     .setColor(Colors.embedColor)
-    .addField('Location', event.loc)
-    .addField('Date', `<t:${unixStartTime}:D>`, true)
-    .addField('Start', `<t:${unixStartTime}:t>`, true)
-    .addField('End', `<t:${unixEndTime}:t>`, true)
-    .addField('Status', event.event_status)
-    .addField('Type', event.event_type)
+    .addFields(
+      { name: 'Location', value: event.loc },
+      { name: 'Date', value: `<t:${unixStartTime}:D>`, inline: true },
+      { name: 'Starts', value: `<t:${unixStartTime}:t>`, inline: true },
+      { name: 'Ends', value: `<t:${unixEndTime}:t>`, inline: true },
+      { name: 'Status', value: event.event_status },
+      { name: 'Type', value: event.event_type }
+    )
     .setThumbnail(event.image);
 }
 
-export async function getEmbedEvents(): Promise<MessageEmbed[] | undefined> {
+export async function getEmbedEvents(): Promise<EmbedBuilder[] | undefined> {
   const events = await axios.get<{ events: APIHackathonEvent[] }>(
     'https://api.knighthacks.org/api/events/get_all_events/'
   );

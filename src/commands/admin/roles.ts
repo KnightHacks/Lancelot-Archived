@@ -1,4 +1,5 @@
 import { Command } from '@knighthacks/scythe';
+import { ApplicationCommandOptionType } from 'discord.js';
 import { KnightHacksRolesMenu } from '../../components/KnightHacksRolesMenu';
 
 const RolesCommand: Command = {
@@ -8,12 +9,12 @@ const RolesCommand: Command = {
     {
       name: 'add',
       description: 'Add roles to your account',
-      type: 'SUB_COMMAND',
+      type: ApplicationCommandOptionType.Subcommand,
     },
     {
       name: 'remove',
       description: 'Remove roles from your account',
-      type: 'SUB_COMMAND',
+      type: ApplicationCommandOptionType.Subcommand,
     },
   ],
   async run({ interaction: { options, reply }, registerUI }) {

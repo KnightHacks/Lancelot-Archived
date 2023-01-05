@@ -1,4 +1,5 @@
 import { Command } from '@knighthacks/scythe';
+import { ApplicationCommandOptionType } from 'discord.js';
 import { KnightHacksMajorsMenu } from '../../components/KnightHacksRolesMenu';
 
 const MajorsCommand: Command = {
@@ -8,12 +9,12 @@ const MajorsCommand: Command = {
     {
       name: 'add',
       description: 'Add majors to your account',
-      type: 'SUB_COMMAND',
+      type: ApplicationCommandOptionType.Subcommand,
     },
     {
       name: 'remove',
       description: 'Remove majors from your account',
-      type: 'SUB_COMMAND',
+      type: ApplicationCommandOptionType.Subcommand,
     },
   ],
   async run({ interaction, registerUI }) {

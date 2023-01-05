@@ -1,5 +1,5 @@
 const Colors = {
-  embedColor: '#303a7a',
+  embedColor: 0x303a7a,
 } as const;
 
 export default Colors;

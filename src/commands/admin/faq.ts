@@ -1,19 +1,22 @@
 import { Command } from '@knighthacks/scythe';
-import { ApplicationCommandOptionData } from 'discord.js';
+import {
+  ApplicationCommandOptionData,
+  ApplicationCommandOptionType,
+} from 'discord.js';
 import topics from '../../faq.json';
 
 const options: ApplicationCommandOptionData[] = [
   {
     name: 'topic',
     description: 'The topic to learn about',
-    type: 'STRING',
+    type: ApplicationCommandOptionType.String,
     autocomplete: true,
     required: true,
   },
   {
     name: 'tag',
     description: 'The user to tag',
-    type: 'USER',
+    type: ApplicationCommandOptionType.User,
   },
 ];
 

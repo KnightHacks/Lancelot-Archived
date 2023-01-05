@@ -1,7 +1,11 @@
 import { Command } from '@knighthacks/scythe';
 import { API, ClubEvent } from '@knighthacks/hackathon';
 import { RelativeDate } from '@knighthacks/hackathon/dist/controllers/club';
-import { ApplicationCommandOptionData, MessageEmbed } from 'discord.js';
+import {
+  ApplicationCommandOptionData,
+  ApplicationCommandOptionType,
+  EmbedBuilder,
+} from 'discord.js';
 // import { sendPaginatedEmbeds } from 'discord.js-embed-pagination';
 import Colors from '../../colors';
 
@@ -12,7 +16,7 @@ const hackathon = new API();
 const options: ApplicationCommandOptionData[] = [
   {
     name: 'range',
-    type: 'STRING',
+    type: ApplicationCommandOptionType.String,
     description: 'The relative date range to fetch events from.',
     choices: [
       {
@@ -35,28 +39,33 @@ const options: ApplicationCommandOptionData[] = [
   },
 ];
 
-function generateEmbed(event: ClubEvent) {
+function generateEmbed(event: ClubEvent): EmbedBuilder {
   const unixStartTime = event.start.getTime() / 1000;
   const unixEndTime = event.end.getTime() / 1000;
 
   return (
-    new MessageEmbed()
+    new EmbedBuilder()
       .setTitle(event.name)
       // @ts-expect-error update node api
       .setAuthor(event.presenter.name)
       .setColor(Colors.embedColor)
       .setDescription(event.description)
-      .addField('Location', event.location)
-      .addField('Date', `<t:${unixStartTime}:D>`, true)
-      .addField('Starts', `<t:${unixStartTime}:t>`, true)
-      .addField('Ends', `<t:${unixEndTime}:t>`, true)
-      .addField('Tags', event.tags.map((tag) => `\`${tag}\``).join(', '))
+      .addFields(
+        { name: 'Location', value: event.location },
+        { name: 'Date', value: `<t:${unixStartTime}:D>`, inline: true },
+        { name: 'Starts', value: `<t:${unixStartTime}:t>`, inline: true },
+        { name: 'Ends', value: `<t:${unixEndTime}:t>`, inline: true },
+        {
+          name: 'Tags',
+          value: event.tags.map((tag) => `\`${tag}\``).join(', '),
+        }
+      )
   );
 }
 
 export async function getEmbedEvents(
   range?: RelativeDate
-): Promise<MessageEmbed[] | undefined> {
+): Promise<EmbedBuilder[] | undefined> {
   const events = await hackathon.club.getEvents({
     rdate: range ?? 'Today',
     confirmed: true,
