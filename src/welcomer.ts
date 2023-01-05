@@ -1,12 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { UI } from '@knighthacks/scythe';
-import { GuildMember, MessageActionRow } from 'discord.js';
+import { GuildMember } from 'discord.js';
 import { KnightHacksLinkButtons } from './components/KnightHacksLinkButtons';
-import {
-  KnightHacksMajorsMenu,
-  KnightHacksRolesMenu,
-} from './components/KnightHacksRolesMenu';
-import { getEmbedEvents } from './commands/admin/clubEvents';
 
 const welcomeMessage = `
 **Hi! I'm Lancelot, the discord bot made for Knight Hacks**
@@ -20,28 +14,15 @@ To add roles, head over to the #bot-spam and run \`/roles add\`.
 
 __**Majors**__
 To add roles, head over to the #bot-spam and run \`/roles add\`.
-
-__**Events**__
-Below is the list of upcoming events we have planned.
 `;
 
-export async function onWelcome(
-  registerUI: (ui: UI) => MessageActionRow[],
-  member: GuildMember
-): Promise<void> {
+export async function onWelcome(member: GuildMember): Promise<void> {
   // Send the DM to the new User.
   try {
     const DM = await member.createDM();
-    const embeds = await getEmbedEvents();
-
     await DM.send({
       content: welcomeMessage,
-      embeds,
-      components: [
-        registerUI(KnightHacksRolesMenu('add', member))[0]!,
-        registerUI(KnightHacksMajorsMenu('add', member))[0]!,
-        KnightHacksLinkButtons,
-      ],
+      components: [KnightHacksLinkButtons],
     });
   } catch {
     console.log("User doesn't allow DMs.");

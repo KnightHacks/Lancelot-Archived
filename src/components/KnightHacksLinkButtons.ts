@@ -1,4 +1,5 @@
-import { MessageButton, MessageActionRow } from 'discord.js';
+import { ButtonBuilder } from '@discordjs/builders';
+import { ActionRowBuilder, ButtonStyle } from 'discord.js';
 
 type LinkButtonData = { link: string; label: string };
 const links: LinkButtonData[] = [
@@ -9,13 +10,13 @@ const links: LinkButtonData[] = [
   { link: 'https://www.knighthacks.org/ops', label: 'Operations Meetings' },
 ];
 
-const buttons: MessageButton[] = links.map((data) => {
-  return new MessageButton()
-    .setLabel(data.label)
-    .setStyle('LINK')
-    .setURL(data.link);
-});
-
-const row = new MessageActionRow().addComponents(buttons);
+const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
+  links.map((data) => {
+    return new ButtonBuilder()
+      .setLabel(data.label)
+      .setStyle(ButtonStyle.Link)
+      .setURL(data.link);
+  })
+);
 
 export { row as KnightHacksLinkButtons };

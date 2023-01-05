@@ -5,7 +5,13 @@ import { countingFilter } from './countingFilter';
 import { onWelcome } from './welcomer';
 import * as Sentry from '@sentry/node';
 import { setupSentry } from './sentry';
-import { Message, PresenceData } from 'discord.js';
+import {
+  ActivityType,
+  GatewayIntentBits,
+  Message,
+  Partials,
+  PresenceData,
+} from 'discord.js';
 import * as random from './util/random';
 import replies from './replies.json';
 import setupProcess from './problemSchedule';
@@ -22,15 +28,20 @@ setupSentry();
     activities: [
       {
         name: 'Slash Commands',
-        type: 'WATCHING',
+        type: ActivityType.Watching,
       },
     ],
   };
 
   // Create client.
   const client = new Client({
-    intents: ['GUILDS', 'GUILD_MESSAGES', 'GUILD_PRESENCES', 'GUILD_MEMBERS'],
-    partials: ['MESSAGE'],
+    intents: [
+      GatewayIntentBits.Guilds,
+      GatewayIntentBits.GuildMessages,
+      GatewayIntentBits.GuildPresences,
+      GatewayIntentBits.GuildMembers,
+    ],
+    partials: [Partials.Message],
     presence,
   });
 
@@ -77,9 +88,7 @@ setupSentry();
   });
 
   // New user handler
-  client.on('guildMemberAdd', async (member) =>
-    onWelcome(client.eventHandler.registerUI, member)
-  );
+  client.on('guildMemberAdd', async (member) => onWelcome(member));
 
   // Handle command errors.
   client.onError = (_, error) => {

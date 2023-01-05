@@ -19,12 +19,12 @@ interface FailedGitHubResponse {
 const checkForLicense = async (message: Message) => {
   const matches = message.content.match(ghRegex);
   if (matches) {
-    const repo = await fetch(githubAPI + matches[1]).then((b) => b.json());
+    const repo = await fetch(githubAPI + matches[1]).then((b: any) => b.json());
     if (repo.license === null) {
       const responses = <PromiseSettledResult<GitHubResponse>[]>(
         await Promise.allSettled(
           ['README', 'README.md'].map((x) =>
-            fetch(repo.contents_url.replace(contentsRegex, x)).then((b) =>
+            fetch(repo.contents_url.replace(contentsRegex, x)).then((b: any) =>
               b.json()
             )
           )

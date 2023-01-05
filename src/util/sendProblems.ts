@@ -4,8 +4,9 @@ import {
   TextChannel,
   Message,
   Client,
-  MessageEmbed,
   Guild,
+  ChannelType,
+  EmbedBuilder,
 } from 'discord.js';
 import { Problem, ProblemInfo, getDifficultyString } from './problemTypes';
 import { getAdditionalProblemInfo } from './retrieveProblems';
@@ -82,7 +83,7 @@ export const getChannel = (client: Client): TextChannel => {
     guild.channels.cache.find(
       (channel: GuildChannel | ThreadChannel) =>
         channel.name.toLowerCase() === channelData.toLowerCase() &&
-        channel.type === 'GUILD_TEXT'
+        channel.type === ChannelType.GuildText
     )
   );
 
@@ -131,31 +132,61 @@ export const sendProblems = async (
   }
 };
 
-const getProblemEmbed = async (problem: Problem): Promise<MessageEmbed> => {
+const getProblemEmbed = async (problem: Problem): Promise<EmbedBuilder> => {
   const today = new Date();
   const difficultyString = getDifficultyString(problem.difficulty);
   const additionalProblemInfo = await getAdditionalProblemInfo(problem);
-  return new MessageEmbed()
+  return new EmbedBuilder()
     .setTitle(
       `Daily Challenge for ${days[today.getDay()]} ${
         months[today.getMonth()]
       } ${today.getDate()} ${today.getFullYear()}`
     )
     .setURL(problem.URL)
-    .addField('Problem', '(' + problem.id + ') ' + problem.name)
-    .addField('URL', problem.URL)
-    .addField('Submissions', problem.numAttempts.toString(), true)
-    .addField('Accepted', problem.numAccepts.toString(), true)
-    .addField(
-      'Accepted %',
-      ((problem.numAccepts / problem.numAttempts) * 100).toFixed(2) + '%',
-      true
-    )
-    .addField('Difficulty', difficultyString, true)
-    .addField('Likes', additionalProblemInfo.likes.toString(), true)
-    .addField('Dislike', additionalProblemInfo.dislikes.toString(), true)
-    .addField('Tagged Topics', generateTagsString(additionalProblemInfo))
-    .addField('Similar Problems', generateSimilarString(additionalProblemInfo));
+    .addFields(
+      {
+        name: 'Problem',
+        value: '(' + problem.id + ') ' + problem.name,
+      },
+      {
+        name: 'URL',
+        value: problem.URL,
+      },
+      {
+        name: 'Submissions',
+        value: problem.numAttempts.toString(),
+        inline: true,
+      },
+      {
+        name: 'Accepted %',
+        value:
+          ((problem.numAccepts / problem.numAttempts) * 100).toFixed(2) + '%',
+        inline: true,
+      },
+      {
+        name: 'Difficulty',
+        value: difficultyString,
+        inline: true,
+      },
+      {
+        name: 'Likes',
+        value: additionalProblemInfo.likes.toString(),
+        inline: true,
+      },
+      {
+        name: 'Dislikes',
+        value: additionalProblemInfo.dislikes.toString(),
+        inline: true,
+      },
+      {
+        name: 'Tagged Topics',
+        value: generateTagsString(additionalProblemInfo),
+      },
+      {
+        name: 'Similar Problems',
+        value: generateSimilarString(additionalProblemInfo),
+      }
+    );
 };
 
 const generateSimilarString = (info: ProblemInfo): string => {
