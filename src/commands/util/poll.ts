@@ -1,13 +1,17 @@
 import { Command } from '@knighthacks/scythe';
 import {
   ApplicationCommandOptionData,
+  ApplicationCommandOptionType,
   CommandInteractionOption,
-  MessageActionRow,
-  MessageEmbed,
-  MessageSelectMenu,
-  MessageSelectOptionData,
+  ComponentType,
+  ActionRowBuilder,
+  SelectMenuBuilder,
   Snowflake,
   User,
+  EmbedData,
+  APIEmbed,
+  SelectMenuComponentOptionData,
+  MessageActionRowComponentBuilder,
 } from 'discord.js';
 import Colors from '../../colors';
 
@@ -24,7 +28,7 @@ function generateChoiceOptions(
 
     retVal.push({
       name: `option${i}`,
-      type: 'STRING',
+      type: ApplicationCommandOptionType.String,
       description: `Poll option number ${i}.`,
       required,
     });
@@ -55,7 +59,7 @@ export class PollManager {
     this.title = title;
   }
 
-  generateEmbed(): MessageEmbed {
+  generateEmbed(): EmbedData {
     const entries = [...this.voteMap.entries()].sort((a, b) => {
       const [, aCount] = a;
       const [, bCount] = b;
@@ -63,19 +67,18 @@ export class PollManager {
       return bCount - aCount;
     });
 
-    return new MessageEmbed()
-      .addFields(
-        entries.map((entry, i) => {
-          const [optionName, voteCount] = entry;
-          return {
-            name: `${i + 1}) ${optionName}`,
-            value: `Votes: ${voteCount}`,
-          };
-        })
-      )
-      .setTitle(this.title)
-      .setDescription(`Duration: ${this.time} minute(s)`)
-      .setColor(Colors.embedColor);
+    return {
+      title: this.title,
+      description: `Duration: ${this.time} minute(s)`,
+      color: Colors.embedColor,
+      fields: entries.map((entry, i) => {
+        const [optionName, voteCount] = entry;
+        return {
+          name: `${i + 1}) ${optionName}`,
+          value: `Votes: ${voteCount}`,
+        };
+      }),
+    };
   }
 
   vote(user: User, choice: string): void {
@@ -119,15 +122,15 @@ export class PollManager {
   }
 }
 
-function generateMenu(options: CommandInteractionOption[]): MessageSelectMenu {
-  const choices: MessageSelectOptionData[] = options.map((option) => {
+function generateMenu(options: CommandInteractionOption[]): SelectMenuBuilder {
+  const choices: SelectMenuComponentOptionData[] = options.map((option) => {
     return {
       label: option.value as string,
       value: option.value as string,
     };
   });
 
-  return new MessageSelectMenu()
+  return new SelectMenuBuilder()
     .setCustomId('pollMenu')
     .setMaxValues(1)
     .setPlaceholder('Pick your vote')
@@ -140,13 +143,13 @@ const PollCommand: Command = {
   options: [
     {
       name: 'title',
-      type: 'STRING',
+      type: ApplicationCommandOptionType.String,
       description: 'The title of the poll',
       required: true,
     },
     {
       name: 'time',
-      type: 'INTEGER',
+      type: ApplicationCommandOptionType.Integer,
       description: 'The amount of time in minutes to run the poll for.',
       required: true,
     },
@@ -181,23 +184,24 @@ const PollCommand: Command = {
     const poll = new PollManager(time, title, normalizedOptions);
     const embed = poll.generateEmbed();
 
-    const row = new MessageActionRow().addComponents(
-      generateMenu(normalizedOptions)
-    );
+    const row =
+      new ActionRowBuilder<MessageActionRowComponentBuilder>().addComponents(
+        generateMenu(normalizedOptions)
+      );
 
     const message = await interaction.reply({
-      embeds: [embed],
+      embeds: [embed as APIEmbed],
       fetchReply: true,
       components: [row],
     });
     const collector = message.createMessageComponentCollector({
-      componentType: 'SELECT_MENU',
+      componentType: ComponentType.StringSelect,
       time: time * 60000,
     });
 
     collector.on('collect', async (collectInteraction) => {
       await collectInteraction.deferUpdate();
-      if (!collectInteraction.isSelectMenu()) {
+      if (!collectInteraction.isStringSelectMenu()) {
         return;
       }
 
@@ -210,7 +214,9 @@ const PollCommand: Command = {
       poll.vote(collectInteraction.user, choice);
       const updatedEmbed = poll.generateEmbed();
 
-      await collectInteraction.editReply({ embeds: [updatedEmbed] });
+      await collectInteraction.editReply({
+        embeds: [updatedEmbed as APIEmbed],
+      });
     });
 
     collector.on('end', async (_, reason) => {
@@ -225,11 +231,11 @@ const PollCommand: Command = {
       }
 
       const embed = poll.generateEmbed();
-      embed.description = null;
+      embed.description = undefined;
       embed.title = `Results of '${title}':`;
       await message.reply({
         content: '**Poll has concluded**',
-        embeds: [embed],
+        embeds: [embed as APIEmbed],
       });
     });
   },

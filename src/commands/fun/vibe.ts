@@ -1,5 +1,12 @@
-import { Button, Command } from '@knighthacks/scythe';
-import { EmbedFieldData, MessageEmbed, User } from 'discord.js';
+import { Command } from '@knighthacks/scythe';
+import {
+  ApplicationCommandType,
+  ButtonStyle,
+  ComponentType,
+  EmbedBuilder,
+  Interaction,
+  User,
+} from 'discord.js';
 import Colors from '../../colors';
 
 const categories = [
@@ -21,14 +28,14 @@ type Result = {
   score: number;
 };
 
-function generateVibeEmbed(sender: User, recipient: User): MessageEmbed {
+function generateVibeEmbed(sender: User, recipient: User): EmbedBuilder {
   // Generate a random percentage per each category
   const results: Result[] = categories.map((category) => ({
     category,
     score: Math.floor(Math.random() * 101),
   }));
 
-  const fields = results.map((result): EmbedFieldData => {
+  const fields = results.map((result) => {
     // Dexponetiate the score.
     const intPercent = Math.floor(result.score / 10);
     const { category } = result;
@@ -52,7 +59,7 @@ function generateVibeEmbed(sender: User, recipient: User): MessageEmbed {
     : '**❌ | Vibe Check failed**';
 
   // Create embed and add fields, and return.
-  return new MessageEmbed()
+  return new EmbedBuilder()
     .setAuthor({
       name: recipient.username,
       iconURL: recipient.avatarURL() ?? undefined,
@@ -69,8 +76,8 @@ function generateVibeEmbed(sender: User, recipient: User): MessageEmbed {
 
 const VibeCommand: Command = {
   name: 'Vibe Check',
-  type: 'USER',
-  async run({ interaction, registerUI }) {
+  type: ApplicationCommandType.User,
+  async run({ interaction }) {
     const guildMember = interaction.guild?.members.cache.get(
       interaction.targetId
     );
@@ -87,23 +94,39 @@ const VibeCommand: Command = {
     // Show that the bot is thinking.
     await interaction.deferReply();
 
-    const ui: Button = {
-      style: 'PRIMARY',
-      label: 'Recheck',
-      async onClick(i) {
-        await i.deferUpdate();
-        await i.editReply({
-          embeds: [generateVibeEmbed(sender, user ?? sender)],
-        });
-      },
-    };
-
     // If there's no user, that means it's just a sender check.
     // Defer because the bot is thinking.
     await interaction.followUp({
       embeds: [generateVibeEmbed(sender, user ?? sender)],
       fetchReply: true,
-      components: registerUI(ui),
+      components: [
+        {
+          type: ComponentType.ActionRow,
+          components: [
+            {
+              type: ComponentType.Button,
+              style: ButtonStyle.Primary,
+              customId: 'vibeCheck',
+              label: 'Recheck',
+            },
+          ],
+        },
+      ],
+    });
+
+    const filter = (i: Interaction) => i.user.id === sender.id;
+
+    const collector = interaction.channel?.createMessageComponentCollector({
+      filter,
+      time: 60000,
+      componentType: ComponentType.Button,
+    });
+
+    collector?.on('collect', async (i) => {
+      await i.deferUpdate();
+      await i.editReply({
+        embeds: [generateVibeEmbed(sender, user ?? sender)],
+      });
     });
   },
 };

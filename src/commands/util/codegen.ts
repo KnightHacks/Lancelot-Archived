@@ -1,6 +1,10 @@
 import { Command } from '@knighthacks/scythe';
 import axios, { AxiosResponse } from 'axios';
-import { ApplicationCommandOptionData, MessageAttachment } from 'discord.js';
+import {
+  ApplicationCommandOptionData,
+  ApplicationCommandOptionType,
+  AttachmentBuilder,
+} from 'discord.js';
 import { Buffer } from 'buffer';
 
 const url = 'https://carbonara.vercel.app/api/cook';
@@ -9,7 +13,7 @@ const options: ApplicationCommandOptionData[] = [
   {
     name: 'input',
     description: 'The source code to format',
-    type: 'STRING',
+    type: ApplicationCommandOptionType.String,
     required: true,
   },
 ];
@@ -42,7 +46,7 @@ const CodeGenCommand: Command = {
     const code = interaction.options.getString('input', true);
     const buffer = await getImage(code);
 
-    const attachment = new MessageAttachment(buffer, 'code.png');
+    const attachment = new AttachmentBuilder(buffer).setName('code.png');
     await interaction.followUp({ files: [attachment] });
   },
 };

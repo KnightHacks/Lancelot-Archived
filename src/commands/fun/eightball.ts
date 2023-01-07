@@ -1,10 +1,13 @@
 import { Command } from '@knighthacks/scythe';
-import { ApplicationCommandOptionData } from 'discord.js';
+import {
+  ApplicationCommandOptionData,
+  ApplicationCommandOptionType,
+} from 'discord.js';
 
 const options: ApplicationCommandOptionData[] = [
   {
     name: 'question',
-    type: 'STRING',
+    type: ApplicationCommandOptionType.String,
     description: 'Generates a random response to a question',
     required: true,
   },

@@ -1,11 +1,11 @@
-import { Command, UI } from '@knighthacks/scythe';
+import { Command } from '@knighthacks/scythe';
 import axios from 'axios';
 import {
-  BaseMessageComponentOptions,
   InteractionReplyOptions,
-  MessageActionRow,
-  MessageActionRowOptions,
-  MessageEmbed,
+  EmbedBuilder,
+  ComponentType,
+  ButtonStyle,
+  Interaction,
 } from 'discord.js';
 import Colors from '../../colors';
 
@@ -20,14 +20,7 @@ async function getCatImage(): Promise<string | null> {
     .catch(() => null);
 }
 
-async function getMessage(
-  registerUI: (
-    ui: UI
-  ) => (
-    | MessageActionRow
-    | (Required<BaseMessageComponentOptions> & MessageActionRowOptions)
-  )[]
-): Promise<InteractionReplyOptions> {
+async function getMessage(): Promise<InteractionReplyOptions> {
   // Get the image URL.
   const catImageURL = await getCatImage();
 
@@ -35,22 +28,25 @@ async function getMessage(
     return { content: 'Error fetching Cat Image' };
   }
 
-  const embed = new MessageEmbed()
+  const embed = new EmbedBuilder()
     .setTitle('Random Cat')
     .setColor(Colors.embedColor)
     .setImage(catImageURL);
 
   return {
     embeds: [embed],
-    components: registerUI({
-      style: 'PRIMARY',
-      label: 'Another!',
-      async onClick({ deferUpdate, editReply }) {
-        await deferUpdate();
-        const catImage = await getMessage(registerUI);
-        await editReply(catImage);
+    components: [
+      {
+        type: ComponentType.ActionRow,
+        components: [
+          {
+            type: ComponentType.Button,
+            style: ButtonStyle.Primary,
+            customId: 'catButton',
+          },
+        ],
       },
-    }),
+    ],
   };
 }
 
@@ -58,12 +54,26 @@ const CatCommand: Command = {
   name: 'cat',
   description: 'Gets a random image of a cat',
   cooldown: 60,
-  async run({ interaction, registerUI }) {
+  async run({ interaction }) {
     // Defer while we fetch the image.
     await interaction.deferReply();
 
-    const message = await getMessage(registerUI);
+    const message = await getMessage();
     await interaction.followUp(message);
+
+    const filter = (i: Interaction) => i.user.id === interaction.user.id;
+
+    const collector = interaction.channel?.createMessageComponentCollector({
+      filter,
+      time: 1000 * 60 * 5,
+      componentType: ComponentType.Button,
+    });
+
+    collector?.on('collect', async (interaction) => {
+      await interaction.deferUpdate();
+      const message = await getMessage();
+      await interaction.editReply(message);
+    });
   },
 };
 

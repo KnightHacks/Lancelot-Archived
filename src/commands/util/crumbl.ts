@@ -1,6 +1,6 @@
 import { Command } from '@knighthacks/scythe';
 import axios from 'axios';
-import { MessageEmbed } from 'discord.js';
+import { EmbedBuilder } from 'discord.js';
 import { sendPaginatedEmbeds } from 'discord.js-embed-pagination';
 import Colors from '../../colors';
 
@@ -22,7 +22,7 @@ const crumbl: Command = {
     const cookiesData = await fetchCookiesData();
 
     const embeds = cookiesData.map((c) =>
-      new MessageEmbed()
+      new EmbedBuilder()
         .setTitle(c.name)
         .setColor(Colors.embedColor)
         .setDescription(c.description)

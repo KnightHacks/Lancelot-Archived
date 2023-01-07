@@ -1,4 +1,11 @@
-import { GuildMember, Role, Guild } from 'discord.js';
+import {
+  GuildMember,
+  Role,
+  Guild,
+  StringSelectMenuComponentData,
+  ComponentType,
+  SelectMenuInteraction,
+} from 'discord.js';
 
 const roles = [
   {
@@ -108,78 +115,44 @@ const majors = [
 const getRole = (guild: Guild, roleName: string) =>
   guild.roles.cache.find((role) => role.name === roleName);
 
-export function KnightHacksMajorsMenu(
-  action: 'add' | 'remove',
-  maybeMember?: GuildMember
-): SelectMenu {
-  const rolesMenu: SelectMenu = {
-    options: majors.map((major) => ({ label: major })),
-    maxValues: 2,
-    placeholder: 'Select Majors',
-    async onSelect({
-      deferReply,
-      editReply,
-      member: interactionMember,
-      values: majorNames,
-    }: SelectMenuInteraction) {
-      await deferReply({ ephemeral: true });
-      const member: GuildMember =
-        maybeMember ?? (interactionMember as GuildMember);
-      const roles: (Role | undefined)[] = majorNames.map((roleName) => {
-        const role = getRole(member.guild, roleName);
-        if (!role) console.log(`Role lookup for ${roleName} failed!`);
-        return role;
-      });
-      const validRoles = roles.filter((role): role is Role => !!role);
-      if (action === 'add') {
-        validRoles.forEach((role) => member.roles.add(role));
-      } else {
-        validRoles.forEach((role) => member.roles.remove(role));
-      }
-      const successMsg = action === 'add' ? 'added' : 'removed';
-      await editReply({
-        content: `Successfully ${successMsg} selected majors.`,
-      });
-    },
-  };
-  return rolesMenu;
-}
+export const majorsMenu = (): StringSelectMenuComponentData => ({
+  customId: 'majorSelect',
+  type: ComponentType.StringSelect,
+  options: majors.map((major) => ({ label: major, value: major })),
+  maxValues: 2,
+  placeholder: 'Select Majors',
+});
 
-function KnightHacksRolesMenu(
-  action: 'add' | 'remove',
-  maybeMember?: GuildMember
-): SelectMenu {
-  const rolesMenu: SelectMenu = {
-    options: roles,
-    maxValues: roles.length,
-    placeholder: 'Select Roles',
-    async onSelect({
-      deferReply,
-      editReply,
-      member: interactionMember,
-      values: roleNames,
-    }: SelectMenuInteraction) {
-      await deferReply({ ephemeral: true });
-      const member: GuildMember =
-        maybeMember ?? (interactionMember as GuildMember);
-      const roles: (Role | undefined)[] = roleNames.map((roleName) => {
-        const role = getRole(member.guild, roleName);
-        if (!role) console.log(`Role lookup for ${roleName} failed!`);
-        return role;
-      });
-      const validRoles = roles.filter((role): role is Role => !!role);
-      if (action === 'add') {
-        validRoles.forEach((role) => member.roles.add(role));
-      } else {
-        validRoles.forEach((role) => member.roles.remove(role));
-      }
-      const successMsg = action === 'add' ? 'added' : 'removed';
-      await editReply({
-        content: `Successfully ${successMsg} selected roles.`,
-      });
-    },
-  };
-  return rolesMenu;
-}
+export const rolesMenu = (): StringSelectMenuComponentData => ({
+  customId: 'roleSelect',
+  type: ComponentType.StringSelect,
+  options: roles.map((role) => ({ ...role, value: role.label })),
+  maxValues: roles.length,
+  placeholder: 'Select Roles',
+});
 
-export { KnightHacksRolesMenu };
+export async function onRoleSelect(
+  interaction: SelectMenuInteraction,
+  action: 'add' | 'remove' = 'remove'
+) {
+  await interaction.deferReply({ ephemeral: true });
+  const member: GuildMember = interaction.member as GuildMember;
+  const { values: roleNames } = interaction;
+  const roles: Role[] = roleNames
+    .map((roleName) => {
+      const role = getRole(member.guild, roleName);
+      if (!role) console.log(`Role lookup for ${roleName} failed!`);
+      return role;
+    })
+    .filter((role): role is Role => !!role);
+
+  if (action === 'add') {
+    roles.forEach((role) => member.roles.add(role));
+  } else {
+    roles.forEach((role) => member.roles.remove(role));
+  }
+  const successMsg = action === 'add' ? 'added' : 'removed';
+  await interaction.editReply({
+    content: `Successfully ${successMsg} selected roles.`,
+  });
+}

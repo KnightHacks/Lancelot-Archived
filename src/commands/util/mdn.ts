@@ -1,19 +1,23 @@
 import { Command } from '@knighthacks/scythe';
-import { ApplicationCommandOptionData, MessageEmbed } from 'discord.js';
+import {
+  ApplicationCommandOptionData,
+  ApplicationCommandOptionType,
+  EmbedBuilder,
+} from 'discord.js';
 import { MDNBase, MDNDocument, searchMDN } from '../../util/mdn';
 
 const options: ApplicationCommandOptionData[] = [
   {
     name: 'query',
     description: 'The lookup query for MDN documentation.',
-    type: 'STRING',
+    type: ApplicationCommandOptionType.String,
     required: true,
     autocomplete: true,
   },
 ];
 
-function generateEmbed(doc: MDNDocument): MessageEmbed {
-  return new MessageEmbed()
+function generateEmbed(doc: MDNDocument): EmbedBuilder {
+  return new EmbedBuilder()
     .setTitle(doc.title)
     .setURL(`${MDNBase}/docs/${doc.slug}`)
     .setDescription(doc.summary);

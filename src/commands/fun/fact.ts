@@ -1,5 +1,6 @@
 import { Command } from '@knighthacks/scythe';
 import axios from 'axios';
+import { ButtonStyle, ComponentType, Interaction } from 'discord.js';
 
 const url = 'https://uselessfacts.jsph.pl/random.json?language=en';
 
@@ -22,7 +23,7 @@ async function getFact(): Promise<string | null> {
 const FactCommand: Command = {
   name: 'fact',
   description: 'Get a random fact',
-  async run({ interaction, registerUI }) {
+  async run({ interaction }) {
     const fact = await getFact();
     if (!fact) {
       await interaction.reply({ content: 'Error: `something went wrong.`' });
@@ -32,18 +33,39 @@ const FactCommand: Command = {
     // Send message.
     await interaction.reply({
       content: fact,
-      components: registerUI({
-        style: 'PRIMARY',
-        label: 'New Fact',
-        async onClick({ update }) {
-          const newFact = await getFact();
-          if (newFact) {
-            update({ content: newFact });
-          } else {
-            update({ content: 'Error: `something went wrong.`' });
-          }
+      components: [
+        {
+          type: ComponentType.ActionRow,
+          components: [
+            {
+              type: ComponentType.Button,
+              style: ButtonStyle.Primary,
+              customId: 'factButton',
+              label: 'New Fact',
+            },
+          ],
         },
-      }),
+      ],
+    });
+
+    const filter = (i: Interaction) => i.user.id === interaction.user.id;
+
+    const collector = interaction.channel?.createMessageComponentCollector({
+      filter,
+      time: 1000 * 60 * 5,
+      componentType: ComponentType.Button,
+    });
+
+    collector?.on('collect', async (interaction) => {
+      await interaction.deferUpdate();
+      const content = await getFact();
+      if (content) {
+        await interaction.editReply({ content });
+      } else {
+        await interaction.editReply({
+          content: 'Error: `something went wrong.`',
+        });
+      }
     });
   },
 };

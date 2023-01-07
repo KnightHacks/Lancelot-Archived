@@ -1,9 +1,9 @@
-import { MessageEmbed } from 'discord.js';
+import { ApplicationCommandType, EmbedBuilder } from 'discord.js';
 import { Command } from '@knighthacks/scythe';
 import Colors from '../../colors';
 
 const WhoIs: Command = {
-  type: 'USER',
+  type: ApplicationCommandType.User,
   name: 'Get User Statistics',
   async run({ interaction }) {
     const guildMember = interaction.guild?.members.cache.get(
@@ -23,7 +23,7 @@ const WhoIs: Command = {
       return;
     }
 
-    const embed = new MessageEmbed({
+    const embed = new EmbedBuilder({
       color: Colors.embedColor,
       timestamp: interaction.createdTimestamp,
       author: {

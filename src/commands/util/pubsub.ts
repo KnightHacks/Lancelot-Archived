@@ -1,6 +1,6 @@
 import { Command } from '@knighthacks/scythe';
 import axios from 'axios';
-import { MessageEmbed } from 'discord.js';
+import { EmbedBuilder } from 'discord.js';
 import { camelizeKeys } from 'humps';
 import { sendPaginatedEmbeds } from 'discord.js-embed-pagination';
 import { toTitleCase } from '../../util/formatters';
@@ -28,13 +28,19 @@ async function getSubs(): Promise<SubData[] | null> {
 }
 
 function generateSubEmbed(data: SubData) {
-  return new MessageEmbed()
+  return new EmbedBuilder()
     .setTitle(toTitleCase(data.name))
     .setImage(data.image)
     .setColor(Colors.embedColor)
-    .addField('Price', data.price, true)
-    .addField('On Sale?', data.onSale === 'True' ? 'Yup!' : 'Nope!', true)
-    .addField('Last on Sale', data.lastOnSale, true);
+    .addFields([
+      { name: 'Price', value: data.price, inline: true },
+      {
+        name: 'On Sale?',
+        value: data.onSale === 'True' ? 'Yup!' : 'Nope!',
+        inline: true,
+      },
+      { name: 'Last on Sale', value: data.lastOnSale, inline: true },
+    ]);
 }
 
 const PubSubCommand: Command = {

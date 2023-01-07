@@ -1,6 +1,13 @@
 import { Command } from '@knighthacks/scythe';
-import { ApplicationCommandOptionType } from 'discord.js';
-import { KnightHacksMajorsMenu } from '../../components/KnightHacksRolesMenu';
+import {
+  ApplicationCommandOptionType,
+  ComponentType,
+  Interaction,
+} from 'discord.js';
+import {
+  majorsMenu,
+  onRoleSelect,
+} from '../../components/KnightHacksRolesMenu';
 
 const MajorsCommand: Command = {
   name: 'majors',
@@ -17,13 +24,29 @@ const MajorsCommand: Command = {
       type: ApplicationCommandOptionType.Subcommand,
     },
   ],
-  async run({ interaction, registerUI }) {
+  async run({ interaction }) {
     const action = interaction.options.getSubcommand() as 'add' | 'remove';
-    const ui = KnightHacksMajorsMenu(action);
     await interaction.reply({
       content: `Pick Majors to ${action}`,
-      components: registerUI(ui),
+      components: [
+        {
+          type: ComponentType.ActionRow,
+          components: [majorsMenu()],
+        },
+      ],
       ephemeral: true,
+    });
+
+    const filter = (i: Interaction) => i.user.id === interaction.user.id;
+
+    const collector = interaction.channel?.createMessageComponentCollector({
+      filter,
+      time: 1000 * 60 * 5,
+      componentType: ComponentType.StringSelect,
+    });
+
+    collector?.on('collect', async (interaction) => {
+      await onRoleSelect(interaction, action);
     });
   },
 };

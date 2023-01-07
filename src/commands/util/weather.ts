@@ -1,6 +1,10 @@
 import { Command } from '@knighthacks/scythe';
 import axios, { AxiosError } from 'axios';
-import { ApplicationCommandOptionData, MessageEmbed } from 'discord.js';
+import {
+  ApplicationCommandOptionData,
+  ApplicationCommandOptionType,
+  EmbedBuilder,
+} from 'discord.js';
 import Colors from '../../colors';
 
 const apiKey = process.env.WEATHER_API_KEY;
@@ -11,7 +15,7 @@ const options: ApplicationCommandOptionData[] = [
   {
     name: 'city',
     description: 'The City to get weather data from.',
-    type: 'STRING',
+    type: ApplicationCommandOptionType.String,
   },
 ];
 
@@ -55,16 +59,18 @@ function createWeatherEmbed(city: string, response: WeatherResponse) {
   const { main } = response;
   const [weather] = response.weather;
 
-  return new MessageEmbed()
+  return new EmbedBuilder()
     .setColor(Colors.embedColor)
     .setThumbnail('https://i.ibb.co/CMrsxdX/weather.png')
     .setTitle(`Weather for ${city}`)
-    .addField('Conditions', weather.description)
-    .addField('Temperature', normalizeTemp(main.temp))
-    .addField('Feels Like', normalizeTemp(main.feels_like))
-    .addField('Low', normalizeTemp(main.temp_min))
-    .addField('High', normalizeTemp(main.temp_max))
-    .addField('Humidity', `${main.humidity}%`);
+    .addFields([
+      { name: 'Conditions', value: weather.description },
+      { name: 'Temperature', value: normalizeTemp(main.temp) },
+      { name: 'Feels Like', value: normalizeTemp(main.feels_like) },
+      { name: 'Low', value: normalizeTemp(main.temp_min) },
+      { name: 'High', value: normalizeTemp(main.temp_max) },
+      { name: 'Humidity', value: `${main.humidity}%` },
+    ]);
 }
 
 const WeatherCommand: Command = {

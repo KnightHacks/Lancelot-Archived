@@ -1,4 +1,4 @@
-import { MessageEmbed } from 'discord.js';
+import { EmbedBuilder } from 'discord.js';
 import { Command, inChannelNames } from '@knighthacks/scythe';
 import { Channels } from '../../channels';
 import Colors from '../../colors';
@@ -22,18 +22,20 @@ const StatsCommand: Command = {
     const totalMembers = members.size;
     const owner = (await guild.fetchOwner()).displayName;
 
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
       .setColor(Colors.embedColor)
       .setTitle(`Server Info - ${guild.name}`)
       .setThumbnail(interaction.guild?.iconURL() ?? '')
-      .addField('Created on:', guild.createdAt.toUTCString())
-      .addField('Owner:', owner)
-      .addField('Total Online:', totalOnline.toString())
-      .addField('Total Members:', totalMembers.toString())
-      .addField(
-        'Nitro Boosters: ',
-        guild.premiumSubscriptionCount?.toString() ?? '0'
-      );
+      .addFields([
+        { name: 'Created on:', value: guild.createdAt.toUTCString() },
+        { name: 'Owner:', value: owner },
+        { name: 'Total Online:', value: totalOnline.toString() },
+        { name: 'Total Members:', value: totalMembers.toString() },
+        {
+          name: 'Nitro Boosters: ',
+          value: guild.premiumSubscriptionCount?.toString() ?? '0',
+        },
+      ]);
 
     await interaction.reply({ embeds: [embed] });
   },
