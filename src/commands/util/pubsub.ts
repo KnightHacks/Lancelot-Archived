@@ -1,5 +1,5 @@
 import { Command } from '@knighthacks/scythe';
-import axios from 'axios';
+import { fetch } from 'undici';
 import { EmbedBuilder } from 'discord.js';
 import { camelizeKeys } from 'humps';
 import { sendPaginatedEmbeds } from 'discord.js-embed-pagination';
@@ -18,9 +18,9 @@ type SubData = {
 };
 
 async function getSubs(): Promise<SubData[] | null> {
-  return await axios
-    .get<SubData[]>(URL)
-    .then((response) => camelizeKeys(response.data) as SubData[])
+  return await fetch(URL)
+    .then((response) => response.json() as Promise<SubData[]>)
+    .then((response) => camelizeKeys(response) as SubData[])
     .catch((error) => {
       console.log(error);
       return null;

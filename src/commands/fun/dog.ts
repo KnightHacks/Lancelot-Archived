@@ -1,5 +1,5 @@
 import { Command } from '@knighthacks/scythe';
-import axios from 'axios';
+import { fetch } from 'undici';
 import {
   InteractionReplyOptions,
   EmbedBuilder,
@@ -14,9 +14,9 @@ const url = 'https://dog.ceo/api/breeds/image/random';
 type DogResponse = { message: string; status: 'success' | 'failure' };
 
 async function getDogImage(): Promise<string | null> {
-  return axios
-    .get<DogResponse>(url)
-    .then((response) => response.data.message)
+  return fetch(url)
+    .then((response) => response.json() as Promise<DogResponse>)
+    .then((response) => response.message)
     .catch(() => null);
 }
 

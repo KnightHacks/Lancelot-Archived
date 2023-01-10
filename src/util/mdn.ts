@@ -1,4 +1,4 @@
-import fetch from 'node-fetch';
+import { fetch } from 'undici';
 
 export const MDNBase = 'https://developer.mozilla.org';
 export const searchMDNURL = (query: string) =>

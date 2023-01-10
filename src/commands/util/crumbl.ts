@@ -1,5 +1,5 @@
 import { Command } from '@knighthacks/scythe';
-import axios from 'axios';
+import { fetch } from 'undici';
 import { EmbedBuilder } from 'discord.js';
 import { sendPaginatedEmbeds } from 'discord.js-embed-pagination';
 import Colors from '../../colors';
@@ -11,7 +11,9 @@ interface Cookie {
 }
 
 async function fetchCookiesData(): Promise<Cookie[]> {
-  return (await axios.get('https://crumbl-api-2.rb32020.workers.dev/')).data;
+  return (
+    await fetch('https://crumbl-api-2.rb32020.workers.dev/')
+  ).json() as Promise<Cookie[]>;
 }
 
 const crumbl: Command = {

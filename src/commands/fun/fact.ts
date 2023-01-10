@@ -1,5 +1,5 @@
 import { Command } from '@knighthacks/scythe';
-import axios from 'axios';
+import { fetch } from 'undici';
 import { ButtonStyle, ComponentType, Interaction } from 'discord.js';
 
 const url = 'https://uselessfacts.jsph.pl/random.json?language=en';
@@ -7,9 +7,9 @@ const url = 'https://uselessfacts.jsph.pl/random.json?language=en';
 type FactResponse = { text: string | null };
 
 async function getFact(): Promise<string | null> {
-  return axios
-    .get<FactResponse>(url)
-    .then((response) => response.data.text)
+  return fetch(url)
+    .then((response) => response.json() as Promise<FactResponse>)
+    .then((response) => response.text)
     .then((fact) => (fact ? fact.replaceAll('`', "'") : null))
     .catch((e) => {
       // Spam limit on api.

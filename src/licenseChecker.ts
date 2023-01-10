@@ -1,5 +1,5 @@
 import { Message } from 'discord.js';
-import fetch from 'node-fetch';
+import { fetch } from 'undici';
 
 const ghRegex = /https?:\/\/github.com\/([\d\w-.]+\/[\d\w-.]+)/;
 const contentsRegex = /\{\+path\}/;

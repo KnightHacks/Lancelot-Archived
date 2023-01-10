@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import axios, { AxiosResponse } from 'axios';
+import { fetch } from 'undici';
 import {
   Problem,
   ProblemInfo,
@@ -55,10 +55,11 @@ export const getAllProblems = async (): Promise<
   const easyProblems: Problem[] = [],
     mediumProblems: Problem[] = [],
     hardProblems: Problem[] = [];
-  await axios
-    .get<ProblemResponse>('https://leetcode.com/api/problems/algorithms/')
+
+  await fetch('https://leetcode.com/api/problems/algorithms/')
+    .then((res) => res.json() as Promise<ProblemResponse>)
     .then((response) => {
-      const problems = response.data.stat_status_pairs;
+      const problems = response.stat_status_pairs;
 
       for (const prob of problems) {
         // If we can't get a problem for everyone, throw it away
@@ -149,19 +150,19 @@ interface InfoRequest {
 export const getAdditionalProblemInfo = async (
   problem: Problem
 ): Promise<ProblemInfo> => {
-  const response = await axios.post<
-    InfoRequest,
-    AxiosResponse<ProblemInfoResponse>
-  >('https://leetcode.com/graphql', {
-    operationName: 'questionData',
-    query:
-      'query questionData($titleSlug: String!) {\n  question(titleSlug: $titleSlug) {\n    questionId\n    questionFrontendId\n    boundTopicId\n    title\n    titleSlug\n    content\n    translatedTitle\n    translatedContent\n    isPaidOnly\n    difficulty\n    likes\n    dislikes\n    isLiked\n    similarQuestions\n    exampleTestcases\n    contributors {\n      username\n      profileUrl\n      avatarUrl\n      __typename\n    }\n    topicTags {\n      name\n      slug\n      translatedName\n      __typename\n    }\n    companyTagStats\n    codeSnippets {\n      lang\n      langSlug\n      code\n      __typename\n    }\n    stats\n    hints\n    solution {\n      id\n      canSeeDetail\n      paidOnly\n      hasVideoSolution\n      paidOnlyVideo\n      __typename\n    }\n    status\n    sampleTestCase\n    metaData\n    judgerAvailable\n    judgeType\n    mysqlSchemas\n    enableRunCode\n    enableTestMode\n    enableDebugger\n    envInfo\n    libraryUrl\n    adminUrl\n    __typename\n  }\n}\n',
-    variables: {
-      titleSlug: problem.slug,
+  const response = await fetch('https://leetcode.com/graphql', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
     },
-  });
+    body: JSON.stringify({
+      query:
+        'query questionData($titleSlug: String!) {\n  question(titleSlug: $titleSlug) {\n    questionId\n    questionFrontendId\n    boundTopicId\n    title\n    titleSlug\n    content\n    translatedTitle\n    translatedContent\n    isPaidOnly\n    difficulty\n    likes\n    dislikes\n    isLiked\n    similarQuestions\n    exampleTestcases\n    contributors {\n      username\n      profileUrl\n      avatarUrl\n      __typename\n    }\n    topicTags {\n      name\n      slug\n      translatedName\n      __typename\n    }\n    companyTagStats\n    codeSnippets {\n      lang\n      langSlug\n      code\n      __typename\n    }\n    stats\n    hints\n    solution {\n      id\n      canSeeDetail\n      paidOnly\n      hasVideoSolution\n      paidOnlyVideo\n      __typename\n    }\n    status\n    sampleTestCase\n    metaData\n    judgerAvailable\n    judgeType\n    mysqlSchemas\n    enableRunCode\n    enableTestMode\n    enableDebugger\n    envInfo\n    libraryUrl\n    adminUrl\n    __typename\n  }\n}\n',
+      variables: { titleSlug: problem.slug },
+    }),
+  }).then((res) => res.json() as Promise<ProblemInfoResponse>);
 
-  const questionData = response.data.data.question;
+  const questionData = response.data.question;
 
   let similarQuestionsArray: SimilarProblemInfo[] = [];
   const simQsString = questionData.similarQuestions ?? '[]';

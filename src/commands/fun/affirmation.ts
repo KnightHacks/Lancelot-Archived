@@ -1,5 +1,5 @@
 import { Command } from '@knighthacks/scythe';
-import axios from 'axios';
+import { fetch } from 'undici';
 import { ButtonStyle, ComponentType, Interaction } from 'discord.js';
 
 const url = 'https://www.affirmations.dev/';
@@ -7,9 +7,9 @@ const url = 'https://www.affirmations.dev/';
 type AffirmationResponse = { affirmation: string };
 
 async function getAffirmation(): Promise<string> {
-  return axios
-    .get<AffirmationResponse>(url)
-    .then((response) => `"${response.data.affirmation}"`)
+  return fetch(url)
+    .then((response) => response.json())
+    .then((response) => `"${(response as AffirmationResponse).affirmation}"`)
     .catch(() => 'Error fetching affirmation.');
 }
 

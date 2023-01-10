@@ -1,5 +1,5 @@
 import { Command } from '@knighthacks/scythe';
-import axios, { AxiosError } from 'axios';
+import { fetch } from 'undici';
 import {
   ApplicationCommandOptionData,
   ApplicationCommandOptionType,
@@ -39,20 +39,22 @@ type WeatherResponse = {
 const normalizeTemp = (temp: number) =>
   Math.round(temp * (9 / 5) - 459.67).toString() + '°';
 
-function getWeather(city: string): Promise<WeatherResponse | null | string> {
+async function getWeather(
+  city: string
+): Promise<WeatherResponse | null | string> {
   const fetchURL = `${baseURL}appid=${apiKey}&q=${city}`;
-  return axios
-    .get<WeatherResponse>(fetchURL)
-    .then((response) => response.data)
-    .catch((error: AxiosError) => {
-      if (error.response?.status === 404) {
-        return `'${city}' is not a valid city.`;
-      }
 
-      console.error(error);
+  const res = await fetch(fetchURL);
 
-      return null;
-    });
+  if (!res.ok) {
+    if (res.status === 404) {
+      return `'${city}' is not a valid city.`;
+    }
+
+    return null;
+  }
+
+  return res.json() as Promise<WeatherResponse>;
 }
 
 function createWeatherEmbed(city: string, response: WeatherResponse) {

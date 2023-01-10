@@ -1,3 +1,5 @@
+import { test, expect } from 'vitest';
+
 function sayHello(): string {
   return 'Hello World';
 }

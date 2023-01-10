@@ -1,6 +1,6 @@
 import { EmbedBuilder } from '@discordjs/builders';
 import { Command } from '@knighthacks/scythe';
-import axios from 'axios';
+import { fetch } from 'undici';
 import { sendPaginatedEmbeds } from 'discord.js-embed-pagination';
 import Colors from '../../colors';
 
@@ -43,15 +43,15 @@ function generateEmbed(event: APIHackathonEvent) {
 }
 
 export async function getEmbedEvents(): Promise<EmbedBuilder[] | undefined> {
-  const events = await axios.get<{ events: APIHackathonEvent[] }>(
+  const events = (await fetch(
     'https://api.knighthacks.org/api/events/get_all_events/'
-  );
+  ).then((res) => res.json())) as { events: APIHackathonEvent[] };
 
   if (events === undefined) {
     return undefined;
   }
 
-  return events.data.events.map(generateEmbed);
+  return events.events.map(generateEmbed);
 }
 
 const HackathonEventsCommand: Command = {

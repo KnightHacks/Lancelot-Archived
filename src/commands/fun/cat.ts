@@ -1,5 +1,5 @@
 import { Command } from '@knighthacks/scythe';
-import axios from 'axios';
+import { fetch } from 'undici';
 import {
   InteractionReplyOptions,
   EmbedBuilder,
@@ -14,9 +14,9 @@ const url = 'https://api.thecatapi.com/v1/images/search';
 type CatResponse = [{ url: string }];
 
 async function getCatImage(): Promise<string | null> {
-  return axios
-    .get<CatResponse>(url)
-    .then((response) => response.data[0].url)
+  return fetch(url)
+    .then((response) => response.json() as Promise<CatResponse>)
+    .then((response) => response[0].url)
     .catch(() => null);
 }
 
@@ -43,6 +43,7 @@ async function getMessage(): Promise<InteractionReplyOptions> {
             type: ComponentType.Button,
             style: ButtonStyle.Primary,
             customId: 'catButton',
+            label: 'Another!',
           },
         ],
       },

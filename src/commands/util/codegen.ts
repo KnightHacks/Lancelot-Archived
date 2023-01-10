@@ -1,5 +1,5 @@
 import { Command } from '@knighthacks/scythe';
-import axios, { AxiosResponse } from 'axios';
+import { fetch } from 'undici';
 import {
   ApplicationCommandOptionData,
   ApplicationCommandOptionType,
@@ -19,20 +19,15 @@ const options: ApplicationCommandOptionData[] = [
 ];
 
 async function getImage(code: string) {
-  const response = await axios.post<
-    Record<string, string>,
-    AxiosResponse<Buffer>
-  >(
-    url,
-    {
-      code,
+  const response = await fetch(url, {
+    method: 'POST',
+    body: JSON.stringify({
+      code: code,
       backgroundColor: 'rgba(0, 0, 0, 0)',
-    },
-    {
-      responseType: 'arraybuffer',
-    }
-  );
-  return response.data;
+    }),
+  });
+
+  return response.arrayBuffer().then((buffer) => Buffer.from(buffer));
 }
 
 const CodeGenCommand: Command = {
