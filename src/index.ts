@@ -14,7 +14,6 @@ import {
 } from 'discord.js';
 import * as random from './util/random';
 import replies from './replies.json';
-import setupProcess from './problemSchedule';
 import { checkForLicense } from './licenseChecker';
 
 // Load env vars.
@@ -102,6 +101,5 @@ setupSentry();
     transaction.finish();
   };
 
-  await setupProcess(client);
   console.log('Lancelot is now running.');
 })();

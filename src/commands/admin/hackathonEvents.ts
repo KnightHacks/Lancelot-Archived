@@ -58,23 +58,28 @@ const HackathonEventsCommand: Command = {
   name: 'hackathonevents',
   description: 'Fetches upcoming hackathon events.',
   async run({ interaction }) {
-    await interaction.deferReply();
-    const embeds = await getEmbedEvents();
+    // await interaction.deferReply();
+    // const embeds = await getEmbedEvents();
 
-    if (embeds === undefined) {
-      await interaction.followUp('Error fetching events');
-      return;
-    }
+    // if (embeds === undefined) {
+    //   await interaction.followUp('Error fetching events');
+    //   return;
+    // }
 
-    if (embeds.length === 0) {
-      await interaction.followUp('There are not upcoming events.');
-      return;
-    }
+    // if (embeds.length === 0) {
+    //   await interaction.followUp('There are not upcoming events.');
+    //   return;
+    // }
 
-    await sendPaginatedEmbeds(interaction, embeds, {
-      pageLabel: 'Event',
-      nextLabel: 'Next Event',
-      previousLabel: 'Previous Event',
+    // await sendPaginatedEmbeds(interaction, embeds, {
+    //   pageLabel: 'Event',
+    //   nextLabel: 'Next Event',
+    //   previousLabel: 'Previous Event',
+    // });
+
+    await interaction.reply({
+      content: "Hackathon events aren't available right now.",
+      ephemeral: true,
     });
   },
 };
