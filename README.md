@@ -2,6 +2,8 @@
 
 The custom-made discord bot for the KnightHacks Discord server, powered by [scythe](https://github.com/KnightHacks/scythe)
 
+As of 3/14/2023 this repository will no longer be maintained! 
+
 <details>
 <summary>Setting up your environment</summary>
 <br>
